@@ -9,8 +9,12 @@
 <html>
   <head>
     <title>$Title$</title>
+    <script src="script.js"></script>
   </head>
   <body>
-  Hello, NanSsoGong!
+  <h1>This is heading</h1>
+  <p>This is a paragrah.</p>
+  Hello, NanSsoGong!<br/>
+  <button onclick="runCode()">Click Me</button>
   </body>
 </html>
