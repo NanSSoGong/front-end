@@ -9,7 +9,7 @@
 <html>
   <head>
     <title>$Title$</title>
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
   </head>
   <body>
   <h1>This is heading</h1>
