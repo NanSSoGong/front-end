@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>Home | Card-it</title>
-    <link rel="stylesheet" type="text/css" href="../../../front-end/web/css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
@@ -17,10 +17,10 @@
 <body>
 <%-- top menu --%>
 <header>
-    <a href="#" class="header-logo"><img src="../../../front-end/web/image/header-logo.png" class="logo-image"></a>
+    <a href="#" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
         <a href="#" class="user-box text"><span class="user-name">amoogae</span></a>
-        <a href="#" class="user-box image"><img src="../../../front-end/web/image/round-face-24px.svg" class="user-image"></a>
+        <a href="#" class="user-box image"><img src="image/round-face-24px.svg" class="user-image"></a>
     </div>
 </header>
 
@@ -44,7 +44,6 @@
     <%-- D-Day --%>
     <section class="d-day float">
         <div>
-            bbb
 
         </div>
 
@@ -52,7 +51,7 @@
 
     <%-- Calendar --%>
     <section class="calendar float">
-        ccc
+
 
     </section>
 </main>
