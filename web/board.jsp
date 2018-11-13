@@ -399,49 +399,41 @@
 </main>
 <footer>
     <div id="add-list">
-        <%--<button class="test" style="position: absolute; top: 500px; left:500px;">test</button>--%>
         <button class="open-add-list-modal" onclick="document.getElementById('add-list-modal').style.display='block'"><img src="image/plus.png"></button>
-        <div id="add-list-modal">
+        <div id="add-list-modal" onclick="document.getElementById('add-list-modal').style.display='none'">
             <form id="add-list-modal-contents">
                 <span>Create a List</span>
                 <div class="container">
                     <input type="text" placeholder="List Name" id="add-list-name" required>
-                    <button class="add-list-button">create</button>
+                    <button class="add-list-button" type="button">create</button>
                 </div>
             </form>
         </div>
     </div>
-    <div id="add-card">
-        <%--<button class="test" style="position: absolute; top: 500px; left:500px;">test</button>--%>
-        <button class="open-add-card-modal" onclick="document.getElementById('add-card-modal').style.display='block'"><img src="image/plus.png"></button>
-        <div id="add-card-modal">
-            <form id="add-card-modal-contents">
-                <span>Create a Card</span>
-                <div class="container">
-                    <input type="text" placeholder="List Name" id="add-card-name" required>
-                    <input type="textarea" id="add-card-textarea">
+    <div id="add-card-modal" onclick="document.getElementById('add-card-modal').style.display='none'">
+        <form id="add-card-modal-contents">
+            <span>Create a Card</span>
+            <div class="container">
+                <input type="text" placeholder="List Name" id="add-card-name" required>
+                <input type="textarea" id="add-card-textarea">
+                <button class="add-card-button" type="button">create</button>
+            </div>
+        </form>
+    </div>
+    <div id="more-menu-modal">
+        <form id="more-menu-modal-contents">
+            <div class="more-menu-header">
+                <span>more</span>
+                <img src="image/multiply.png" onclick="document.getElementById('more-menu-modal').style.display='none'" style="position:absolute; width: 16px; height:16px; right: 10px; cursor:pointer;">
+            </div>
+            <div>
+                <a href="#"><span>invite users..</span></a>
+                <a href="#"><span>see history..</span></a>
+            </div>
+        </form>
+    </div>
 
-                    <button class="add-card-button">create</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div id="more-menu">
-        <%--<button class="test" style="position: absolute; top: 500px; left:500px;">test</button>--%>
-        <button class="more-menu-modal" onclick="document.getElementById('more-menu-modal').style.display='block'"><img src="image/plus.png"></button>
-        <div id="more-menu-modal">
-            <form id="more-menu-modal-contents">
-                <div class="more-menu-header">
-                    <span>more</span>
-                    <img src="image/multiply.png" onclick="document.getElementById('more-menu-modal').style.display='none'" style="position:absolute; width: 16px; height:16px; right: 10px; cursor:pointer;">
-                </div>
-                <div>
-                    <a href="#"><span>invite users..</span></a>
-                    <a href="#"><span>see history..</span></a>
-                </div>
-            </form>
-        </div>
-    </div>
+
 <%-- list 양식
     <div id="listName" class="list sortable">
         <div class="list-header">
@@ -527,28 +519,22 @@
                 connectWith: ".sortable .list-contents"
             }).disableSelection();
             $(".sortable").draggable({ containment: "#list", scroll: false });
-            /*$(".add-card-button").on("click", function() {
-                // 클릭한 버튼이 속한 div 의 id 얻기
-                var div_id = document.getElementById($(this).closest("div").attr("id"));
-                // div 의 list(.list-contents)
-                var new_card = div_id.children[1];
-                //alert(new_card);
-                $(new_card).append("<li class=\"card\"><span>Item</span><img src=\"/image/star_off.png\" class=\"star-before\"></li>");
-            });*/
         })
 
         // test 용
         $(function() {
             $(".test").click(function () {
-            var get_id = document.getElementById("test");
-            alert(get_id);
+                var get_id = document.getElementById("test");
+                alert(get_id);
             });
         });
 
+/*
         var modal_list = document.getElementById('add-list-modal');
         // modal 밖 클릭시 modal 종료
         window.onclick = function (event) {
             if (event.target == modal_list) {
+                alert(modal_list);
                 modal_list.style.display = "none";
             }
         };
@@ -560,6 +546,8 @@
                 modal_card.style.display = "none";
             }
         };
+*/
+
 
         var modal_more_menu = document.getElementById('more-menu-modal');
         // modal 밖 클릭시 modal 종료
