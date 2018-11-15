@@ -428,7 +428,7 @@
             </div>
             <div>
                 <a href="#"><span>invite users..</span></a>
-                <a href="#"><span>see history..</span></a>
+                <a href="history.jsp"><span>see history..</span></a>
             </div>
         </form>
     </div>
