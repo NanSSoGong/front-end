@@ -9,6 +9,30 @@ body {
 * {
     box-sizing: border-box;
 }
+
+.history-header{
+    font-family: "NanumSquare", light;
+    font-size: 35px;
+    color: #707070;
+    margin-top: 80px;
+    margin-left: 300px;
+
+}
+.histroy-image-margin {
+    margin-top: 50px;
+    margin-left: 350px;
+}
+.margin-left50 {
+    margin-left: 50px;
+}
+.margin-left730 {
+    margin-left: 730px;
+}
+.divider{
+    height: 5px;
+    width: 1500px;
+    color: #707070;
+}
 .list {
     border: 1px solid #eee;
     border-radius: 5px;
@@ -48,6 +72,7 @@ body {
     height: 86px;
     background-color: #FFFFFF;
 }
+
 /*-----------------------------------header-------------------------------------*/
 header {
     position: relative;
@@ -76,13 +101,14 @@ header {
     top: 4px;
     left: 20px;
     float: left;
-    height: 34px;
-    width: 34px;
+    height: 25px;
+    width: 25px;
     padding-right: 8px;
+    margin-top: 5px;
 }
 .home-button {
-    width: 34px;
-    height: 34px;
+    width: 20px;
+    height: 20px;
 }
 .user {
     position: absolute;
@@ -104,13 +130,17 @@ header {
     height:34px;
 }
 .user-image {
-    width:34px;
-    height:34px;
+    margin-top: 5px;
+    width:25px;
+    height:25px;
 }
 .float {
     float: left;
 }
-
+.float-right {
+    float: right;
+    margin-right: 350px;
+}
 /*-----------------------sub-header-------------------------*/
 .sub-header {
     position: relative;
@@ -141,7 +171,7 @@ header {
     color: #707070;
     font-size: 16px;
     text-align: center;
-    background: url(../image/search.svg) no-repeat;
+    background: url(../image/search.png) no-repeat;
     background-position: 120px 0;
 }
 li {

@@ -48,6 +48,13 @@ body {
     height: 86px;
     background-color: #FFFFFF;
 }
+.add-card-button {
+    display: block;
+    height: 50px;
+    width:334px;
+    padding: 10px 40px 10px 40px;
+
+}
 /*-----------------------------------header-------------------------------------*/
 header {
     position: relative;
