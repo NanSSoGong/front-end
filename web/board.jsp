@@ -54,7 +54,7 @@
             background-color: #F6F6F6;
         }
         .list-header {
-            font-family:"NanumSquareOTF ExtraBold";
+            font-family:"NanumSquare ExtraBold";
             font-size: 22px;
             color: #707070;
             height: 50px;
@@ -231,6 +231,19 @@
 
 
         /*----------------------- footer -------------------------*/
+        .modal-header-name {
+            display: block;
+            font-family:"NanumSquare Bold";
+            font-size: 30px;
+            color: #707070;
+        }
+        .modal-close-button {
+            position:absolute;
+            width: 20px;
+            height:20px;
+            cursor:pointer;
+        }
+
         .open-add-list-modal {
             position:fixed;
             background: #F6F6F6;
@@ -252,7 +265,6 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.7);
         }
         #add-list-modal-contents {
@@ -266,16 +278,47 @@
             padding: 20px 20px 20px 20px;
             background-color: #FFFFFF;
         }
+
+
+        .add-list-modal-header span {
+            margin: 0 0 15px 22px;
+        }
+
+        .add-list-modal-header img {
+            top: 38px;
+            right: 48px;
+        }
+        #add-list-modal-contents .container span {
+            display: block;
+            margin: 35px 0 10px 37px;
+            font-family:"NanumSquare Regular";
+            font-size: 25px;
+            color: #707070;
+        }
+        #add-list-name {
+            width: 352px;
+            height: 45px;
+            margin: 0 37px 0 37px;
+            border: 0;
+            border-bottom: 1px solid #E7E7E7;
+            padding: 0 0 0 14px;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #B5B5B5;
+            /*focus:on;*/
+        }
+
         #add-list-modal button {
             position:absolute;
-            background: #F6F6F6;
+            background: #707070;
             width: 250px;
             height: 50px;
-            bottom: 30px;
+            bottom: 34px;
             left: calc(50% - 125px);
             border: 0;
             border-radius: 5px;
-            color: #707070;
+            font-size: 20px;
+            color: #FFFFFF;
             cursor: pointer;
         }
         #add-card-modal {
@@ -286,19 +329,87 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.7);
         }
         #add-card-modal-contents {
             position: fixed;
-            top: calc(50% - 160px);
-            left: calc(50% - 245px);
-            width: 490px;
-            height: 320px;
+            top: calc(50% - 300px);
+            left: calc(50% - 400px);
+            width: 800px;
+            height: 600px;
             border: 0;
             border-radius: 5px;
             padding: 20px 20px 20px 20px;
             background-color: #FFFFFF;
+        }
+        .add-card-modal-header span {
+            margin: 10px 0 10px 34px;
+        }
+        .add-card-close-button{
+            top: 48px;
+            right: 49px;
+        }
+        .modal-star-off {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            top: 45px;
+            right: 80px;
+        }
+        .add-card-container-name {
+            margin: 32px 0 0 68px;
+        }
+        #add-card-name {
+            width: 617px;
+            height: 40px;
+            margin: 0 0 0 68px;
+            border: 0;
+            border-bottom: 1px solid #E7E7E7;
+            padding-left: 14px;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #B5B5B5;
+        }
+        #add-card-modal-contents .container span {
+            display: inline-block;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #707070;
+        }
+        .add-card-container-description {
+            margin: 36px 0 10px 68px;
+        }
+        #add-card-description {
+            resize: none;
+            width: 615px;
+            height: 100px;
+            margin: 0 98px 0 68px;
+            padding: 14px 18px 14px 18px;
+            border: 1px solid #E7E7E7;
+            background-color: #FAFAFA;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #B5B5B5;
+        }
+        .add-card-container-duedate {
+            margin: 40px 0 0 68px;
+        }
+        #duedate {
+            display: inline-block;
+            margin: 40px 0 0 344px;
+        }
+        #add-card-modal button {
+            position:absolute;
+            background: #707070;
+            width: 250px;
+            height: 50px;
+            bottom: 60px;
+            left: calc(50% - 125px);
+            border: 0;
+            border-radius: 5px;
+            font-size: 20px;
+            color: #FFFFFF;
+            cursor: pointer;
         }
         #more-menu-modal {
             display: none;
@@ -308,7 +419,6 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.0);
         }
         #more-menu-modal-contents {
@@ -316,22 +426,147 @@
             top: 85px;
             right: 10px;
             width: 350px;
-            height: 230px;
+            height: 210px;
             border: 0;
             border-radius: 5px;
             padding: 10px 20px 10px 20px;
             background-color: #FFFFFF;
             box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.24);
         }
+        .more-menu-header span {
+            display: inline-block;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #707070;
+            margin: 14px 0 10px 10px;
+        }
+        #more-menu-modal-contents .container a {
+            display: block;
+            margin: 13px 100px 24px 15px;
+            cursor: pointer;
+        }
+        #more-menu-modal-contents .container img {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin: 12px 0 0 14px;
+        }
+        #more-menu-modal-contents .container span {
+            position: absolute;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #707070;
+        }
+        .invite-users-span {
+            top: 92px;
+            left: 104px;
+        }
+        .see-history-span {
+            top: 158px;
+            left: 104px;
+        }
+        .more-menu-close-button {
+            position:absolute;
+            cursor:pointer;
+            width: 16px;
+            height: 16px;
+            top: 30px;
+            right: 29px;
+        }
+        #user-invite-modal {
+            display: none;
+            position:fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        #user-invite-modal-contents {
+            position: fixed;
+            top: calc(50% - 160px);
+            left: calc(50% - 365px);
+            width: 730px;
+            height: 320px;
+            border: 0;
+            border-radius: 5px;
+            padding: 10px 20px 10px 20px;
+            background-color: #FFFFFF;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.24);
+        }
+        .user-invite-close-button {
+            top: 48px;
+            right: 54px;
+        }
+        .user-invite-header span {
+            margin: 18px 0 20px 37px;
+        }
+        #user-invite-modal-contents .container {
+            display: block;
+            width: 630px;
+            height: 50px;
+            margin: 48px 0 0 37px;
+        }
+        .invite-user-name {
+            border: 1px solid #E7E7E7;
+            border-radius: 5px;
+            background-color: #FAFAFA;
+            width: 536px;
+            height: 50px;
+            padding-left: 15px
+        }
+        .user-invite-button {
+            position: absolute;
+            top: 137px;
+            right: 69px;
+            background: #ACACAC;
+            width: 88px;
+            height: 50px;
+            border: 1px solid #E7E7E7;
+            border-radius: 3px;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+        .user-invite-ok-button {
+            position:absolute;
+            background: #707070;
+            width: 250px;
+            height: 50px;
+            bottom: 35px;
+            left: calc(50% - 125px);
+            border: 0;
+            border-radius: 5px;
+            font-size: 20px;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
 
         /* 브라우저 별 호환성 확인 */
-        .search-bar::placeholder  {
+        .search-bar input::placeholder  {
             color: #707070;
             font-size: 16px;
             text-align: center;
             background: url(/image/search.png) no-repeat;
             background-size: 18px 18px;
             background-position: 130px 0;
+        }
+        textarea::placeholder {
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #B5B5B5;
+        }
+        #user-invite-modal-contents .container input::placeholder {
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #B5B5B5;
+            background: url(/image/user_male_black_shape.png) no-repeat;
+            background-size: 18px 18px;
+            background-position: 0 3px;
         }
         li {
             list-style-type: none;
@@ -341,11 +576,18 @@
             padding-inline-start: 0px;
             padding: 10px 0 0 0;
         }
+        input[type=text]:focus {
+            outline: none;
+        }
+        textarea:focus {
+            outline: none;
+        }
 
     </style>
     <%-- jquery 기본 파일 --%>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.js"></script>
+    <script type="text/javascript" src="js/duedate.js"></script>
 
     <%--<script type="text/javascript" src="js/board.js"></script>--%>
 </head>
@@ -397,39 +639,77 @@
         </div>
     </div>
 </main>
+
+
 <footer>
     <div id="add-list">
         <button class="open-add-list-modal" onclick="document.getElementById('add-list-modal').style.display='block'"><img src="image/plus.png"></button>
-        <div id="add-list-modal" onclick="document.getElementById('add-list-modal').style.display='none'">
+        <div id="add-list-modal">
             <form id="add-list-modal-contents">
-                <span>Create a List</span>
-                <div class="container">
-                    <input type="text" placeholder="List Name" id="add-list-name" required>
-                    <button class="add-list-button" type="button">create</button>
+                <div class="add-list-modal-header">
+                    <span class="modal-header-name">Create a List</span>
+                    <img src="image/multiply.png" class="modal-close-button" onclick="document.getElementById('add-list-modal').style.display='none'">
                 </div>
+                <hr style="width: 402px; border: 0; border-top:1px solid rgba(112, 112, 112, 0.5);">
+                <div class="container">
+                    <span>List Name</span>
+                    <input type="text" id="add-list-name" required>
+                </div>
+                <button class="add-list-button" type="button">create</button>
             </form>
         </div>
     </div>
-    <div id="add-card-modal" onclick="document.getElementById('add-card-modal').style.display='none'">
+    <div id="add-card-modal">
         <form id="add-card-modal-contents">
-            <span>Create a Card</span>
-            <div class="container">
-                <input type="text" placeholder="List Name" id="add-card-name" required>
-                <input type="textarea" id="add-card-textarea">
-                <button class="add-card-button" type="button">create</button>
+            <div class="add-card-modal-header">
+                <span class="modal-header-name">Create a Card</span>
+                <img src="image/multiply.png" class="modal-close-button add-card-close-button" onclick="document.getElementById('add-card-modal').style.display='none'">
+                <img src="image/star_off.png" class="modal-star-off">
             </div>
+            <hr style="width: 702px; border: 0; border-top:1px solid rgba(112, 112, 112, 0.5);">
+            <div class="container">
+                <span class="add-card-container-name">Card Name</span>
+                <input type="text" id="add-card-name" required>
+                <span class="add-card-container-description">Description</span>
+                <textarea id="add-card-description" placeholder="Write a description..."></textarea>
+                <span class="add-card-container-duedate">Due Date</span>
+                <div id='duedate'><script type="text/javascript">Today('null','null','null');</script></div>
+            </div>
+            <button class="add-card-button" type="button">create</button>
         </form>
     </div>
     <div id="more-menu-modal">
         <form id="more-menu-modal-contents">
             <div class="more-menu-header">
                 <span>more</span>
-                <img src="image/multiply.png" onclick="document.getElementById('more-menu-modal').style.display='none'" style="position:absolute; width: 16px; height:16px; right: 10px; cursor:pointer;">
+                <img src="image/multiply.png" class="modal-close-button more-menu-close-button" onclick="document.getElementById('more-menu-modal').style.display='none'">
             </div>
-            <div>
-                <a href="#"><span>invite users..</span></a>
-                <a href="history.jsp"><span>see history..</span></a>
+            <hr style="width: 302px; border: 0; border-top:1px solid rgba(112, 112, 112, 0.5);">
+            <div class="container">
+                <a onclick="document.getElementById('user-invite-modal').style.display='block'">
+                    <img src="image/add_contacts.png" class="invite-users-img">
+                    <span class="invite-users-span">invite users..</span>
+                </a>
+                <hr style="width: 302px; border: 0; border-top: 1px solid #E7E7E7;">
+                <a href="history.jsp">
+                    <img src="image/time_passing.png" class="see-history-img">
+                    <span class="see-history-span">see history..</span>
+                </a>
             </div>
+        </form>
+    </div>
+    <div id="user-invite-modal">
+        <form id="user-invite-modal-contents">
+            <div class="user-invite-header">
+                <span class="modal-header-name">Invite members</span>
+                <img src="image/multiply.png" class="modal-close-button user-invite-close-button" onclick="document.getElementById('user-invite-modal').style.display='none'">
+            </div>
+            <hr style="width: 632px; border: 0; border-top:1px solid rgba(112, 112, 112, 0.5);">
+            <div class="container">
+                <input type="text" class="invite-user-name" placeholder="      search by user ID">
+                <button class="user-invite-button">invite</button>
+            </div>
+            <button class="user-invite-ok-button">OK</button>
         </form>
     </div>
 
@@ -529,7 +809,6 @@
             });
         });
 
-/*
         var modal_list = document.getElementById('add-list-modal');
         // modal 밖 클릭시 modal 종료
         window.onclick = function (event) {
@@ -539,15 +818,13 @@
             }
         };
 
-        var modal_card = document.getElementById('add-card-modal');
+        var modal_card = document.getElementById("add-card-modal");
         // modal 밖 클릭시 modal 종료
         window.onclick = function (event) {
             if (event.target == modal_card) {
                 modal_card.style.display = "none";
             }
         };
-*/
-
 
         var modal_more_menu = document.getElementById('more-menu-modal');
         // modal 밖 클릭시 modal 종료
@@ -556,6 +833,7 @@
                 modal_more_menu.style.display = "none";
             }
         };
+
     });
 </script>
 
