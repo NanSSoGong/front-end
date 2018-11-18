@@ -7,32 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82fb8430-fada-4983-a33d-a5f973f14f18" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/web/image/add.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/add_people.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/back.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/calendar_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/calendar_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/edit.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/history.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/home.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/list.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/more_black.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/more_white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/multiply.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/next.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/picture.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/plus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/post_it_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/post_it_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/search.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/settings.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/star_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/star_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/user.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/image/user_shape.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/calendar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/calendar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/css/calendar.css" beforeDir="false" afterPath="$PROJECT_DIR$/web/css/calendar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.jsp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -45,13 +20,13 @@
     <session id="-1646626543">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="6" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.14" value="1" />
-          <entry key="project.open.time.8" value="1" />
+          <entry key="project.open.time.8" value="2" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -76,12 +51,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="jsp" value="843" />
+          <entry key="jsp" value="1093" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JSP" value="843" />
+          <entry key="JSP" value="1093" />
         </counts>
       </usages-collector>
     </session>
@@ -91,7 +66,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/index.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
+            <state relative-caret-position="555">
               <caret line="37" column="32" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
             </state>
           </provider>
@@ -100,7 +75,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/main.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
+            <state relative-caret-position="255">
               <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
             </state>
           </provider>
@@ -118,13 +93,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/calendar.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2263">
-              <caret line="165" column="34" selection-start-line="165" selection-start-column="34" selection-end-line="165" selection-end-column="34" />
+            <state relative-caret-position="271">
+              <caret line="413" column="79" selection-start-line="413" selection-start-column="79" selection-end-line="413" selection-end-column="79" />
               <folding>
                 <element signature="n#style#0;n#table#1;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#table#0;n#td#0;n#table#1;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="e#10848#10854#1#HTML" expanded="true" />
-                <element signature="e#11940#11946#1#HTML" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -138,7 +111,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/board.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
+            <state relative-caret-position="5235">
               <caret line="349" column="70" selection-start-line="9" selection-start-column="6" selection-end-line="349" selection-end-column="70" />
             </state>
           </provider>
@@ -147,8 +120,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/history.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="893">
-              <caret line="73" column="7" lean-forward="true" selection-start-line="25" selection-start-column="6" selection-end-line="73" selection-end-column="7" />
+            <state relative-caret-position="1095">
+              <caret line="73" column="7" selection-start-line="25" selection-start-column="6" selection-end-line="73" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -207,6 +180,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -230,7 +204,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -351,17 +324,18 @@
       <workItem from="1542256870364" duration="294000" />
       <workItem from="1542529405690" duration="230000" />
       <workItem from="1542544903502" duration="8545000" />
+      <workItem from="1542562986184" duration="1099000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11265000" />
+    <option name="totallyTimeSpent" value="12364000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="808" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23247497" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2353362" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -455,6 +429,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/index.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" column="32" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/main.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web/css/calendar.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -462,46 +450,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/main.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/index.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="37" column="32" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/web/image/back.png">
+      <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/web/board.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
+        <state relative-caret-position="5235">
           <caret line="349" column="70" selection-start-line="9" selection-start-column="6" selection-end-line="349" selection-end-column="70" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/history.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="893">
-          <caret line="73" column="7" lean-forward="true" selection-start-line="25" selection-start-column="6" selection-end-line="73" selection-end-column="7" />
+        <state relative-caret-position="1095">
+          <caret line="73" column="7" selection-start-line="25" selection-start-column="6" selection-end-line="73" selection-end-column="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/image/back.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/calendar.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2263">
-          <caret line="165" column="34" selection-start-line="165" selection-start-column="34" selection-end-line="165" selection-end-column="34" />
+        <state relative-caret-position="271">
+          <caret line="413" column="79" selection-start-line="413" selection-start-column="79" selection-end-line="413" selection-end-column="79" />
           <folding>
             <element signature="n#style#0;n#table#1;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#table#0;n#td#0;n#table#1;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="e#10848#10854#1#HTML" expanded="true" />
-            <element signature="e#11940#11946#1#HTML" expanded="true" />
           </folding>
         </state>
       </provider>

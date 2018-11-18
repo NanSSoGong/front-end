@@ -332,15 +332,6 @@
             border-radius: 5px;
             padding: 7px;
         }
-        .more-menu {
-            position:absolute;
-            width: 24px;
-            height: 24px;
-            margin: 8px 0 8px 0;
-            top:0;
-            right:60px;
-            cursor: pointer;
-        }
         .settings-menu {
             position:absolute;
             width: 24px;
@@ -357,15 +348,6 @@
             height:24px;
             width:auto;
             margin: 8px 0 8px 0;
-        }
-        .post-it {
-            position:absolute;
-            width: 24px;
-            height: 24px;
-            margin: 8px 0 8px 0;
-            top:0;
-            left:150px;
-            cursor: pointer;
         }
 
         #add-list-modal button {
@@ -426,30 +408,30 @@
 
 <main>
     <div class="calendar">
-        <table border='1' width='519' celpadding='0' cellspacing='0'>
+        <table height='100' width='519' celpadding='0' cellspacing='0' align="center" valign="center">
             <tr>
                 <td width='150' align='right' valign='middle'><a href="cal.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=0"><img height="20px" width="20px" src="image/back.png"></a></td>
-                <td width='260' align='center' valign='middle'><b><%= cal.get(cal.YEAR)+"."+getDateName (cal.get(cal.MONTH))%></b></td>
+                <td width='260' align='center' valign='middle'><b><font size="6px"><%= cal.get(cal.YEAR)+"."+getDateName (cal.get(cal.MONTH))%></font></b></td>
                 <td width='173' align='left' valign='middle'><a href="cal.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=1"><img height="20px" width="20px" src="image/next.png"></a></td>
             </tr>
         </table>
-        <table border="0" width="520" bordercolorlight="#C0C0C0" bordercolordark="#808080" style="border-collapse: collapse" bordercolor="#111111" cellpadding="0" cellspacing="0">
+        <table align="center" valign="center" border="0" width="520" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0">
             <td width="100%">
-                <table border="2" width="519" bordercolorlight="#C0C0C0" bordercolordark="#000000" style="border-collapse: collapse" bordercolor="#000000" cellpadding="0" cellspacing="0" bgcolor="#DFDCD8">
+                <table border="2" width="519" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0" >
                     <tr>
-                        <td width="<%=boxSize%>" align="center" nowrap bordercolor="#666666" bgcolor="#666666">
+                        <td width="<%=boxSize%>" align="center" nowrap >
                             <font color="#F02E0B"><b>Sun</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap bordercolor="#666666" bgcolor="#666666">
+                        <td width="<%=boxSize%>" align="center" nowrap >
                             <font color="#707070"><b>Mon</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap bordercolor="#666666" bgcolor="#666666">
+                        <td width="<%=boxSize%>" align="center" nowrap >
                             <font color="#707070"><b>Tue</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap bordercolor="#666666" bgcolor="#666666">
+                        <td width="<%=boxSize%>" align="center" nowrap >
                             <font color="#707070"><b>Wed</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap bordercolor="#666666" bgcolor="#666666">
+                        <td width="<%=boxSize%>" align="center" nowrap >
                             <font color="#707070"><b>Thu</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap bordercolor="#666666" bgcolor="#666666">
+                        <td width="<%=boxSize%>" align="center" nowrap >
                             <font color="#707070"><b>Fri</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap bordercolor="#666666" bgcolor="#666666">
+                        <td width="<%=boxSize%>" align="center" nowrap >
                             <font color="#707070"><b>Sat</b></font></td>
                     </tr>
                     <%
@@ -491,7 +473,7 @@
                                     todayColor = "#ffffff";
                                 }
                         %>
-                        <td bgcolor ="<%=todayColor%>" width="<%=boxSize%>" align="left" height="<%=boxSize%>" valign="top"><%=dispDay%><br>
+                        <td bgcolor ="<%=todayColor%>" width="<%=boxSize%>" align="center" height="<%=boxSize%>" valign="center"><%=dispDay%><br>
                         </td>
                         <%
                             count += 1;
