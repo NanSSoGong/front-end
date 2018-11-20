@@ -1,0 +1,182 @@
+body {
+    margin: 0px;
+    z-index: 0;
+    overflow: hidden;
+    background-color: #FAFAFA;
+    font-family: "NanumSquare", light;
+}
+/* box-size 에 padding, border 을 포함*/
+* {
+    box-sizing: border-box;
+}
+
+.history-header{
+    font-family: "NanumSquare", light;
+    font-size: 35px;
+    color: #707070;
+    margin-top: 80px;
+    margin-left: 300px;
+
+}
+.histroy-image-margin {
+    margin-top: 50px;
+    margin-left: 350px;
+}
+.margin-left50 {
+    margin-left: 50px;
+}
+.margin-left730 {
+    margin-left: 730px;
+}
+.divider{
+    height: 5px;
+    width: 1500px;
+    color: #707070;
+}
+.list {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    width: 350px;
+    min-height: 20px;
+    list-style-type: none;
+    margin: 5px;
+    padding: 2px 7px 7px 7px;
+    float: left;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.24);
+    background-color: #F6F6F6;
+}
+.list-header {
+    font-family:"NanumSquareOTF ExtraBold";
+    font-size: 22px;
+    color: #707070;
+    height: 50px;
+    width: 334px;
+}
+.list-name {
+    display: inline-block;
+    margin: 10px 0 0 5px;
+}
+.list-tool-button-box {
+    position: absolute;
+    top:12px;
+    right:10px;
+}
+.card {
+    font-family:"NanumSquare Bold";
+    color: #707070;
+    margin: 0 0 10px 0;
+    border-radius: 5px;
+    padding: 10px 14px 14px 14px;
+    font-size: 16px;
+    width: 334px;
+    height: 86px;
+    background-color: #FFFFFF;
+}
+
+/*-----------------------------------header-------------------------------------*/
+header {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 44px;
+    border: 1px solid #E7E7E7;
+    padding: 5px 0 5px 0;
+    background-color: #ffffff;
+    text-align: center;
+}
+.header-logo {
+    position: absolute;
+    display: block;
+    height: 32px;
+    top: 0;
+    left: calc(50% - 46px);
+    padding-top: 5px;
+}
+.logo-image {
+    height: 32px;
+    width: 93px;
+}
+.home-box {
+    position: absolute;
+    top: 4px;
+    left: 20px;
+    float: left;
+    height: 25px;
+    width: 25px;
+    padding-right: 8px;
+    margin-top: 5px;
+}
+.home-button {
+    width: 20px;
+    height: 20px;
+}
+.user {
+    position: absolute;
+    top: 4px;
+    right: 20px;
+}
+.user-box {
+    display: block;
+    float: left;
+    height: 34px;
+    padding-right: 8px;
+}
+.text {
+    padding: 6px 8px 4px 0;
+}
+/*.image {
+}*/
+.user-name {
+    height:34px;
+}
+.user-image {
+    margin-top: 5px;
+    width:25px;
+    height:25px;
+}
+.float {
+    float: left;
+}
+.float-right {
+    float: right;
+    margin-right: 350px;
+}
+/*-----------------------sub-header-------------------------*/
+.sub-header {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 44px;
+    /*border: 1px solid #E7E7E7;*/
+    padding: 2px 0 2px 0;
+    background-color: #ffffff;
+    text-align: center;
+}
+.search-bar {
+    position: absolute;
+    top: 0;
+    left: calc(50% - 170px);
+}
+.search-bar input[type=text] {
+    width: 340px;
+    height: 36px;
+    margin: 4px 0 4px 0;
+    background-color: #FAFAFA;
+    border: 1px solid #E7E7E7;
+    border-radius: 5px;
+    padding: 7px;
+}
+/* 브라우저 별 호환성 확인 */
+::placeholder {
+    color: #707070;
+    font-size: 16px;
+    text-align: center;
+    background: url(../image/search.png) no-repeat;
+    background-position: 120px 0;
+}
+li {
+    list-style-type: none;
+}
+ul {
+    padding: 0;
+}
