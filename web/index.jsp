@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="css/login.css">
 
   <%-- javascript --%>
-
+  <script type="text/javascript" src="js/jquery.min.js"></script>
 </head>
 <body>
 

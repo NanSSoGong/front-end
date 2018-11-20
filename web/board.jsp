@@ -587,9 +587,9 @@
     <%-- jquery 기본 파일 --%>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.js"></script>
-    <script type="text/javascript" src="js/duedate.js"></script>
 
-    <%--<script type="text/javascript" src="js/board.js"></script>--%>
+    <script type="text/javascript" src="js/duedate.js"></script>
+    <script type="text/javascript" src="js/board.js"></script>
 </head>
 
 <body>
@@ -808,32 +808,6 @@
                 alert(get_id);
             });
         });
-
-        var modal_list = document.getElementById('add-list-modal');
-        // modal 밖 클릭시 modal 종료
-        window.onclick = function (event) {
-            if (event.target == modal_list) {
-                alert(modal_list);
-                modal_list.style.display = "none";
-            }
-        };
-
-        var modal_card = document.getElementById("add-card-modal");
-        // modal 밖 클릭시 modal 종료
-        window.onclick = function (event) {
-            if (event.target == modal_card) {
-                modal_card.style.display = "none";
-            }
-        };
-
-        var modal_more_menu = document.getElementById('more-menu-modal');
-        // modal 밖 클릭시 modal 종료
-        window.onclick = function (event) {
-            if (event.target == modal_more_menu) {
-                modal_more_menu.style.display = "none";
-            }
-        };
-
     });
 </script>
 
