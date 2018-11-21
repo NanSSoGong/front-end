@@ -1,7 +1,8 @@
 body {
     margin: 0;
     z-index: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     font-family: 'NanumSquare', light;
 }
 /* box-size 에 padding, border 을 포함*/
@@ -10,12 +11,13 @@ body {
 }
 /*-----------------------------------header-------------------------------------*/
 header {
-    position: relative;
-    top: 0;
+    z-index:50;
+    position: fixed;
     width: 100%;
     height: 44px;
     border: 1px solid #E7E7E7;
     padding: 5px 0 5px 0;
+    background-color: #FFFFFF;
     text-align: center;
 }
 .header-logo {
@@ -25,7 +27,6 @@ header {
     top: 0;
     left: calc(50% - 46px);
     padding-top: 5px;
-    /* 50% - 23px */
 }
 .logo-image {
     height: 32px;
@@ -45,8 +46,6 @@ header {
 .text {
     padding: 6px 8px 4px 0;
 }
-/*.image {
-}*/
 .user-name {
     height:34px;
 }
@@ -54,19 +53,17 @@ header {
     width:34px;
     height:34px;
 }
-/* --------------------------------------------------------------------- */
-main {
-    z-index: 1;
+/* --------------------------------sub header(search bar)------------------------------------- */
 
-}
 .sub-header {
+    z-index:50;
     position: fixed;
-    top: 44px;
+    float:left;
+    top:44px;
     width: 100%;
     height: 44px;
-    /*border: 1px solid #E7E7E7;*/
     padding: 2px 0 2px 0;
-    background-color: #ffffff;
+    background-color: #FFFFFF;
     text-align: center;
 }
 .search-bar {
@@ -83,10 +80,50 @@ main {
     border-radius: 5px;
     padding: 7px;
 }
+/* --------------------------------side menu(board list)------------------------------------- */
 .side-menu {
-    z-index: 2;
+
     height: 100%;
     width: 34%;
+    /*min-width: 360px;*/
+    padding: calc(88px + 5%) 0 0 11%;
+}
+.side-menu-container {
+    position: fixed;
+    padding:0;
+    width: 360px;
+    height: 100%;
+    min-width: 300px;
+}
+.side-menu-container button {
+    width: 182px;
+    height: 36px;
+    padding: 0;
+    border:0;
+    background-color:rgba(0,0,0,0);
+    cursor:pointer;
+}
+.button-img-wrap {
+    display:inline-block;
+    width:35px;
+    height: 35px;
+    padding:10px;
+    border-radius:5px;
+    background-color: #EAEAEA;
+}
+.side-menu-container img {
+    width: 15px;
+    height: 15px;
+}
+.side-menu-container button span {
+    display:inline-block;
+    font-family: 'NanumSquare', Regular;
+    font-size: 20px;
+    margin: 0 0 0 12px;
+}
+#board-list span {
+    font-family: 'NanumSquare', Regular;
+    font-size: 20px;
 }
 .modal-header-name {
     display: block;
@@ -99,10 +136,6 @@ main {
     width: 20px;
     height:20px;
     cursor:pointer;
-}
-.board-li {
-
-
 }
 #create-board-modal {
     display: none;
@@ -209,14 +242,138 @@ main {
     color: #FFFFFF;
     cursor: pointer;
 }
-
 .d-day {
-    z-index: 2;
+    z-index: -1;
+    padding: calc(88px + 5%) 0 0 0;
     height: 100%;
     width: 32%;
+    min-width: 360px;
+}
+.today {
+    z-index: -1;
+    position: relative;
+    width:600px;
+    height: 320px;
+    padding: 40px;
+    margin: 0 0 53px 0;
+    text-align: center;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
+}
+.today-shadow {
+    z-index:-1;
+    position:absolute;
+    top:51px;
+    left:calc(50% - 49px);
+    width: 104px;
+    height: 28px;
+    background-color: #EFCE4A;
+}
+.today li {
+    margin-bottom: 53px;
+}
+.today .today-header {
+    font-family:"NanumSquare Regular";
+    font-size: 33px;
+}
+.today .today-card-name {
+    font-family:"NanumSquare Bold";
+    font-size: 35px;
+}
+.today .today-date {
+    font-family:"NanumSquare Regular";
+    font-size: 25px;
+}
+.d-day-list {
+    position: relative;
+    width:600px;
+    height: 100%;
+    padding: 0;
+    margin:0;
+}
+.card-list {
+    position: relative;
+    width:600px;
+    height: 300px;
+    padding: 30px 50px 0 50px;
+    margin:0 0 30px 0;
+    background-color: #FAFAFA;
+    opacity: 0.82;
+    border:0;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
+}
+.card-header {
+    width: 500px;
+    height: 27px;
+}
+.board-name {
+    font-family:"NanumSquare Regular";
+    font-size: 25px;
+}
+.colon {
+    font-family:"NanumSquare Regular";
+    font-size: 25px;
+}
+.list-name {
+    display: inline-block;
+    width: 296px;
+    font-family:"NanumSquare Regular";
+    font-size: 25px;
+}
+.d-day-number {
+    font-family:"NanumSquare Bold";
+    font-size: 22px;
+    color: #F02E0B;
+}
+.card-contents {
+    width:500px;
+    height: 111px;
+    padding: 17px 0 23px 24px;
+    margin:20px 0 30px 0;
+    border:0;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+}
+.card-name {
+    display: block;
+    margin: 0 0 18px 0;
+    font-family:"NanumSquare Bold";
+    font-size: 22px;
+    color: #707070;
+}
+.card-duedate {
+    display: block;
+    font-family:"NanumSquare Light";
+    font-size: 22px;
+    color: #707070;
+}
+.card-list button {
+    position: absolute;
+    width:300px;
+    height: 80px;
+    padding: 0;
+    margin:0;
+    background-color: #FFFFFF;
+    font-family:"NanumSquare Regular";
+    font-size: 25px;
+    color:#707070;
+}
+.done-button {
+    top:220px;
+    left: 0;
+    border:0;
+    border-right: 1px solid #F6F6F6;
+    border-bottom-left-radius: 5px;
+}
+.hide-button {
+    top:220px;
+    right: 0;
+    border:0;
+    border-left: 1px solid #F6F6F6;
+    border-bottom-right-radius: 5px;
 }
 .calendar {
-    z-index: 2;
+    z-index: -1;
     height: 100%;
     width: 34%;
 }
@@ -233,10 +390,22 @@ main {
     background-size: 18px 18px;
     background-position: 130px 0;
 }
+#board-list {
+    margin: 0 0 30px 0;
+}
+#board-list li {
+    margin: 0 0 15px 0;
+}
+ul {
+    padding: 0;
+    margin: 0;
+}
 li {
     list-style-type: none;
     padding: 0;
+
 }
+
 #create-board-modal-contents .container input::placeholder {
     font-family:"NanumSquare Regular";
     font-size: 20px;
@@ -245,3 +414,18 @@ li {
     background-size: 18px 18px;
     background-position: 0 3px;
 }
+a:link, a:visited {
+    color: initial;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:link:active, a:visited:active {
+    color: initial;
+}
+
+/*        @media only screen and (max-width: 600px) {
+            section.side-menu {
+                display: none;
+            }
+        }*/

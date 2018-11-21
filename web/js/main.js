@@ -6,16 +6,17 @@ $(document).ready(function() {
 });*/
 
 $(document).ready(function() {
-    var modal_board = document.getElementById('more-menu-modal');
+    $(document).ready(function() {
+        var modal_board = document.getElementById('create-board-modal');
 
 // modal 밖 클릭시 modal 종료
-    $(function () {
-        window.onclick = function (event) {
-            if (event.target == modal_board) {
-                alert(modal_board);
-                modal_board.style.display = "none";
-            }
-        };
+        $(function () {
+            window.onclick = function (event) {
+                if (event.target == modal_board) {
+                    modal_board.style.display = "none";
+                }
+            };
+        });
     });
 
 });
