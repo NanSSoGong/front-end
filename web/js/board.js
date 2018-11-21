@@ -1,27 +1,33 @@
 $(document).ready(function() {
+    var modal_list = document.getElementById('add-list-modal');
+    var modal_card = document.getElementById("add-card-modal");
+    var modal_more_menu = document.getElementById('more-menu-modal');
+
+// modal 밖 클릭시 modal 종료
     $(function () {
-        $(".sortable .list-contents").sortable({
-            connectWith: ".sortable .list-contents"
-        }).disableSelection();
+        window.onclick = function (event) {
+            if (event.target == modal_list) {
+                modal_list.style.display = "none";
+            }
+        };
     });
+
+// modal 밖 클릭시 modal 종료
     $(function () {
-        $(".sortable").draggable();
+        window.onclick = function (event) {
+            if (event.target == modal_card) {
+                modal_card.style.display = "none";
+            }
+        };
     });
-    /* 임시 */
-    $("#listName1 .add-card-button").click(function () {
-        $("#listName1 .list-contents").append("<li class=\"card\">Item 1</li>");
-    });
-    $("#listName2 .add-card-button").click(function () {
-        $("#listName2 .list-contents").append("<li class=\"card\">Item 1</li>");
-    });
-    $("#listName3 .add-card-button").click(function () {
-        $("#listName3 .list-contents").append("<li class=\"card\">Item 1</li>");
-    });
-    $("#listName4 .add-card-button").click(function () {
-        $("#listName4 .list-contents").append("<li class=\"card\">Item 1</li>");
-    });
-    $("#listName5 .add-card-button").click(function () {
-        $("#listName5 .list-contents").append("<li class=\"card\">Item 1</li>");
+
+// modal 밖 클릭시 modal 종료
+    $(function () {
+        window.onclick = function (event) {
+            if (event.target == modal_more_menu) {
+                modal_more_menu.style.display = "none";
+            }
+        };
     });
 });
 
