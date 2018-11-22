@@ -14,18 +14,20 @@
     <%--<link rel="stylesheet" type="text/css" href="css/board.css">--%>
     <style>
         body {
-            margin: 0px;
+            margin: 0;
             z-index: 0;
-            overflow: scroll;
             background-color: #FAFAFA;
             font-family: "NanumSquare", light;
             overflow-x:scroll;
             overflow-y:hidden;
+/**/
         }
         .list-wrap {
+            float: left;
             position:relative;
+            display: inline-block;
             float:left;
-            width: 350px;
+            width: auto;
             height: 100%;
         }
 
@@ -34,14 +36,16 @@
             box-sizing: border-box;
         }
         #list {
-            position:fixed;
+            position:relative;
             top: 88px;
             left:0;
             height:100%;
             width:100%;
+
+
         }
         .list {
-            position:relative;
+            position:absolute;
             display: inline-block;
             border: 1px solid #eee;
             border-radius: 5px;
@@ -614,28 +618,26 @@
 </section>
 <main>
     <div id="list">
-        <%--<div class="list-wrap">--%>
         <div id="listName1" class="list sortable">
             <div class="list-header">
                 <span class="list-name">To Do</span>
                 <a href="#" class="list-tool-button-box"><img src="image/more_2.png" class="list-tool-box"></a>
             </div>
             <ul class="list-contents">
-                <li class="card">SOW 보고서 쓰기</li>
-                <li class="card">프로젝트 이름 정하기</li>
+                <li class="card"><span>SOW 보고서 쓰기</span><img src="/image/star_off.png" class="star-before"></li>
+                <li class="card"><span>프로젝트 이름 정하기</span><img src="/image/star_off.png" class="star-before"></li>
             </ul>
-            <img src="image/plus.png" class="open-add-card-modal" onclick="document.getElementById('add-card-modal').style.display='block'">
+            <img src="image/plus.png" class="open-add-card-modal">
         </div>
-        <%--</div>--%>
         <div id="listName2" class="list sortable">
             <div class="list-header">
                 <span class="list-name">Doing</span>
                 <a href="#" class="list-tool-button-box"><img src="image/more_2.png" class="list-tool-box"></a>
             </div>
             <ul class="list-contents">
-                <li class="card">UI 디자인 완성하기</li>
+                <li class="card"><span>UI 디자인 완성하기</span><img src="/image/star_off.png" class="star-before"></li>
             </ul>
-            <img src="image/plus.png" class="open-add-card-modal" onclick="document.getElementById('add-card-modal').style.display='block'">
+            <img src="image/plus.png" class="open-add-card-modal">
         </div>
     </div>
 </main>
@@ -746,60 +748,73 @@
         });
 
         /* Card 추가 */
-        /*$(function() {
-            $(".add-card-button").on("click", function() {
-                // 클릭한 버튼이 속한 div 의 id 얻기
-                var div_id = document.getElementById($(this).closest("div").attr("id"));
-                // div 의 list(.list-contents)
-                var new_card = div_id.children[1];
-                //alert(new_card);
-                $(new_card).append("<li class=\"card\"><span>Item</span><img src=\"/image/star_off.png\" class=\"star-before\"></li>");
-            });
-        });*/
-
-        /* List 추가 */
         $(function() {
-            $(".add-list-button").on("click", function() {
-                // modal 에서 입력한 List 이름 가져오기
-                var add_list_name = $("#add-list-name").val();
-                //alert(add_list_name);
-                // List 추가
-                $("#list").append("<div id='" + add_list_name + "' class='list sortable'><div class='list-header'><span class='list-name'>" + add_list_name + "</span><a href='#' class='list-tool-button-box'><img src='image/more_2.png' class='list-tool-box'></a></div><ul class='list-contents'></ul><img src=\"image/plus.png\" class=\"open-add-card-modal\" onclick=\"document.getElementById('add-card-modal').style.display='block'\"></div>");
-
-                // List 생성 후 modal 종료
-                var modal = document.getElementById('add-list-modal');
-                modal.style.display = "none";
-                //alert(add_list_name);
+            $(".open-add-card-modal").on("click", function() {
+                document.getElementById('add-card-modal').style.display='block' // add-modal 보이기
+                var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
+                sessionStorage.setItem("click_list_id", div_id);
             });
         });
-
         /* Card 추가 */
         $(function() {
             $(".add-card-button").on("click", function() {
                 // modal 에서 입력한 List 이름 가져오기
                 var add_card_name = $("#add-card-name").val();
-                // 클릭한 버튼이 속한 div 의 id 얻기
-                //var div_id = document.getElementById($(this).closest("div").attr("id"));
-                // div 의 list(.list-contents)
-                //var new_card = div_id.children[1];
-
-                //$(new_card).append("<li class=\"card\"><span>" + add_card_name + "</span><img src=\"/image/star_off.png\" class=\"star-before\"></li>");
+                var click_list_id = sessionStorage.getItem("click_list_id")
+                var clicked_list = document.getElementById(click_list_id).children[1]; // div 의 자식노드중 두번째 (ul - .list-contents)
+                $(clicked_list).append("<li class=\"card\"><span>" + add_card_name + "</span><img src=\"/image/star_off.png\" class=\"star-before\"></li>");
 
                 // Card 생성 후 modal 종료
                 var modal = document.getElementById('add-card-modal');
-                //alert(modal);
                 modal.style.display = "none";
-                //alert(add_list_name);
+                sessionStorage.clear();
+            });
+        });
+        /* List 추가 */
+        $(function() {
+            $(".add-list-button").on("click", function() {
+                // modal 에서 입력한 List 이름 가져오기
+                var add_list_name = $("#add-list-name").val();
+                var list = document.getElementById('list');
+                var i;
+                var top = 0; var left = 0;
+                for (i = 0; i < list.childElementCount; i++) {
+                    var list_position = document.getElementById(list.children[i].getAttribute("id")).getBoundingClientRect();
+                    if( list_position.left > left) {
+                        left = list_position.left;
+                        top = list_position.top;
+                    }
+                }
+                // List 추가
+                $("#list").append("<div id='" + add_list_name + "' class='list sortable'><div class='list-header'><span class='list-name'>" + add_list_name + "</span><a href='#' class='list-tool-button-box'><img src='image/more_2.png' class='list-tool-box'></a></div><ul class='list-contents'></ul><img src='image/plus.png' class='open-add-card-modal'></div>");
+
+                var rect = document.getElementById(add_list_name).getBoundingClientRect();
+                left = left + rect.width;
+                top = top - 92;
+
+                $("#"+ add_list_name).css({"left" : left, "top" : top});
+                // List 생성 후 modal 종료
+                var modal = document.getElementById('add-list-modal');
+                modal.style.display = "none";
+
+                // element 추가할 때 이벤트 다시 등록하기
+                $(".sortable .list-contents").sortable({
+                    connectWith: ".sortable .list-contents"
+                }).disableSelection();
+                $(".sortable").draggable({ containment: "#list", scroll: false });
+                $(".open-add-card-modal").on("click", function() {
+                    document.getElementById('add-card-modal').style.display = 'block' // add-modal 보이기
+                    var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
+                    sessionStorage.setItem("click_list_id", div_id);
+                    alert(div_id + "sssss");
+                });
             });
         });
 
-        // element 추가할 때 이벤트 다시 등록하기
-        $("#list").on("click",".list", function() {
-            $(".sortable .list-contents").sortable({
-                connectWith: ".sortable .list-contents"
-            }).disableSelection();
-            $(".sortable").draggable({ containment: "#list", scroll: false });
-        })
+
+
+
+
 
         // test 용
         $(function() {
@@ -809,6 +824,7 @@
             });
         });
     });
+
 </script>
 
 </body>
