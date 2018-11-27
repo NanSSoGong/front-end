@@ -5,9 +5,17 @@ body {
     background-color: #FAFAFA;
     font-family: "NanumSquare", light;
 }
+
+@font-face{
+    font-family:"NanumSquare"; /*폰트 패밀리 이름 추가*/
+    src:url("libraries/fonts/NanumSqure.ttf"); /*폰트 파일 주소*/
+}
+
+
 /* box-size 에 padding, border 을 포함*/
 * {
     box-sizing: border-box;
+    font-family: NanumSquare;
 }
 .list {
     border: 1px solid #eee;

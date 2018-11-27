@@ -7,18 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<<<<<<< HEAD
-  <head>
-    <title>$Title$</title>
-    <script src="script.js"></script>
-  </head>
-  <body>
-  <h1>This is heading</h1>
-  <p>This is a paragrah.</p>
-  Hello, NanSsoGong!<<br/>
-  <button onclick="runCode()">Click Me</button>
-  </body>
-=======
 <head>
   <title>Card-it</title>
 
@@ -26,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="css/login.css">
 
   <%-- javascript --%>
-
+  <script type="text/javascript" src="js/jquery.min.js"></script>
 </head>
 <body>
 
@@ -88,5 +76,4 @@
 </script>
 
 </body>
->>>>>>> 704d1eed5d0e66ab32af510b1e8fcfd83d34ea64
 </html>

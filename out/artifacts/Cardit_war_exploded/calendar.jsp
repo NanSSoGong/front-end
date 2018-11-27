@@ -13,7 +13,7 @@
     int action = 0;  // 1이면 다음 달, 0이면 이전 달
     int currYear = 0; // if it is not retrieved from incoming URL (month=) then 현재 년도
     int currMonth = 0;
-    String boxSize = "70";  // 달력 크
+    String boxSize = "90";  // 달력 한 칸 크기
 
 //build 2 calendars
 
@@ -79,40 +79,40 @@
         switch (monthNumber)
         {
             case 0:
-                strReturn = "January";
+                strReturn = "01";
                 break;
             case 1:
-                strReturn = "February";
+                strReturn = "02";
                 break;
             case 2:
-                strReturn = "March";
+                strReturn = "03";
                 break;
             case 3:
-                strReturn = "April";
+                strReturn = "04";
                 break;
             case 4:
-                strReturn = "May";
+                strReturn = "05";
                 break;
             case 5:
-                strReturn = "June";
+                strReturn = "06";
                 break;
             case 6:
-                strReturn = "July";
+                strReturn = "07";
                 break;
             case 7:
-                strReturn = "August";
+                strReturn = "08";
                 break;
             case 8:
-                strReturn = "September";
+                strReturn = "09";
                 break;
             case 9:
-                strReturn = "October";
+                strReturn = "10";
                 break;
             case 10:
-                strReturn = "November";
+                strReturn = "11";
                 break;
             case 11:
-                strReturn = "December";
+                strReturn = "12";
                 break;
         }
         return strReturn;
@@ -125,7 +125,7 @@
     <title>Calendar | cardit</title>
 
     <%-- css 파일 --%>
-    <%--<link rel="stylesheet" type="text/css" href="css/board.css">--%>
+    <link rel="stylesheet" type="text/css" href="css/calendar.css">
     <style>
         body {
             margin: 0px;
@@ -164,6 +164,10 @@
             background-color: #ffffff;
             border-radius: 10px;
             align-content: center;
+        }
+        .calendar-y-m{
+            margin-top: 10px;
+            margin-bottom: 20px;
         }
         .list {
             position:relative;
@@ -411,28 +415,28 @@
         <table height='100' width='519' celpadding='0' cellspacing='0' align="center" valign="center">
             <tr>
                 <td width='150' align='right' valign='middle'><a href="cal.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=0"><img height="20px" width="20px" src="image/back.png"></a></td>
-                <td width='260' align='center' valign='middle'><b><font size="6px"><%= cal.get(cal.YEAR)+"."+getDateName (cal.get(cal.MONTH))%></font></b></td>
+                <td width='260' align='center' valign='middle'><b><font color="#707070" size="6px"><%= cal.get(cal.YEAR)+"."+getDateName (cal.get(cal.MONTH))%></font></b></td>
                 <td width='173' align='left' valign='middle'><a href="cal.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=1"><img height="20px" width="20px" src="image/next.png"></a></td>
             </tr>
         </table>
         <table align="center" valign="center" border="0" width="520" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0">
             <td width="100%">
-                <table border="2" width="519" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0" >
+                <table class="calendar-y-m" border="2" width="519" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0" >
                     <tr>
                         <td width="<%=boxSize%>" align="center" nowrap >
-                            <font color="#F02E0B"><b>Sun</b></font></td>
+                            <font size=4 color="#F02E0B"><b>Sun</b></font></td>
                         <td width="<%=boxSize%>" align="center" nowrap >
-                            <font color="#707070"><b>Mon</b></font></td>
+                            <font size=4 color="#707070"><b>Mon</b></font></td>
                         <td width="<%=boxSize%>" align="center" nowrap >
-                            <font color="#707070"><b>Tue</b></font></td>
+                            <font size=4 color="#707070"><b>Tue</b></font></td>
                         <td width="<%=boxSize%>" align="center" nowrap >
-                            <font color="#707070"><b>Wed</b></font></td>
+                            <font size=4 color="#707070"><b>Wed</b></font></td>
                         <td width="<%=boxSize%>" align="center" nowrap >
-                            <font color="#707070"><b>Thu</b></font></td>
+                            <font size=4 color="#707070"><b>Thu</b></font></td>
                         <td width="<%=boxSize%>" align="center" nowrap >
-                            <font color="#707070"><b>Fri</b></font></td>
+                            <font size=4 color="#707070"><b>Fri</b></font></td>
                         <td width="<%=boxSize%>" align="center" nowrap >
-                            <font color="#707070"><b>Sat</b></font></td>
+                            <font size=4 color="#707070"><b>Sat</b></font></td>
                     </tr>
                     <%
 
@@ -473,7 +477,7 @@
                                     todayColor = "#ffffff";
                                 }
                         %>
-                        <td bgcolor ="<%=todayColor%>" width="<%=boxSize%>" align="center" height="<%=boxSize%>" valign="center"><%=dispDay%><br>
+                        <td bgcolor ="<%=todayColor%>" width="<%=boxSize%>" align="center" height="<%=boxSize%>" valign="center"><font size="4" color="#707070"><%=dispDay%></font><br>
                         </td>
                         <%
                             count += 1;
