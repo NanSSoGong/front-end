@@ -165,6 +165,12 @@
             border-radius: 10px;
             align-content: center;
         }
+        .today-date{
+            opacity: 0.3;
+            width: 32px;
+            height: 32px;
+            background-image: url("image/date_circle.png");
+        }
         .calendar-y-m{
             margin-top: 10px;
             margin-bottom: 20px;
@@ -210,6 +216,7 @@
             font-size: 15px;
         }
         .d-content{
+            vertical-align: center;
             margin-left: 50px;
         }
         .list-tool-button-box {
@@ -227,7 +234,7 @@
             height: 20px;
         }
         .card {
-            vertical-align: middle;
+            vertical-align: center;
             font-family:"NanumSquare Bold";
             color: #707070;
             margin: 10px;
@@ -237,6 +244,9 @@
             width: 660px;
             height: 86px;
             background-color: #FFFFFF;
+        }
+        .list-contents{
+            vertical-align: center;
         }
         .open-add-card-modal {
             display: block;
@@ -446,6 +456,8 @@
                         int count = 1;
                         int dispDay = 1;
 
+                        int today =0;
+
 
                         for (int w = 1; w < 6; w++)
                         {
@@ -470,14 +482,19 @@
 
                                 if ( dispDay == c.get(c.DAY_OF_MONTH) && c.get(c.MONTH) == cal.get(cal.MONTH) && c.get(c.YEAR) == cal.get(cal.YEAR)) // Here we check to see if the current day is today
                                 {
-                                    todayColor = "#D7D7D7";
+                                    todayColor = "#ffffff";
+                                    today=1;
                                 }
                                 else
                                 {
                                     todayColor = "#ffffff";
                                 }
                         %>
-                        <td bgcolor ="<%=todayColor%>" width="<%=boxSize%>" align="center" height="<%=boxSize%>" valign="center"><font size="4" color="#707070"><%=dispDay%></font><br>
+                        <td bgcolor ="<%=todayColor%>" width="<%=boxSize%>" align="center" height="<%=boxSize%>" valign="center">
+                            <% if(today==1) {%>
+                                <div class="today-date"/>
+                            <% today=0; } %>
+                            <div ><font size="4" color="#707070"><%=dispDay%></font></div><br>
                         </td>
                         <%
                             count += 1;
@@ -513,17 +530,26 @@
             <li class="card">
                 <span><div class="d-day">D-3</div><span class="d-date">09.18</span></span>
                 <span class="d-content">SOW 보고서 쓰기</span>
-                <img src="image/star_off.png" class="star-img"/>
-            </li>
-            <li class="card">
-                <span><div class="d-day">D-7</div><span class="d-date">09.28</span></span>
-                <span class="d-content">프로젝트 이름 정하기</span>
-                <img src="image/star_off.png" class="star-img"/>
+                <img id="cardStar" src="image/star_off.png" class="star-img" onclick="changeStar()"/>
+
             </li>
         </ul>
     </div>
-
 </main>
+
+
+
+<script>
+    function changeStar(){
+        if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
+            document.getElementById("cardStar").src="image/star_on.png";
+        }
+        else {
+            document.getElementById("cardStar").src = "image/star_off.png";
+        }
+    }
+</script>
+
 
 </body>
 </html>
