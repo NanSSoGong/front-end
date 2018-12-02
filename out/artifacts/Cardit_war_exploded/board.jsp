@@ -609,7 +609,7 @@
 <section class="sub-header">
     <span class="board-name">NanSsoGong</span>
     <img src="image/post_it_on.png" class="post-it">
-    <img src="image/calendar_on.png" class="calendar">
+    <a href ="calendar.jsp"><img  src="image/calendar_off.png" class="calendar"></a>
     <div class="search-bar">
         <input type="text" name="search" placeholder="   검색">
     </div>

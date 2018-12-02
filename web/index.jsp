@@ -35,7 +35,7 @@
         <h1>Card-it !</h1>
       </div>
       <div class="logo-footer">
-        <p><a href="calendar.jsp">card-it</a>이 무엇인가요?</p>
+        <p><a href="#">card-it</a>이 무엇인가요?</p>
       </div>
     </div>
     <%-- login, sign up --%>
