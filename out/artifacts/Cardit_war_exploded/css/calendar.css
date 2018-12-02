@@ -17,18 +17,6 @@ body {
     box-sizing: border-box;
     font-family: "NanumSquare";
 }
-.list {
-    border: 1px solid #eee;
-    border-radius: 5px;
-    width: 350px;
-    min-height: 20px;
-    list-style-type: none;
-    margin: 5px;
-    padding: 2px 7px 7px 7px;
-    float: left;
-    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.24);
-    background-color: #F6F6F6;
-}
 .list-header {
     font-family:"NanumSquareOTF ExtraBold";
     font-size: 22px;
@@ -44,6 +32,18 @@ body {
     position: absolute;
     top:12px;
     right:10px;
+}
+.list {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    width: 350px;
+    min-height: 20px;
+    list-style-type: none;
+    margin: 5px;
+    padding: 2px 7px 7px 7px;
+    float: left;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.24);
+    background-color: #F6F6F6;
 }
 .card {
     font-family:"NanumSquare Bold";
