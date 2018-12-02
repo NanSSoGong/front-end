@@ -623,6 +623,7 @@
     };
 */
 
+
     //중요도 바꾸기
     var getJson = function(method, url, body, callback) {
         var xhr = new XMLHttpRequest();

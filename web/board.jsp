@@ -33,6 +33,7 @@
 
         /* box-size 에 padding, border 을 포함*/
         * {
+            font-family:
             box-sizing: border-box;
         }
         #list {

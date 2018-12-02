@@ -206,7 +206,7 @@
 
     // 메인페이지 로드
     function loadPage() {
-        var boardUrl = myUrl + "board/:1"; /*"/board/:user_idx"*/
+        var boardUrl = myUrl + "board/1"; /*"/board/:user_idx"*/
         var cardUrl = "json_test/card.json";/*myUrl + "card/:1";*/    /*"/card/:board_idx"*/
         var calendarUrl = "json_test/card.json";/*myUrl + "calendar";*/
         var body = "";

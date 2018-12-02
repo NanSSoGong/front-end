@@ -12,6 +12,13 @@
 
   <%-- css 파일 --%>
   <link rel="stylesheet" type="text/css" href="css/login.css">
+  <style>
+    @media screen and (max-width: 1000px) {
+      .logo {
+        display: none;
+      }
+    }
+  </style>
 
   <%-- javascript --%>
   <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -57,7 +64,7 @@
         <input type="password" placeholder="비밀번호 확인" name="user_pwd_check">
         <input type="text" placeholder="전화번호" name="user_phone">
         <input type="email" placeholder="이메일" name="user_email">
-        <button type="button" onclick="signUp()">회원가입</button>
+        <button type="button" <%--onclick="signUp()"--%>>회원가입</button>
         <p class="message">Already registered? <a href="#">로그인</a></p>
       </form>
     </div>
@@ -98,24 +105,25 @@
     }
 
     var token = sessionStorage.getItem("user_token");
-    var myUrl = 'ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/user/login/';
-
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/user/login/';
     var getJson = function(method, url, body, callback) {
+
         var xhr = new XMLHttpRequest();
         var data = JSON.stringify(body);
 
         xhr.open(method, url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('authorization', token);
         xhr.responseType = 'json';
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
         };
-        alert(xhr.status);
+        alert("response : " + xhr.response + " status : " + xhr.status + " data : " + data);
+
         if(data) {
+            alert("전송");
             xhr.send(data);
         }
-        else xhr.send();
+        else {xhr.send(); alert("실패");}
     };
 
     // 로그인
@@ -135,21 +143,20 @@
         //location.href='/main.jsp';
 
         getJson('POST', myUrl, body, function (status, response) {
-
             if(status == 201) { // 성공
                 sessionStorage.setItem("user_token", response.data.token);
                 sessionStorage.setItem("user_name", response.data.user_name); // 확인
-                alert(response.data.token);
+                alert(sessionStorage.getItem("user_token"));
                 location.href='/main.jsp';
             }
             else { // 실패
-                alert(id);
+                //alert(id + "실패");
             }
         })
     }
 
     // 회원가입
-    function signUp() {
+/*    function signUp() {
         var f = document.signUpForm;
         var name = f.user_name.value;
         var id = f.user_id.value;
@@ -178,7 +185,7 @@
                 alert("회원가입 실패");
             }
         })
-    }
+    }*/
 
 </script>
 
