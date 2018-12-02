@@ -33,6 +33,7 @@
 
         /* box-size 에 padding, border 을 포함*/
         * {
+            font-family:
             box-sizing: border-box;
         }
         #list {
@@ -79,6 +80,11 @@
             width:24px;
             height:24px;
         }
+        .list-contents {
+            overflow-x: hidden;
+            overflow-y: auto;
+            max-height: calc(100% - 140px);
+        }
         .card {
             font-family:"NanumSquare Bold";
             color: #707070;
@@ -96,6 +102,11 @@
             margin: 0px calc(50% - 16px) 10px calc(50% - 16px);
         }
         .star-before {
+            float: right;
+            width: 16px;
+            height: 16px;
+        }
+        .star-after {
             float: right;
             width: 16px;
             height: 16px;
@@ -624,21 +635,12 @@
                 <a href="#" class="list-tool-button-box"><img src="image/more_2.png" class="list-tool-box"></a>
             </div>
             <ul class="list-contents">
-                <li class="card"><span>SOW 보고서 쓰기</span><img src="/image/star_off.png" class="star-before"></li>
-                <li class="card"><span>프로젝트 이름 정하기</span><img src="/image/star_off.png" class="star-before"></li>
+                <li class="card"><span>Card1</span><img src="/image/star_off.png"  class="star-before"></li>
+                <li class="card"><span>Card2</span><img src="/image/star_off.png"  class="star-before"></li>
             </ul>
             <img src="image/plus.png" class="open-add-card-modal">
         </div>
-        <div id="listName2" class="list sortable">
-            <div class="list-header">
-                <span class="list-name">Doing</span>
-                <a href="#" class="list-tool-button-box"><img src="image/more_2.png" class="list-tool-box"></a>
-            </div>
-            <ul class="list-contents">
-                <li class="card"><span>UI 디자인 완성하기</span><img src="/image/star_off.png" class="star-before"></li>
-            </ul>
-            <img src="image/plus.png" class="open-add-card-modal">
-        </div>
+
     </div>
 </main>
 
@@ -728,8 +730,88 @@
         </ul>
         <img src="image/plus.png" class="open-add-card-modal" onclick="document.getElementById('add-card-modal').style.display='block'">
     </div>
+
+    <div id="listName1" class="list sortable">
+            <div class="list-header">
+                <span class="list-name">To Do</span>
+                <a href="#" class="list-tool-button-box"><img src="image/more_2.png" class="list-tool-box"></a>
+            </div>
+            <ul class="list-contents">
+                <li class="card"><span>Card1</span><img src="/image/star_off.png" class="star-before"></li>
+                <li class="card"><span>Card2</span><img src="/image/star_off.png" class="star-before"></li>
+            </ul>
+            <img src="image/plus.png" class="open-add-card-modal">
+        </div>
     --%>
 </footer>
+
+<script>
+    function boardPageLoad(){
+        var token = sessionStorage.getItem("user_token");
+        var myUrl = 'ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+
+        var getJson = function(method, url, body, callback) {
+            var xhr = new XMLHttpRequest();
+
+            xhr.open(method, url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('authorization', token);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+                callback(xhr.status, xhr.response);
+            };
+            if(data) {
+                var data = JSON.stringify(body);
+                xhr.send(data);
+            }
+            else xhr.send();
+        };
+    }
+
+    function loadList(response) {
+        document.getElementById("list").innerHTML = list;
+
+        // element 추가할 때 이벤트 다시 등록하기
+        $(".sortable .list-contents").sortable({
+            connectWith: ".sortable .list-contents"
+        }).disableSelection();
+        $(".sortable").draggable({ containment: "#list", scroll: false });
+        $(".open-add-card-modal").on("click", function() {
+            document.getElementById('add-card-modal').style.display = 'block' // add-modal 보이기
+            var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
+            sessionStorage.setItem("click_list_id", div_id);
+        });
+    }
+
+    $(function() {
+        $(".star-before").on("click", function () {
+            var starClass = $(this).attr("class");
+
+            if(starClass == 'star-before') {
+                $(this).attr("src", "image/star_on.png");
+            }
+            $(this).attr("class", 'star-after');
+        });
+    });
+
+    $(function() {
+        $(".star-after").on("click", function () {
+            var starClass = $(this).attr("class");
+
+            if(starClass == 'star-after') {
+                $(this).attr("src", "image/star_off.png");
+            }
+            $(this).attr("class", 'star-before');
+        });
+    });
+
+    function loadCard(response) {
+
+    }
+
+
+</script>
+
 
 
 
@@ -769,14 +851,14 @@
             $(".add-card-button").on("click", function() {
                 // modal 에서 입력한 List 이름 가져오기
                 var add_card_name = $("#add-card-name").val();
-                var click_list_id = sessionStorage.getItem("click_list_id")
+                var click_list_id = sessionStorage.getItem("click_list_id");
                 var clicked_list = document.getElementById(click_list_id).children[1]; // div 의 자식노드중 두번째 (ul - .list-contents)
                 $(clicked_list).append("<li class=\"card\"><span>" + add_card_name + "</span><img src=\"/image/star_off.png\" class=\"star-before\"></li>");
 
                 // Card 생성 후 modal 종료
                 var modal = document.getElementById('add-card-modal');
                 modal.style.display = "none";
-                sessionStorage.clear();
+                //sessionStorage.clear();
             });
         });
         /* List 추가 */
@@ -815,23 +897,11 @@
                     document.getElementById('add-card-modal').style.display = 'block' // add-modal 보이기
                     var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
                     sessionStorage.setItem("click_list_id", div_id);
-                    alert(div_id + "sssss");
                 });
             });
         });
 
 
-
-
-
-
-        // test 용
-        $(function() {
-            $(".test").click(function () {
-                var get_id = document.getElementById("test");
-                alert(get_id);
-            });
-        });
     });
 
 </script>

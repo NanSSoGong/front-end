@@ -10,18 +10,85 @@
 <head>
     <title>Home | Card-it</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.ui.css">
 
     <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/display-calendar.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
     <style>
-
+        .calendar {
+            width: 296px;
+            height: 336px;
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        .preMon {
+            background: #FFFFFF;
+            border: 0;
+            font-size: 17px;
+            margin: 0 20px 0 0;
+            color: #707070;
+            cursor: pointer;
+        }
+        .nextMon {
+            background: #FFFFFF;
+            border: 0;
+            font-size: 17px;
+            margin: 0 0 0 20px;
+            color: #707070;
+            cursor: pointer;
+        }
+        .monthPre {
+            color: gray;
+            text-align: center;
+        }
+        .monthNow {
+            font-family: "NanumSquare", Regular;
+            font-size: 12px;
+            color: #707070;
+            text-align: center;
+        }
+        .dayNum span {
+            display:block;
+        }
+        .dayNames {
+            text-align: center;
+        }
+        .dayNow {
+            border: 0;
+            color: #707070;
+            text-align: center;
+        }
+        .monthNow th {
+            font-family: "NanumSquare", ExtraBold;
+            font-size: 17px;
+            color: #707070;
+        }
+        .calendar td {
+            font-family: "NanumSquare", Regular;
+            font-size: 13px;
+            color: #707070;
+            width: calc(296px / 7);
+        }
+        .calendar td:first-child {
+            color:#F02E0B;
+        }
+        @media screen and (max-width: 1000px) {
+            .side-menu {
+                display: none;
+            }
+            .calendar-section {
+                display: none;
+            }
+        }
 
 
     </style>
 
 </head>
-<body>
+<body onload="loadPage()">
 <%-- top menu --%>
 <header>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
@@ -36,6 +103,7 @@
 <section class="sub-header">
     <div class="search-bar">
         <input type="text" name="search" placeholder="검색">
+        <button type="button" onclick="calDDay('july 10,2019')"></button>
     </div>
 </section>
 
@@ -44,9 +112,6 @@
     <section class="side-menu float">
         <div class="side-menu-container">
             <ul id="board-list">
-                <li id="<%--board-name--%>" class="board-li"><a href="board.jsp"><span>- NanSSoGong</span></a></li>
-                <li id="<%--board-name--%>" class="board-li"><a href="board.jsp"><span>- EasyFunArt</span></a></li>
-                <li id="<%--board-name--%>" class="board-li"><a href="board.jsp"><span>- HalMate</span></a></li>
             </ul>
             <button type="button" style="vertical-align:middle" onclick="document.getElementById('create-board-modal').style.display='block'"><div class="button-img-wrap"><img src="image/add.png"></div><span>Create a board</span></button>
         </div>
@@ -91,74 +156,18 @@
             </ul>
         </div>
         <div class="d-day-list">
-            <ul>
-                <li>
-                    <div class="card-list">
-                        <div class="card-header">
-                            <span class="board-name">NanSSoGong</span><span class="colon">: </span>
-                            <span class="list-name">To Do</span>
-                            <span class="d-day-number">D-2</span>
-                        </div>
-                        <div class="card-contents">
-                            <span class="card-name">SOW 보고서 쓰기</span>
-                            <span class="card-duedate">Due Date : Oct, 6th</span>
-                        </div>
-                        <button class="done-button">Done</button>
-                        <button class="hide-button">Hide</button>
-                    </div>
-                </li>
-                <li>
-                    <div class="card-list">
-                        <div class="card-header">
-                            <span class="board-name">NanSSoGong</span><span class="colon">: </span>
-                            <span class="list-name">To Do</span>
-                            <span class="d-day-number">D-2</span>
-                        </div>
-                        <div class="card-contents">
-                            <span class="card-name">SOW 보고서 쓰기</span>
-                            <span class="card-duedate">Due Date : Oct, 6th</span>
-                        </div>
-                        <button class="done-button">Done</button>
-                        <button class="hide-button">Hide</button>
-                    </div>
-                </li>
-                <li>
-                    <div class="card-list">
-                        <div class="card-header">
-                            <span class="board-name">NanSSoGong</span><span class="colon">: </span>
-                            <span class="list-name">To Do</span>
-                            <span class="d-day-number">D-2</span>
-                        </div>
-                        <div class="card-contents">
-                            <span class="card-name">SOW 보고서 쓰기</span>
-                            <span class="card-duedate">Due Date : Oct, 6th</span>
-                        </div>
-                        <button class="done-button">Done</button>
-                        <button class="hide-button">Hide</button>
-                    </div>
-                </li>
-                <li>
-                    <div class="card-list">
-                        <div class="card-header">
-                            <span class="board-name">NanSSoGong</span><span class="colon">: </span>
-                            <span class="list-name">To Do</span>
-                            <span class="d-day-number">D-2</span>
-                        </div>
-                        <div class="card-contents">
-                            <span class="card-name">SOW 보고서 쓰기</span>
-                            <span class="card-duedate">Due Date : Oct, 6th</span>
-                        </div>
-                        <button class="done-button">Done</button>
-                        <button class="hide-button">Hide</button>
-                    </div>
-                </li>
+            <ul id="d-day-wrapper">
+                <%----%>
             </ul>
         </div>
 
     </section>
 
     <%-- Calendar --%>
-    <section class="calendar float">
+    <section class="calendar-section float">
+        <div id="calendar-wrapper">
+
+        </div>
 
 
 
@@ -169,7 +178,121 @@
 <footer>
 
 </footer>
+<%--
 
-<script></script>
+<li><div class='card-list'><div class='card-header'><span class='board-name'>NanSSoGong</span><span class='colon'>: </span><span class='list-name'>To Do</span><span class='d-day-number'>D-2</span></div><div class='card-contents'><span class='card-name'>SOW 보고서 쓰기</span><span class='card-duedate'>Due Date : Oct, 6th</span></div><button class='done-button'>Done</button><button class='hide-button'>Hide</button></div></li>
+--%>
+
+<script>
+    var token = sessionStorage.getItem("user_token");
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+
+    var getJson = function(method, url, body, callback) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('authorization', token);
+        xhr.responseType = 'json';
+        xhr.onload = function() {
+            callback(xhr.status, xhr.response);
+        };
+        if(data) {
+            var data = JSON.stringify(body);
+            xhr.send(data);
+        }
+        else xhr.send();
+    };
+
+    // 메인페이지 로드
+    function loadPage() {
+        var boardUrl = myUrl + "board/1"; /*"/board/:user_idx"*/
+        var cardUrl = "json_test/card.json";/*myUrl + "card/:1";*/    /*"/card/:board_idx"*/
+        var calendarUrl = "json_test/card.json";/*myUrl + "calendar";*/
+        var body = "";
+        var user_name = sessionStorage.getItem("user_name")
+
+
+        getJson('GET', boardUrl, body, function (status, response) {
+            if (status == 201) { // 성공
+                loadBoardList(response.data);
+            }
+            else { // 실패
+                alert("board 로드 실패");
+            }
+        })
+        getJson('GET', cardUrl, body, function (status, response) {
+            if (status == 201) { // 성공
+                loadCardList(response.data);
+            }
+            else { // 실패
+                alert("카드 로드 실패");
+            }
+        })
+        getJson('GET', calendarUrl, body, function (status, response) {
+            if (status == 201) { // 성공
+                displayCalendar(0);
+                //loadCalendar(response.data);
+            }
+            else { // 실패
+                alert("캘린더 로드 실패");
+            }
+        })
+
+        document.getElementsByClassName('user_name').innerText = user_name;
+    }
+
+    function loadBoardList(response) {
+        var boardList = "";
+        var i;
+
+        for (i in response) {
+            boardList += "<li class='board-li'><a href='board.jsp'><span>- " + response[i].board_name + "</span></a></li>";
+        }
+
+        document.getElementById('board-list').innerHTML = boardList;
+    }
+
+    function loadCardList(response) {
+        var cardList = "";
+        var i;
+/*
+        var todayCard = "<div class='today-shadow'></div><ul><li><span class='today-header'>TODAY</span></li><li><span class='today-card-name'>" +
+            response[0].card_name + "</span></li><li><span class='today-date'>Oct, 4th (THU)</span></li></ul>";
+*/
+        for (i=0; i < response.length; i++) {
+            cardList += "<li><div class='card-list'><div class='card-header'><span class='board-name'>" +
+                response[i].card_name + "</span><span class='colon'>: </span><span class='list-name'>" +
+                response[i].list_name + "</span><span class='d-day-number'>D-2</span></div><div class='card-contents'><span class='card-name'>" +
+                response[i].card_content + "</span><span class='card-duedate'>Due Date : Oct, 6th</span></div><button class='done-button'>Done</button><button class='hide-button'>Hide</button></div></li>"
+        }
+
+        document.getElementById('d-day-wrapper').innerHTML = cardList;
+    }
+
+    /*function loadCalendar(response) {
+        var dayNum = document.getElementById("calendar-wrapper").querySelectorAll('tr');
+        var i, date, month, year, endDay;
+        for(i = 2; i<dayNum.length;i++) {
+            date = new Date(response[i].card_end_date);
+            year = date.getFullYear();
+            month = date.getMonth();
+            endDay = date.getDay();
+
+            if(response.
+        }
+
+    }*/
+
+    function calDDay(endDate) {
+        var now = new Date();
+        var then = new Date(endDate);
+        var gap = then.getTime() - now.getTime();
+        var d_day = "D" + Math.floor(gap / (1000 * 60 * 60 * 24));
+
+        alert(d_day);
+    }
+</script>
+
 </body>
 </html>

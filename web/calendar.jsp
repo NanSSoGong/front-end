@@ -23,36 +23,10 @@
 
     cardMonthDate= c.get(c.YEAR) + "-" + c.get(c.MONTH);
 
-    if (request.getParameter("action") == null) // Check to see if we should set the year and month to the current
-    {
         currMonth = c.get(c.MONTH);
         currYear = c.get(c.YEAR);
         cal.set(currYear, currMonth,1);
-    }
 
-    else
-    {
-        if (!(request.getParameter("action") == null)) // Hove the calendar up or down in this if block
-        {
-            currMonth = Integer.parseInt(request.getParameter("month"));
-            currYear = Integer.parseInt(request.getParameter("year"));
-
-            if (Integer.parseInt( request.getParameter("action")) == 1 )
-            {
-                cal.set(currYear, currMonth, 1);
-                cal.add(cal.MONTH, 1);
-                currMonth = cal.get(cal.MONTH);
-                currYear = cal.get(cal.YEAR);
-            }
-            else
-            {
-                cal.set(currYear, currMonth ,1);
-                cal.add(cal.MONTH, -1);
-                currMonth = cal.get(cal.MONTH);
-                currYear = cal.get(cal.YEAR);
-            }
-        }
-    }
 %>
 
 <%!
@@ -158,6 +132,16 @@
             height:100%;
             width:100%;
         }
+        .today-date{
+            opacity: 0.3;
+            width: 32px;
+            height: 32px;
+            background-image: url("image/date_circle.png");
+        }
+        .calendar-y-m{
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
         .calendar {
             position:relative;
             width: 700px;
@@ -168,16 +152,6 @@
             background-color: #ffffff;
             border-radius: 10px;
             align-content: center;
-        }
-        .today-date{
-            opacity: 0.3;
-            width: 32px;
-            height: 32px;
-            background-image: url("image/date_circle.png");
-        }
-        .calendar-y-m{
-            margin-top: 10px;
-            margin-bottom: 20px;
         }
         .list {
             position:relative;
@@ -208,6 +182,7 @@
             margin: 10px 0 0 5px;
         }
         .d-day{
+            align: center;
             font-family:"NanumSquare Bold";
             color: #707070;
             vertical-align: middle;
@@ -441,19 +416,20 @@
     <a href="board.jsp"><img src="image/post_it_off.png" class="post-it"></a>
     <a href ="calendar.jsp"><img src="image/calendar_on.png" class="calendar-img"></a>
     <div class="search-bar">
-        <input type="text" name="search" placeholder="   검색">
+        <input type="text" name="search" placeholder="검색">
     </div>
     <img src="image/more.png" class="more-menu" onclick="document.getElementById('more-menu-modal').style.display='block'">
     <img src="image/settings.png" class="settings-menu">
 </section>
 
+
 <main>
     <div class="calendar">
         <table height='100' width='519' celpadding='0' cellspacing='0' align="center" valign="center">
             <tr>
-                <td width='150' align='right' valign='middle'><a href="cal.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=0"><img height="20px" width="20px" src="image/back.png"></a></td>
+                <td width='150' align='right' valign='middle'><a href="calendar.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=0"><img height="20px" width="20px" src="image/back.png"></a></td>
                 <td width='260' align='center' valign='middle'><b><font color="#707070" size="6px"><%= cal.get(cal.YEAR)+"."+getDateName (cal.get(cal.MONTH))%></font></b></td>
-                <td width='173' align='left' valign='middle'><a href="cal.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=1"><img height="20px" width="20px" src="image/next.png"></a></td>
+                <td width='173' align='left' valign='middle'><a href="calendar.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=1"><img height="20px" width="20px" src="image/next.png"></a></td>
             </tr>
         </table>
         <table align="center" valign="center" border="0" width="520" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0">
@@ -555,16 +531,36 @@
         </div>
         <ul class="list-contents">
             <li class="card">
-                <span><div class="d-day">D-3</div><span class="d-date">09.18</span></span>
+                <span><span class="d-day">D-3<br></span><span class="d-date">&nbsp12.18</span></span>
                 <span class="d-content">SOW 보고서 쓰기</span>
-                <img id="cardStar" src="image/star_off.png" class="star-img" onclick="changeStar(card_name, card_mark)"/>
+                <img id="cardStar" src="image/star_off.png" class="star-img" onclick="changeStar()"/>
 
             </li>
         </ul>
     </div>
 </main>
 
+<script>
+    if (!(request.getParameter("action") == null)) // Have the calendar up or down in this if block
+    {
+        currMonth = Integer.parseInt(request.getParameter("month"));
+        currYear = Integer.parseInt(request.getParameter("year"));
 
+        if (Integer.parseInt( request.getParameter("action")) == 1 )
+        {
+            cal.set(currYear, currMonth, 1);
+            cal.add(cal.MONTH, 1);
+            currMonth = cal.get(cal.MONTH);
+            currYear = cal.get(cal.YEAR);
+        }
+        else
+        {
+            cal.set(currYear, currMonth ,1);
+            cal.add(cal.MONTH, -1);
+            currMonth = cal.get(cal.MONTH);
+            currYear = cal.get(cal.YEAR);
+        }
+    }
 
 <script>
 
@@ -578,9 +574,7 @@
 
     var card_name = sessionStorage.getItem("card_name");
     var card_mark = sessionStorage.getItem("card_mark");
-
-    alert(cardMonthDate);
-
+    /*
     //보드에 해당하는 캘린더 조회
     var getJson1 = function() {
         myUrl += "/"+ sessionStorage.getItem("board_idx");
@@ -595,7 +589,7 @@
         xhr.onload = function() {
             callback(xhr.status, xhr.response){
                 alert("yeji~");
-                if(xhr.status == 200) { // 성공
+                if(xhr.status == 200 ) { // 성공
                     var message = response.data.message;
                     sessionStorage.getItem("data");
                 }
@@ -632,7 +626,7 @@
         };
         xhr.send();
     };
-
+*/
 
 
     //중요도 바꾸기
@@ -653,9 +647,7 @@
         }
         else xhr.send();
     };
-
     function changeStar(card_name, card_mark){
-        alert("yeji");
         if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
             document.getElementById("cardStar").src="image/star_on.png";
             card_mark=1;
@@ -665,17 +657,19 @@
             card_mark=0;
         }
         var body = {
-            'card_name': cardName,
-            'card_mark': cardMark
+            'card_name': card_name,
+            'card_mark': card_mark
         };
         getJson('PUT', myUrl, body, function (status, response) {
-            if(status == 200) { // 성공
+            alert("yejii");
+            if(status == 200 || status==201) { // 성공
                 var message = response.data.message;
             }
             else { // 실패
                 alert("failure");
             }
         })
+
     }
 </script>
 

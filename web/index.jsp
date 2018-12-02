@@ -12,6 +12,13 @@
 
   <%-- css 파일 --%>
   <link rel="stylesheet" type="text/css" href="css/login.css">
+  <style>
+    @media screen and (max-width: 1000px) {
+      .logo {
+        display: none;
+      }
+    }
+  </style>
 
   <%-- javascript --%>
   <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -35,7 +42,7 @@
         <h1>Card-it !</h1>
       </div>
       <div class="logo-footer">
-        <p><a href="#">card-it</a>이 무엇인가요?</p>
+        <p><a href="calendar.jsp">card-it</a>이 무엇인가요?</p>
       </div>
     </div>
     <%-- login, sign up --%>
@@ -104,8 +111,8 @@
             return false;
         }
     }
-
     var getJson = function(method, url, body, callback) {
+
         var xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');

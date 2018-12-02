@@ -25,7 +25,7 @@
 .login {
     position: absolute;
     top:150px;
-    left: 1165px;
+    right: 7%;
     width: 495px;
     height: auto;
     padding: 0px;
@@ -90,3 +90,6 @@
 body {
     font-family: "NanumSquare", light;
 }
+
+
+
