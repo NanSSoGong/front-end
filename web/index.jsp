@@ -106,12 +106,12 @@
 
         xhr.open(method, url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('authorization', token);
         xhr.responseType = 'json';
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
         };
-        alert(data);
+        alert("response : " + xhr.response + " status : " + xhr.status + " data : " + data);
+
         if(data) {
             alert("전송");
             xhr.send(data);
@@ -137,10 +137,10 @@
 
         getJson('POST', myUrl, body, function (status, response) {
             if(status == 201) { // 성공
-                //sessionStorage.setItem("user_token", response.data.token);
-                //sessionStorage.setItem("user_name", response.data.user_name); // 확인
-                //alert(response.data.token + "실패");
-                //location.href='/main.jsp';
+                sessionStorage.setItem("user_token", response.data.token);
+                sessionStorage.setItem("user_name", response.data.user_name); // 확인
+                alert(response.data.token + "실패");
+                location.href='/main.jsp';
             }
             else { // 실패
                 //alert(id + "실패");
