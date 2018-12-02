@@ -7,18 +7,21 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@page session="true" import="java.util.*" %>
+<%@page session="true" import="java.util.*" import="java.io.*" %>
 <%
     // Global Vars
     int action = 0;  // 1이면 다음 달, 0이면 이전 달
     int currYear = 0; // if it is not retrieved from incoming URL (month=) then 현재 년도
     int currMonth = 0;
+    String cardMonthDate ="";
     String boxSize = "90";  // 달력 한 칸 크기
 
 //build 2 calendars
 
     Calendar c = Calendar.getInstance();
     Calendar cal = Calendar.getInstance();
+
+    cardMonthDate= c.get(c.YEAR) + "-" + c.get(c.MONTH);
 
     if (request.getParameter("action") == null) // Check to see if we should set the year and month to the current
     {
@@ -118,6 +121,7 @@
         return strReturn;
     }
 %>
+
 
 <html>
 <head>
@@ -376,6 +380,24 @@
             color: #707070;
             cursor: pointer;
         }
+        .calendar-img {
+            position:absolute;
+            width: 24px;
+            height: 24px;
+            margin: 8px 0 8px 0;
+            top:0;
+            left:180px;
+            cursor: pointer;
+        }
+        .post-it {
+            position:absolute;
+            width: 24px;
+            height: 24px;
+            margin: 8px 0 8px 0;
+            top:0;
+            left:150px;
+            cursor: pointer;
+        }
 
         /* 브라우저 별 호환성 확인 */
         .search-bar::placeholder  {
@@ -415,9 +437,14 @@
 </header>
 
 <section class="sub-header">
+    <span class="board-name">NanSsoGong</span>
+    <a href="board.jsp"><img src="image/post_it_off.png" class="post-it"></a>
+    <a href ="calendar.jsp"><img src="image/calendar_on.png" class="calendar-img"></a>
     <div class="search-bar">
         <input type="text" name="search" placeholder="   검색">
     </div>
+    <img src="image/more.png" class="more-menu" onclick="document.getElementById('more-menu-modal').style.display='block'">
+    <img src="image/settings.png" class="settings-menu">
 </section>
 
 <main>
@@ -459,7 +486,7 @@
                         int today =0;
 
 
-                        for (int w = 1; w < 6; w++)
+                        for (int w = 1; w < 7; w++)
                         {
                     %>
                     <tr>
@@ -490,7 +517,7 @@
                                     todayColor = "#ffffff";
                                 }
                         %>
-                        <td bgcolor ="<%=todayColor%>" width="<%=boxSize%>" align="center" height="<%=boxSize%>" valign="center">
+                        <td bgcolor ="<%=todayColor%>" width="<%=boxSize%>" align="center" align-vertical="true" height="<%=boxSize%>" valign="center">
                             <% if(today==1) {%>
                                 <div class="today-date"/>
                             <% today=0; } %>
@@ -530,7 +557,7 @@
             <li class="card">
                 <span><div class="d-day">D-3</div><span class="d-date">09.18</span></span>
                 <span class="d-content">SOW 보고서 쓰기</span>
-                <img id="cardStar" src="image/star_off.png" class="star-img" onclick="changeStar()"/>
+                <img id="cardStar" src="image/star_off.png" class="star-img" onclick="changeStar(card_name, card_mark)"/>
 
             </li>
         </ul>
@@ -540,13 +567,109 @@
 
 
 <script>
-    function changeStar(){
+    //var token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NDIzMzAzOTYsImV4cCI6MTU0NDkyMjM5Nn0.CvJaHskunMlV-hP1xNcqhHss4s1YwxNbPkobVK_aJn4";
+    var token = sessionStorage.getItem("user_token");
+    var card_name = sessionStorage.getItem("card_name");
+    var card_mark = sessionStorage.getItem("card_mark");
+    var myUrl = "ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calendar";
+
+    alert(cardMonthDate);
+
+    //보드에 해당하는 캘린더 조회
+    var getJson1 = function() {
+        myUrl += "/"+ sessionStorage.getItem("board_idx");
+        alert(myUrl);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', myUrl, true);
+        xhr.setRequestHeader('Content-Type', 'application/json;');
+        xhr.setRequestHeader('authorization', token);
+        xhr.responseType = "json";
+        xhr.onreadystatechange = getCalendar(cardMonthDate);
+        xhr.onload = function() {
+            callback(xhr.status, xhr.response){
+                alert("yeji~");
+                if(xhr.status == 200) { // 성공
+                    var message = response.data.message;
+                    sessionStorage.getItem("data");
+                }
+                else { // 실패
+                    alert("failure");
+                }
+            }
+        };
+        xhr.send();
+    };
+
+    //마감임박 카드 조회
+    var getJson2 = function() {
+        myUrl += "/emergency/"+ sessionStorage.getItem("board_idx");
+        alert(myUrl);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', myUrl, true);
+        xhr.setRequestHeader('Content-Type', 'application/json;');
+        xhr.setRequestHeader('authorization', token);
+        xhr.responseType = "json";
+        xhr.onreadystatechange = getCalendar(cardMonthDate);
+        xhr.onload = function() {
+            callback(xhr.status, xhr.response){
+                alert("yeji~");
+                if(xhr.status == 200) { // 성공
+                    var message = response.data.message;
+                    sessionStorage.getItem("data");
+                }
+                else { // 실패
+                    alert("failure");
+                }
+            }
+        };
+        xhr.send();
+    };
+
+
+
+    //중요도 바꾸기
+    var getJson = function(method, url, body, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json;');
+        xhr.setRequestHeader('authorization', token);
+        xhr.responseType = "json";
+        xhr.onload = function() {
+            callback(xhr.status, xhr.response);
+            alert(xhr.status);
+            alert(xhr.response);
+        };
+        if(data) {
+            var data = JSON.stringify(body);
+            xhr.send(data);
+        }
+        else xhr.send();
+    };
+
+    function changeStar(card_name, card_mark){
+        alert("yeji");
         if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
             document.getElementById("cardStar").src="image/star_on.png";
+            card_mark=1;
         }
         else {
             document.getElementById("cardStar").src = "image/star_off.png";
+            card_mark=0;
         }
+        var body = {
+            'card_name': cardName,
+            'card_mark': cardMark
+        };
+        getJson('PUT', myUrl, body, function (status, response) {
+            if(status == 200) { // 성공
+                var message = response.data.message;
+            }
+            else { // 실패
+                alert("failure");
+            }
+        })
     }
 </script>
 
