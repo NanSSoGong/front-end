@@ -399,7 +399,7 @@
 
     <%--<script type="text/javascript" src="js/board.js"></script>--%>
 </head>
-<body>
+<body onload="loadCalendar()">
 
 <%-- top menu --%>
 <header>
@@ -642,6 +642,37 @@
         }
         else xhr.send();
     };
+
+    function loadCalendar(){
+        var emerUrl = myUrl + "/emergency/1/1";    // "/user_idx/board_idx"
+        var body = "";
+        var user_name = sessionStorage.getItem("user_name")
+
+
+        getJson('GET', emerUrl, body, function (status, response) {
+            if (status == 201) { // 성공
+                loadEmerList(response.data);
+            }
+            else { // 실패
+                alert("board 로드 실패");
+            }
+        })
+
+        document.getElementsByClassName('user_name').innerText = user_name;
+    }
+
+    function loadEmerList(response){
+            var emerList = "";
+            var i;
+
+            for (i in response) {
+                emerList += "<li class='card'><span>- " + response[i].board_name + "</span></li>";
+            }
+
+            document.getElementById('board-list').innerHTML = emerList;
+
+    }
+
     function changeStar(card_name, card_mark){
         if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
             document.getElementById("cardStar").src="image/star_on.png";
@@ -656,7 +687,6 @@
             'card_mark': card_mark
         };
         getJson('PUT', myUrl, body, function (status, response) {
-            alert("yejii");
             if(status == 200 || status==201) { // 성공
                 var message = response.data.message;
             }
@@ -666,6 +696,7 @@
         })
 
     }
+
 </script>
 
 
