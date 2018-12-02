@@ -57,7 +57,7 @@
         <input type="password" placeholder="비밀번호 확인" name="user_pwd_check">
         <input type="text" placeholder="전화번호" name="user_phone">
         <input type="email" placeholder="이메일" name="user_email">
-        <button type="button" onclick="signUp()">회원가입</button>
+        <button type="button" <%--onclick="signUp()"--%>>회원가입</button>
         <p class="message">Already registered? <a href="#">로그인</a></p>
       </form>
     </div>
@@ -79,7 +79,7 @@
     // input 값이 비었는지 확인
     function isEmpty(obj, msg) {
         if(obj.value=="") {
-            alert(msg);
+            //alert(msg);
             obj.focus();
 
             return true;
@@ -111,11 +111,12 @@
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
         };
-        alert(xhr.status);
+        alert(data);
         if(data) {
+            alert("전송");
             xhr.send(data);
         }
-        else xhr.send();
+        else {xhr.send(); alert("실패");}
     };
 
     // 로그인
@@ -135,21 +136,20 @@
         //location.href='/main.jsp';
 
         getJson('POST', myUrl, body, function (status, response) {
-
             if(status == 201) { // 성공
-                sessionStorage.setItem("user_token", response.data.token);
-                sessionStorage.setItem("user_name", response.data.user_name); // 확인
-                alert(response.data.token);
-                location.href='/main.jsp';
+                //sessionStorage.setItem("user_token", response.data.token);
+                //sessionStorage.setItem("user_name", response.data.user_name); // 확인
+                //alert(response.data.token + "실패");
+                //location.href='/main.jsp';
             }
             else { // 실패
-                alert(id);
+                //alert(id + "실패");
             }
         })
     }
 
     // 회원가입
-    function signUp() {
+/*    function signUp() {
         var f = document.signUpForm;
         var name = f.user_name.value;
         var id = f.user_id.value;
@@ -178,7 +178,7 @@
                 alert("회원가입 실패");
             }
         })
-    }
+    }*/
 
 </script>
 
