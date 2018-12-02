@@ -562,8 +562,6 @@
         }
     }
 
-<script>
-
     //추가했습니다////필요합니다////
     var token = sessionStorage.getItem("user_token");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
