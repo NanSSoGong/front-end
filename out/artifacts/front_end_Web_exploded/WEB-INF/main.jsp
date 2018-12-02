@@ -75,15 +75,6 @@
         .calendar td:first-child {
             color:#F02E0B;
         }
-        @media screen and (max-width: 1000px) {
-            .side-menu {
-                display: none;
-            }
-            .calendar-section {
-                display: none;
-            }
-        }
-
 
     </style>
 
@@ -211,7 +202,7 @@
 
     // 메인페이지 로드
     function loadPage() {
-        var boardUrl = myUrl + "board/1"; /*"/board/:user_idx"*/
+        var boardUrl = "json_test/board.json";/*myUrl + "board/:1";*/   /*"/board/:user_idx"*/
         var cardUrl = "json_test/card.json";/*myUrl + "card/:1";*/    /*"/card/:board_idx"*/
         var calendarUrl = "json_test/card.json";/*myUrl + "calendar";*/
         var body = "";
@@ -219,7 +210,7 @@
 
 
         getJson('GET', boardUrl, body, function (status, response) {
-            if (status == 201) { // 성공
+            if (status == 200) { // 성공
                 loadBoardList(response.data);
             }
             else { // 실패
@@ -227,7 +218,7 @@
             }
         })
         getJson('GET', cardUrl, body, function (status, response) {
-            if (status == 201) { // 성공
+            if (status == 200) { // 성공
                 loadCardList(response.data);
             }
             else { // 실패
@@ -235,7 +226,7 @@
             }
         })
         getJson('GET', calendarUrl, body, function (status, response) {
-            if (status == 201) { // 성공
+            if (status == 200) { // 성공
                 displayCalendar(0);
                 //loadCalendar(response.data);
             }
