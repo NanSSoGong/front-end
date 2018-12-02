@@ -40,16 +40,16 @@
     </div>
     <%-- login, sign up --%>
     <div class="login">
-      <form class="login-form" action="main.jsp">
+      <form class="login-form" name="loginForm">
         <h1>Card-it</h1>
-        <input type="text" placeholder="아이디" name="user_id" required>
-        <input type="password" placeholder="비밀번호" name="user_pwd" required>
-        <button>로그인</button>
+        <input type="text" placeholder="아이디" name="user_id">
+        <input type="password" placeholder="비밀번호" name="user_pwd">
+        <button type="button" onclick="login()">로그인</button>
         <p class="bar">──────── 혹은 ────────</p>
         <p class="message">비밀번호를 읽어버리셨나요?</p>
         <p class="message">계정이 없으신가요? <a href="#">가입하기</a></p>
       </form>
-      <form id="sign-up-form" class="sign-up-form" action="main.jsp">
+      <form class="sign-up-form" name="signUpForm" action="main.jsp">
         <h1>Card-it</h1>
         <input type="text" placeholder="이름" name="user_name">
         <input type="text" placeholder="아이디" name="user_id">
@@ -57,7 +57,7 @@
         <input type="password" placeholder="비밀번호 확인" name="user_pwd_check">
         <input type="text" placeholder="전화번호" name="user_phone">
         <input type="email" placeholder="이메일" name="user_email">
-        <button>회원가입</button>
+        <button type="button" onclick="signUp()">회원가입</button>
         <p class="message">Already registered? <a href="#">로그인</a></p>
       </form>
     </div>
@@ -74,6 +74,114 @@
         $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
     });
 </script>
+
+<script>
+    // input 값이 비었는지 확인
+    function isEmpty(obj, msg) {
+        if(obj.value=="") {
+            alert(msg);
+            obj.focus();
+
+            return true;
+        }
+
+        return false;
+    }
+    // 비밀번호 확인과 같은지 확인
+    function isSame(pwd1, pwd2) {
+        if(pwd1 == pwd2) return true;
+        else {
+            alert("비밀번호가 일치하지 않습니다.");
+
+            return false;
+        }
+    }
+
+    var token = sessionStorage.getItem("user_token");
+    var myUrl = 'ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/user/login/';
+
+    var getJson = function(method, url, body, callback) {
+        var xhr = new XMLHttpRequest();
+        var data = JSON.stringify(body);
+
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('authorization', token);
+        xhr.responseType = 'json';
+        xhr.onload = function() {
+            callback(xhr.status, xhr.response);
+        };
+        alert(xhr.status);
+        if(data) {
+            xhr.send(data);
+        }
+        else xhr.send();
+    };
+
+    // 로그인
+    function login() {
+        var f = document.loginForm;
+        var id = f.user_id.value;
+        var pw = f.user_pwd.value;
+        var body = {
+            "user_id": id,
+            "user_pwd": pw
+        };
+
+        if(isEmpty(f.user_id, "ID를 입력하세요.")) return false;
+        if(isEmpty(f.user_pwd, "비밀번호를 입력하세요.")) return false;
+
+        // 임시
+        //location.href='/main.jsp';
+
+        getJson('POST', myUrl, body, function (status, response) {
+
+            if(status == 201) { // 성공
+                sessionStorage.setItem("user_token", response.data.token);
+                sessionStorage.setItem("user_name", response.data.user_name); // 확인
+                alert(response.data.token);
+                location.href='/main.jsp';
+            }
+            else { // 실패
+                alert(id);
+            }
+        })
+    }
+
+    // 회원가입
+    function signUp() {
+        var f = document.signUpForm;
+        var name = f.user_name.value;
+        var id = f.user_id.value;
+        var pwd = f.user_pwd.value;
+        var pwd_check = f.user_pwd_check.value;
+        var phone = f.user_phone.value;
+        var email = f.user_email.value;
+        var body = {
+            "user_name" : name,
+            "user_phone" : phone,
+            "user_email" : email,
+            "user_id" : id,
+            "user_pwd" : pwd
+        };
+
+        if(isEmpty(f.user_name, "이름을 입력해주세요.")) return false;
+        if(isEmpty(f.user_id, "ID를 입력해주세요.")) return false;
+        if(isEmpty(f.user_pwd, "비밀번호를 입력해주세요.")) return false;
+        if(isSame(pwd, pwd_check)) return false;
+
+        getJson('POST', myUrl, body, function (status, response) {
+            if(status == 201) { // 성공
+                alert("회원가입 성공");
+            }
+            else { // 실패
+                alert("회원가입 실패");
+            }
+        })
+    }
+
+</script>
+
 
 </body>
 </html>
