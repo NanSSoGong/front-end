@@ -12,6 +12,13 @@
 
   <%-- css 파일 --%>
   <link rel="stylesheet" type="text/css" href="css/login.css">
+  <style>
+    @media screen and (max-width: 1000px) {
+      .logo {
+        display: none;
+      }
+    }
+  </style>
 
   <%-- javascript --%>
   <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -79,7 +86,7 @@
     // input 값이 비었는지 확인
     function isEmpty(obj, msg) {
         if(obj.value=="") {
-            //alert(msg);
+            alert(msg);
             obj.focus();
 
             return true;
@@ -98,9 +105,9 @@
     }
 
     var token = sessionStorage.getItem("user_token");
-    var myUrl = 'ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/user/login/';
-
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/user/login/';
     var getJson = function(method, url, body, callback) {
+
         var xhr = new XMLHttpRequest();
         var data = JSON.stringify(body);
 
@@ -139,7 +146,7 @@
             if(status == 201) { // 성공
                 sessionStorage.setItem("user_token", response.data.token);
                 sessionStorage.setItem("user_name", response.data.user_name); // 확인
-                alert(response.data.token + "실패");
+                alert(sessionStorage.getItem("user_token"));
                 location.href='/main.jsp';
             }
             else { // 실패
