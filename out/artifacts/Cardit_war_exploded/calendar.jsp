@@ -534,7 +534,6 @@
                 <span><span class="d-day">D-3<br></span><span class="d-date">&nbsp12.18</span></span>
                 <span class="d-content">SOW 보고서 쓰기</span>
                 <img id="cardStar" src="image/star_off.png" class="star-img" onclick="changeStar()"/>
-
             </li>
         </ul>
     </div>
@@ -571,59 +570,6 @@
 
     var card_name = sessionStorage.getItem("card_name");
     var card_mark = sessionStorage.getItem("card_mark");
-    /*
-    //보드에 해당하는 캘린더 조회
-    var getJson1 = function() {
-        myUrl += "/"+ sessionStorage.getItem("board_idx");
-        alert(myUrl);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', myUrl, true);
-        xhr.setRequestHeader('Content-Type', 'application/json;');
-        xhr.setRequestHeader('authorization', token);
-        xhr.responseType = "json";
-        xhr.onreadystatechange = getCalendar(cardMonthDate);
-        xhr.onload = function() {
-            callback(xhr.status, xhr.response){
-                alert("yeji~");
-                if(xhr.status == 200 ) { // 성공
-                    var message = response.data.message;
-                    sessionStorage.getItem("data");
-                }
-                else { // 실패
-                    alert("failure");
-                }
-            }
-        };
-        xhr.send();
-    };
-
-    //마감임박 카드 조회
-    var getJson2 = function() {
-        myUrl += "/emergency/"+ sessionStorage.getItem("board_idx");
-        alert(myUrl);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', myUrl, true);
-        xhr.setRequestHeader('Content-Type', 'application/json;');
-        xhr.setRequestHeader('authorization', token);
-        xhr.responseType = "json";
-        xhr.onreadystatechange = getCalendar(cardMonthDate);
-        xhr.onload = function() {
-            callback(xhr.status, xhr.response){
-                alert("yeji~");
-                if(xhr.status == 200) { // 성공
-                    var message = response.data.message;
-                    sessionStorage.getItem("data");
-                }
-                else { // 실패
-                    alert("failure");
-                }
-            }
-        };
-        xhr.send();
-    };
-*/
 
 
     //중요도 바꾸기
@@ -671,12 +617,10 @@
                 emerList += "<li class='card'><span><span class=\"d-day\">D-3<br></span><span class=\"d-date\">&nbsp12.18</span></span><span class=\"d-content\"> " + response[i].card_name + "</span>\n" +
                     "<img id=\"cardStar\" src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
             }
-            document.getElementById('card').innerHTML = emerList;
+            document.getElementById('list-contents').innerHTML = emerList;
 
     }
 
-    function changeStar(card_name, card_mark){
-        alert("yeji");
         if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
             document.getElementById("cardStar").src="image/star_on.png";
             card_mark=1;
@@ -690,7 +634,6 @@
             'card_mark': card_mark
         };
         getJson('PUT', myUrl, body, function (status, response) {
-            alert("yejii");
             if(status == 200 || status==201) { // 성공
                 var message = response.data.message;
             }

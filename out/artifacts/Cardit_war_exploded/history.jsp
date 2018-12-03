@@ -28,74 +28,7 @@
     <script type="text/javascript" src="js/board.js"></script>
 </head>
 
-<<<<<<< HEAD
-<body>
-
-<script>
-
-    //추가했습니다////필요합니다////
-    var token = sessionStorage.getItem("user_token");
-    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
-
-    $(document).ready(function() {
-        if(!token) location.replace("index.jsp");
-    });
-
-    var getJson = function(method, url, body, callback) {
-        var xhr = new XMLHttpRequest();
-        var data = JSON.stringify(body);
-        xhr.open(method, url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('authorization', token);
-        xhr.responseType = 'json';
-        xhr.onload = function() {
-            callback(xhr.status, xhr.response);
-        };
-
-        if(data) {
-            alert("전송");
-            xhr.send(data);
-        }
-        else {xhr.send(); alert("실패");}
-
-    };
-
-    // 로그인
-    function history() {
-        var f = document.loginForm;
-        var id = f.user_id.value;
-        var pw = f.user_pwd.value;
-        var body = {
-            "user_id": id,
-            "user_pwd": pw
-        };
-
-        if(isEmpty(f.user_id, "ID를 입력하세요.")) return false;
-        if(isEmpty(f.user_pwd, "비밀번호를 입력하세요.")) return false;
-
-        // 임시
-        //location.href='/main.jsp';
-
-        getJson('POST', myUrl, body, function (status, response) {
-            alert("status : "+status);
-            alert(response);
-
-            if(status == 201) { // 성공
-                //sessionStorage.setItem("user_token", response.data.token);
-                sessionStorage.setItem("user_name", response.data.message); // 확인
-                alert(response.data.token + "실패");
-                location.href='/main.jsp';
-            }
-            else { // 실패
-                //alert(id + "실패");
-            }
-        })
-    }
-</script>
-
-=======
 <body onload="history()">
->>>>>>> b36f447c4749d044fdce49baa29713bd5730359c
 
 <%-- top menu --%>
 <header>

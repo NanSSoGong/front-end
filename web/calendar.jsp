@@ -534,27 +534,22 @@
                 <span><span class="d-day">D-3<br></span><span class="d-date">&nbsp12.18</span></span>
                 <span class="d-content">SOW 보고서 쓰기</span>
                 <img id="cardStar" src="image/star_off.png" class="star-img" onclick="changeStar()"/>
-
             </li>
         </ul>
     </div>
 </main>
 
 <script>
-    if (!(request.getParameter("action") == null)) // Have the calendar up or down in this if block
-    {
+    if (!(request.getParameter("action") == null)) // Have the calendar up or down in this if block {
         currMonth = Integer.parseInt(request.getParameter("month"));
         currYear = Integer.parseInt(request.getParameter("year"));
 
-        if (Integer.parseInt( request.getParameter("action")) == 1 )
-        {
+        if (Integer.parseInt( request.getParameter("action")) == 1 ) {
             cal.set(currYear, currMonth, 1);
             cal.add(cal.MONTH, 1);
             currMonth = cal.get(cal.MONTH);
             currYear = cal.get(cal.YEAR);
-        }
-        else
-        {
+        } else {
             cal.set(currYear, currMonth ,1);
             cal.add(cal.MONTH, -1);
             currMonth = cal.get(cal.MONTH);
@@ -571,62 +566,8 @@
 
     var card_name = sessionStorage.getItem("card_name");
     var card_mark = sessionStorage.getItem("card_mark");
-    /*
-    //보드에 해당하는 캘린더 조회
-    var getJson1 = function() {
-        myUrl += "/"+ sessionStorage.getItem("board_idx");
-        alert(myUrl);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', myUrl, true);
-        xhr.setRequestHeader('Content-Type', 'application/json;');
-        xhr.setRequestHeader('authorization', token);
-        xhr.responseType = "json";
-        xhr.onreadystatechange = getCalendar(cardMonthDate);
-        xhr.onload = function() {
-            callback(xhr.status, xhr.response){
-                alert("yeji~");
-                if(xhr.status == 200 ) { // 성공
-                    var message = response.data.message;
-                    sessionStorage.getItem("data");
-                }
-                else { // 실패
-                    alert("failure");
-                }
-            }
-        };
-        xhr.send();
-    };
-
-    //마감임박 카드 조회
-    var getJson2 = function() {
-        myUrl += "/emergency/"+ sessionStorage.getItem("board_idx");
-        alert(myUrl);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', myUrl, true);
-        xhr.setRequestHeader('Content-Type', 'application/json;');
-        xhr.setRequestHeader('authorization', token);
-        xhr.responseType = "json";
-        xhr.onreadystatechange = getCalendar(cardMonthDate);
-        xhr.onload = function() {
-            callback(xhr.status, xhr.response){
-                alert("yeji~");
-                if(xhr.status == 200) { // 성공
-                    var message = response.data.message;
-                    sessionStorage.getItem("data");
-                }
-                else { // 실패
-                    alert("failure");
-                }
-            }
-        };
-        xhr.send();
-    };
-*/
 
 
-    //중요도 바꾸기
     var getJson = function(method, url, body, callback) {
         var xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
@@ -645,6 +586,7 @@
         else xhr.send();
     };
 
+    //캘린더 페이지 불러오기
     function loadCalendar(){
         var emerUrl = myUrl + "/emergency/1/1";    // "/user_idx/board_idx"
         var body = "";
@@ -663,18 +605,26 @@
         document.getElementsByClassName('user_name').innerText = user_name;
     }
 
+    //D-DAY 카드 불러오기
     function loadEmerList(response){
             var emerList = "";
             var i;
 
             for (i in response) {
-                emerList += "<li class='card'><span><span class=\"d-day\">D-3<br></span><span class=\"d-date\">&nbsp12.18</span></span><span class=\"d-content\"> " + response[i].card_name + "</span>\n" +
-                    "<img id=\"cardStar\" src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
-            }
-            document.getElementById('card').innerHTML = emerList;
+                emerList += "<li class='card'><span><span class=\"d-day\">D-" +response[i].d_day+ "<br></span><span class=\"d-date\">&nbsp12.18</span></span><span class=\"d-content\"> " + response[i].card_name + "</span>\n";
+                    if(response[i].card_mark == 0) {
+                        emerList += "<img id=\"cardStar\" src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
+                    }
+                    else {
+                        emerList += "<img id=\"cardStar\" src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
 
+                    }
+            }
+            document.getElementById('list-contents').innerHTML = emerList;
     }
 
+    //카드 중요도 변경하기
+    function changeStar() {
         if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
             document.getElementById("cardStar").src="image/star_on.png";
             card_mark=1;
@@ -683,10 +633,12 @@
             document.getElementById("cardStar").src = "image/star_off.png";
             card_mark=0;
         }
+
         var body = {
             'card_name': card_name,
             'card_mark': card_mark
         };
+
         getJson('PUT', myUrl, body, function (status, response) {
             if(status == 200 || status==201) { // 성공
                 var message = response.data.message;
@@ -695,8 +647,9 @@
                 alert("failure");
             }
         })
-
     }
+
+
 
 </script>
 
