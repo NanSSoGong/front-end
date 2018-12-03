@@ -9,6 +9,10 @@ body {
 * {
     box-sizing: border-box;
 }
+@font-face{
+    font-family:"NanumSquare"; /*폰트 패밀리 이름 추가*/
+    src:url(../NanumSquareRegular.ttf); /*폰트 파일 주소*/
+}
 .list {
     border: 1px solid #eee;
     border-radius: 5px;
