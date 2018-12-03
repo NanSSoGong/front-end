@@ -28,8 +28,10 @@
 <script>
 
     //추가했습니다////필요합니다////
-    var token = sessionStorage.getItem("user_token");
-    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+    //var token = sessionStorage.getItem("user_token");
+    var token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NDM4MTg1NzQsImV4cCI6MTU0NjQxMDU3NH0.fGAuub9Qean8dXUUEmfldjlQ4a7nxe09-buwFQzwv-w;
+    var myUrl = 'http://localhost:3000/api/history/';
+    var parm_board = 1;
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
@@ -37,7 +39,6 @@
 
     var getJson = function(method, url, body, callback) {
         var xhr = new XMLHttpRequest();
-        var data = JSON.stringify(body);
         xhr.open(method, url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.setRequestHeader('authorization', token);
@@ -45,43 +46,20 @@
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
         };
-
-        if(data) {
-            alert("전송");
-            xhr.send(data);
-        }
-        else {xhr.send(); alert("실패");}
-
     };
-
     // 로그인
     function history() {
-        var f = document.loginForm;
-        var id = f.user_id.value;
-        var pw = f.user_pwd.value;
-        var body = {
-            "user_id": id,
-            "user_pwd": pw
-        };
-
-        if(isEmpty(f.user_id, "ID를 입력하세요.")) return false;
-        if(isEmpty(f.user_pwd, "비밀번호를 입력하세요.")) return false;
-
-        // 임시
-        //location.href='/main.jsp';
-
-        getJson('POST', myUrl, body, function (status, response) {
+        getJson('GET', myUrl.concat(parm_board), body, function (status, response) {
             alert("status : "+status);
             alert(response);
 
             if(status == 201) { // 성공
-                //sessionStorage.setItem("user_token", response.data.token);
-                sessionStorage.setItem("user_name", response.data.message); // 확인
-                alert(response.data.token + "실패");
-                location.href='/main.jsp';
+                alert(response.data.history_string);
+                var history_string = response.data.history_string;
+                var history_d_day = response.data.d_day;
             }
             else { // 실패
-                //alert(id + "실패");
+                alert("실패");
             }
         })
     }
