@@ -562,13 +562,15 @@
         }
     }
 
-
-    //var token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NDIzMzAzOTYsImV4cCI6MTU0NDkyMjM5Nn0.CvJaHskunMlV-hP1xNcqhHss4s1YwxNbPkobVK_aJn4";
     var token = sessionStorage.getItem("user_token");
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calender';
+
+    $(document).ready(function() {
+        if(!token) location.replace("index.jsp");
+    });
+
     var card_name = sessionStorage.getItem("card_name");
     var card_mark = sessionStorage.getItem("card_mark");
-    var myUrl = "http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calender";
-
     /*
     //보드에 해당하는 캘린더 조회
     var getJson1 = function() {
@@ -666,14 +668,15 @@
             var i;
 
             for (i in response) {
-                emerList += "<li class='card'><span>- " + response[i].board_name + "</span></li>";
+                emerList += "<li class='card'><span><span class=\"d-day\">D-3<br></span><span class=\"d-date\">&nbsp12.18</span></span><span class=\"d-content\"> " + response[i].card_name + "</span>\n" +
+                    "<img id=\"cardStar\" src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
             }
-
-            document.getElementById('board-list').innerHTML = emerList;
+            document.getElementById('card').innerHTML = emerList;
 
     }
 
     function changeStar(card_name, card_mark){
+        alert("yeji");
         if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
             document.getElementById("cardStar").src="image/star_on.png";
             card_mark=1;

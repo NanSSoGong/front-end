@@ -562,9 +562,8 @@
         }
     }
 
-    //추가했습니다////필요합니다////
     var token = sessionStorage.getItem("user_token");
-    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calender';
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
@@ -669,14 +668,13 @@
             var i;
 
             for (i in response) {
-                emerList += "<li class='card'><span>- " + response[i].board_name + "</span></li>";
+                emerList += "<li class='card'><span><span class=\"d-day\">D-3<br></span><span class=\"d-date\">&nbsp12.18</span></span><span class=\"d-content\"> " + response[i].card_name + "</span>\n" +
+                    "<img id=\"cardStar\" src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
             }
-
-            document.getElementById('board-list').innerHTML = emerList;
+            document.getElementById('card').innerHTML = emerList;
 
     }
 
-    function changeStar(card_name, card_mark){
         if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
             document.getElementById("cardStar").src="image/star_on.png";
             card_mark=1;
