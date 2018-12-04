@@ -540,7 +540,8 @@
 </main>
 
 <script>
-    if (!(request.getParameter("action") == null)) // Have the calendar up or down in this if block {
+    if (!(request.getParameter("action") == null)) // Have the calendar up or down in this if block
+    {
         currMonth = Integer.parseInt(request.getParameter("month"));
         currYear = Integer.parseInt(request.getParameter("year"));
 
