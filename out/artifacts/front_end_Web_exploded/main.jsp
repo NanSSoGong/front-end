@@ -240,7 +240,7 @@
 <script>
     //추가했습니다////필요합니다////
     var token = sessionStorage.getItem("user_token");
-    var myUrl = 'http://localhost:3000/api/';
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
     var user_idx = sessionStorage.getItem("user_idx");
     var user_name = sessionStorage.getItem("user_name");
 
