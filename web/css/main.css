@@ -95,7 +95,6 @@ header {
     padding: calc(88px + 5%) 0 0 11%;
 }
 .side-menu-container {
-    position: fixed;
     padding:0;
     width: 360px;
     height: 100%;
