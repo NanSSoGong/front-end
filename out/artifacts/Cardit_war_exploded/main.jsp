@@ -211,11 +211,15 @@
 
     // 메인페이지 로드
     function loadPage() {
+        var user_idx = sessionStorage.getItem("user_idx");
+        var user_name = sessionStorage.getItem("user_name");
+
         var boardUrl = myUrl + "board/1"; /*"/board/:user_idx"*/
-        var cardUrl = "json_test/card.json";/*myUrl + "card/:1";*/    /*"/card/:board_idx"*/
+        var cardUrl = myUrl + "/calender/emergency/"+ user_idx +"/-1";  /*"/card/:board_idx"*/
         var calendarUrl = "json_test/card.json";/*myUrl + "calendar";*/
         var body = "";
-        var user_name = sessionStorage.getItem("user_name")
+
+
 
 
         getJson('GET', boardUrl, body, function (status, response) {
@@ -225,16 +229,17 @@
             else { // 실패
                 alert("board 로드 실패");
             }
-        })
+        });
         getJson('GET', cardUrl, body, function (status, response) {
             if (status == 201) { // 성공
                 loadCardList(response.data);
+                displayCalendar(0);
             }
             else { // 실패
                 alert("카드 로드 실패");
             }
-        })
-        getJson('GET', calendarUrl, body, function (status, response) {
+        });
+/*        getJson('GET', calendarUrl, body, function (status, response) {
             if (status == 201) { // 성공
                 displayCalendar(0);
                 //loadCalendar(response.data);
@@ -242,7 +247,7 @@
             else { // 실패
                 alert("캘린더 로드 실패");
             }
-        })
+        });*/
 
         document.getElementsByClassName('user_name').innerText = user_name;
     }
@@ -269,9 +274,10 @@
             cardList += "<li><div class='card-list'><div class='card-header'><span class='board-name'>" +
                 response[i].card_name + "</span><span class='colon'>: </span><span class='list-name'>" +
                 response[i].list_name + "</span><span class='d-day-number'>D-2</span></div><div class='card-contents'><span class='card-name'>" +
-                response[i].card_content + "</span><span class='card-duedate'>Due Date : Oct, 6th</span></div><button class='done-button'>Done</button><button class='hide-button'>Hide</button></div></li>"
+                /*response[i].card_content + */"</span><span class='card-duedate'>Due Date : Oct, 6th</span></div><button class='done-button'>Done</button><button class='hide-button'>Hide</button></div></li>"
         }
 
+        //document.getElementById('today').innerHTML = todayCard;
         document.getElementById('d-day-wrapper').innerHTML = cardList;
     }
 

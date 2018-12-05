@@ -116,7 +116,6 @@
         var xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('authorization', token);
         xhr.responseType = 'json';
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
@@ -176,7 +175,7 @@
         var email = f.user_email.value;
 
         if(isEmpty(f.user_name, "이름을 입력해주세요.")) return false;
-        if(isEmpty(f.user_id, "ID를 입력해주세요.")) return false;
+        if(isEmpty(f.user_id, "ID를 입력해주세요."))  return false;
         if(isEmpty(f.user_pwd, "비밀번호를 입력해주세요.")) return false;
         if(!isSame(pwd, pwd_check)) {
             f.user_pwd_check.focus();
@@ -206,7 +205,6 @@
             }
         })
     }
-
 </script>
 
 
