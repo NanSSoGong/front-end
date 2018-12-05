@@ -56,7 +56,7 @@
         <p class="message">비밀번호를 읽어버리셨나요?</p>
         <p class="message">계정이 없으신가요? <a href="#">가입하기</a></p>
       </form>
-      <form class="sign-up-form" name="signUpForm" action="main.jsp">
+      <form class="sign-up-form" name="signUpForm">
         <h1>Card-it</h1>
         <input type="text" placeholder="이름" name="user_name">
         <input type="text" placeholder="아이디" name="user_id">
@@ -64,8 +64,8 @@
         <input type="password" placeholder="비밀번호 확인" name="user_pwd_check">
         <input type="text" placeholder="전화번호" name="user_phone">
         <input type="email" placeholder="이메일" name="user_email">
-        <button type="button" <%--onclick="signUp()"--%>>회원가입</button>
-        <p class="message">Already registered? <a href="#">로그인</a></p>
+        <button type="button" onclick="signUp()">회원가입</button>
+        <p class="message">이미 아이디가 있으신가요? <a href="#">로그인</a></p>
       </form>
     </div>
   </div>
@@ -77,18 +77,26 @@
 </footer>
 
 <script>
-    $('.message a').click(function(){
-        $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-    });
-</script>
+    var token = sessionStorage.getItem("user_token");
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/user/';
 
-<script>
+    $(document).ready(function() {
+        if(token) location.replace("main.jsp");
+    });
+
+    $('.message a').click(function(){
+        changeMode();
+    });
+
+    function changeMode(){
+        $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    }
+
     // input 값이 비었는지 확인
     function isEmpty(obj, msg) {
         if(obj.value=="") {
             alert(msg);
             obj.focus();
-
             return true;
         }
 
@@ -96,34 +104,33 @@
     }
     // 비밀번호 확인과 같은지 확인
     function isSame(pwd1, pwd2) {
-        if(pwd1 == pwd2) return true;
+        if(pwd1 === pwd2) return true;
         else {
             alert("비밀번호가 일치하지 않습니다.");
 
             return false;
         }
     }
-
-    var token = sessionStorage.getItem("user_token");
-    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/user/login/';
     var getJson = function(method, url, body, callback) {
 
         var xhr = new XMLHttpRequest();
-        var data = JSON.stringify(body);
-
         xhr.open(method, url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.responseType = 'json';
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
         };
-        alert("response : " + xhr.response + " status : " + xhr.status + " data : " + data);
 
-        if(data) {
-            alert("전송");
+        if(body) {
+            var data = JSON.stringify(body);
             xhr.send(data);
+            //alert("전송");
         }
-        else {xhr.send(); alert("실패");}
+        else {
+            xhr.send();
+            //alert("실패");
+        }
+
     };
 
     // 로그인
@@ -139,24 +146,26 @@
         if(isEmpty(f.user_id, "ID를 입력하세요.")) return false;
         if(isEmpty(f.user_pwd, "비밀번호를 입력하세요.")) return false;
 
-        // 임시
-        //location.href='/main.jsp';
-
-        getJson('POST', myUrl, body, function (status, response) {
+        getJson('POST', myUrl.concat('login/'), body, function (status, response) {
             if(status == 201) { // 성공
                 sessionStorage.setItem("user_token", response.data.token);
-                sessionStorage.setItem("user_name", response.data.user_name); // 확인
-                alert(sessionStorage.getItem("user_token"));
-                location.href='/main.jsp';
+                sessionStorage.setItem("user_idx", response.data.user_idx);
+                sessionStorage.setItem("user_name", response.data.user_name);
+                sessionStorage.setItem("user_email", response.data.user_email);
+                sessionStorage.setItem("user_phone", response.data.user_phone);
+                sessionStorage.setItem("user_id", response.data.user_id);
+
+                location.href = "main.jsp";
             }
-            else { // 실패
-                //alert(id + "실패");
+            else {
+                if(response.message == "Login Failed") alert("아이디 혹은 패스워드가 일치하지 않습니다.");
+                else alert("로그인에 실패했습니다. Error Code : " + status);
             }
         })
     }
 
     // 회원가입
-/*    function signUp() {
+    function signUp() {
         var f = document.signUpForm;
         var name = f.user_name.value;
         var id = f.user_id.value;
@@ -164,6 +173,16 @@
         var pwd_check = f.user_pwd_check.value;
         var phone = f.user_phone.value;
         var email = f.user_email.value;
+
+        if(isEmpty(f.user_name, "이름을 입력해주세요.")) return false;
+        if(isEmpty(f.user_id, "ID를 입력해주세요."))  return false;
+        if(isEmpty(f.user_pwd, "비밀번호를 입력해주세요.")) return false;
+        if(!isSame(pwd, pwd_check)) {
+            f.user_pwd_check.focus();
+            alert("비밀번호가 일치하지 않습니다.");
+            return false;
+        }
+
         var body = {
             "user_name" : name,
             "user_phone" : phone,
@@ -172,21 +191,20 @@
             "user_pwd" : pwd
         };
 
-        if(isEmpty(f.user_name, "이름을 입력해주세요.")) return false;
-        if(isEmpty(f.user_id, "ID를 입력해주세요.")) return false;
-        if(isEmpty(f.user_pwd, "비밀번호를 입력해주세요.")) return false;
-        if(isSame(pwd, pwd_check)) return false;
-
-        getJson('POST', myUrl, body, function (status, response) {
+        getJson('POST', myUrl.concat('signup/'), body, function (status, response) {
             if(status == 201) { // 성공
-                alert("회원가입 성공");
+                alert("회원가입에 성공하였습니다.");
+                changeMode();
             }
-            else { // 실패
-                alert("회원가입 실패");
+            else if(status == 400) { // 실패
+                if (response.message == "Null Value") alert("회원가입에 실패했습니다. Error Code : " + status);
+                else alert("이미 존재하는 아이디입니다.");
+            }
+            else { // 오류
+                alert("회원가입에 실패했습니다. Error Code : " + status);
             }
         })
-    }*/
-
+    }
 </script>
 
 
