@@ -63,7 +63,7 @@
     //추가했습니다////필요합니다////
     var token = sessionStorage.getItem("user_token");
     var user_name = sessionStorage.getItem("user_name");
-    var myUrl = 'http://localhost:3000/api/history/';
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/history/';
     var parm_board = sessionStorage.getItem("board_idx");
     //var parm_board = 1;
     myUrl = myUrl + parm_board;
