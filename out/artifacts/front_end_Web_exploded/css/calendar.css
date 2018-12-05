@@ -17,6 +17,10 @@ body {
     box-sizing: border-box;
     font-family: "NanumSquare";
 }
+
+.list-contents{
+    vertical-align: center;
+}
 .list-header {
     font-family:"NanumSquareOTF ExtraBold";
     font-size: 22px;

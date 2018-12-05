@@ -816,6 +816,13 @@
 
 
 <script>
+    var token = sessionStorage.getItem("user_token");
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+
+    $(document).ready(function() {
+        if(!token) location.replace("index.jsp");
+    });
+
     $(document).ready(function() {
         /*List 간 Card 이동*/
         $(function () {
