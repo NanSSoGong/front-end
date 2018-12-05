@@ -16,6 +16,9 @@
     String cardMonthDate ="";
     String boxSize = "90";  // 달력 한 칸 크기
 
+    String cardDate = "";
+
+
 //build 2 calendars
 
     Calendar c = Calendar.getInstance();
@@ -425,9 +428,9 @@
     <div class="calendar">
         <table height='100' width='519' celpadding='0' cellspacing='0' align="center" valign="center">
             <tr>
-                <td width='150' align='right' valign='middle'><a href="calendar.jsp?month=<%=currMonth--%>&year=<%=currYear%>&action=0"><img height="20px" width="20px" src="image/back.png"></a></td>
+                <td width='150' align='right' valign='middle'><a href="calendar.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=0"><img height="20px" width="20px" src="image/back.png"></a></td>
                 <td width='260' align='center' valign='middle'><b><font color="#707070" size="6px"><%= cal.get(cal.YEAR)+"."+getDateName (cal.get(cal.MONTH))%></font></b></td>
-                <td width='173' align='left' valign='middle'><a href="calendar.jsp?month=<%=currMonth++%>&year=<%=currYear%>&action=1"><img height="20px" width="20px" src="image/next.png"></a></td>
+                <td width='173' align='left' valign='middle'><a href="calendar.jsp?month=<%=currMonth%>&year=<%=currYear%>&action=1"><img height="20px" width="20px" src="image/next.png"></a></td>
             </tr>
         </table>
         <table align="center" valign="center" border="0" width="520" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0">
@@ -496,6 +499,9 @@
                                 <div class="today-date"/>
                             <% today=0; } %>
                             <div ><font size="4" color="#707070"><%=dispDay%></font></div><br>
+                            <% if(cardDate.indexOf(dispDay) != -1) {%>
+                            <div id="haveDate"><img height=8px weight=8px src="image/date_on.png"/></div>
+                            <% } %>
                         </td>
                         <%
                             count += 1;
@@ -508,7 +514,6 @@
                         <%
                                     }
                                 }
-
                             }
                         %>
                     </tr>
@@ -558,7 +563,7 @@
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calender';
 
     var dateList = new Array();
-
+    var dateString ="";
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
@@ -612,7 +617,9 @@
         for (i in response) {
             end_date = response[i].card_end_date.toString().substr(8,2);
             dateList[i] = end_date;
+            dateString += end_date + " ";
         }
+
 
     }
 
@@ -651,7 +658,6 @@
     //카드 중요도 변경하기
     function changeStar(card_name) {
         var card_mark =0;
-        alert(card_name);
 
         if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
             document.getElementById("cardStar").src="image/star_on.png";
@@ -669,10 +675,8 @@
 
         getJson('PUT', myUrl, body, function (status, response) {
             if(status == 200 || status==201) { // 성공
-                alert("중요도가 변경되었습니다!");
             }
             else { // 실패
-                alert("failure");
             }
         })
     }
