@@ -35,7 +35,7 @@
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
     <a href="#" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="#" class="user-box text"><span class="user-name">amoogae</span></a>
+        <a href="#" class="user-box text"><span class="user-name" id = "user-name-label"></span></a>
         <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
@@ -62,17 +62,17 @@
 <script>
 
     //추가했습니다////필요합니다////
-    //var token = sessionStorage.getItem("user_token");
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NDM4MTg1NzQsImV4cCI6MTU0NjQxMDU3NH0.fGAuub9Qean8dXUUEmfldjlQ4a7nxe09-buwFQzwv-w";
+    var token = sessionStorage.getItem("user_token");
+    var user_name = sessionStorage.getItem("user_name");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/history/';
-    var parm_board = '1';
+    var parm_board = sessionStorage.getItem("board_idx");
     myUrl = myUrl + parm_board;
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
+        document.getElementById('user-name-label').innerHTML = user_name;
     });
     // 로그인
-
     var getJson = function(method, url, body, callback) {
         var xhr = new XMLHttpRequest();
 
@@ -102,15 +102,10 @@
         })
     }
     function loadHistoryList(response){
-        alert(response);
         var historyList = "";
         var i;
         for (i in response){
-            if(response[i].d_day == 0){
-                historyList += "<img class = 'history-image-margin' src = 'image/history.png'>&nbsp;&nbsp;&nbsp;&nbsp;" + response[i].history_string + "<font class=\"float-right\">" + " Today </font><br><br>";
-            }else{
-                historyList += "<img class = 'history-image-margin' src = 'image/history.png'>&nbsp;&nbsp;&nbsp;&nbsp;" + response[i].history_string + "<font class=\"float-right\">"+ response[i].d_day.toString().substring(1,2) + " days ago</font><br><br>";
-            }
+            historyList += "<img class = 'history-image-margin' src = 'image/history.png'>&nbsp;&nbsp;&nbsp;&nbsp;" + response[i].history_string + "<font class=\"float-right\">"+ response[i].d_day.toString().substring(1,2) + " days ago</font><br><br>";
         }
         document.getElementById('history-list').innerHTML = historyList;
     }

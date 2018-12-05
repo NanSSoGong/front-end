@@ -19,6 +19,14 @@
     String cardDate = "";
 
 
+    int daymonth;
+    int cMonth;
+    int calMonth;
+    int cYear;
+    int calYear;
+    int calWeek;
+
+
 //build 2 calendars
 
     Calendar c = Calendar.getInstance();
@@ -26,9 +34,9 @@
 
     cardMonthDate= c.get(c.YEAR) + "-" + c.get(c.MONTH);
 
-        currMonth = c.get(c.MONTH);
-        currYear = c.get(c.YEAR);
-        cal.set(currYear, currMonth,1);
+    currMonth = c.get(c.MONTH);
+    currYear = c.get(c.YEAR);
+    cal.set(currYear, currMonth,1);
 
 %>
 
@@ -435,90 +443,24 @@
         </table>
         <table align="center" valign="center" border="0" width="520" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0">
             <td width="100%">
-                <table class="calendar-y-m" border="2" width="519" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0" >
-                    <tr>
-                        <td width="<%=boxSize%>" align="center" nowrap >
-                            <font size=4 color="#F02E0B"><b>Sun</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap >
-                            <font size=4 color="#707070"><b>Mon</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap >
-                            <font size=4 color="#707070"><b>Tue</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap >
-                            <font size=4 color="#707070"><b>Wed</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap >
-                            <font size=4 color="#707070"><b>Thu</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap >
-                            <font size=4 color="#707070"><b>Fri</b></font></td>
-                        <td width="<%=boxSize%>" align="center" nowrap >
-                            <font size=4 color="#707070"><b>Sat</b></font></td>
-                    </tr>
-                    <%
+                <table id="date" class="calendar-y-m" border="2" width="519" style="border-collapse: collapse" bordercolor="#ffffff" cellpadding="0" cellspacing="0" >
 
-                        //'Calendar loop
-                        int currDay;
+                    <%
                         String todayColor;
                         int count = 1;
                         int dispDay = 1;
 
-                        int today =0;
+                        int today = 0;
 
 
-                        for (int w = 1; w < 7; w++)
-                        {
-                    %>
-                    <tr>
-                        <%
-                            for (int d = 1; d < 8; d++)
-                            {
-                                if (! (count >= cal.get(c.DAY_OF_WEEK)))
-                                {
+                        daymonth =c.get(c.DAY_OF_MONTH);
+                        cMonth= c.get(c.MONTH);
+                        calMonth = cal.get(cal.MONTH);
+                        cYear = c.get(c.YEAR);
+                        calYear = cal.get(cal.YEAR);
+                        calWeek = cal.get(c.DAY_OF_WEEK);
 
-                        %>
-                        <td width="<%=boxSize%>" height="<%=boxSize%>" valign="top" align="left">&nbsp;</td>
-                        <%
-                            count += 1;
-                        }
-                        else
-                        {
 
-                            if (isDate ( currMonth + 1, dispDay, currYear) ) // use the isDate method
-                            {
-
-                                if ( dispDay == c.get(c.DAY_OF_MONTH) && c.get(c.MONTH) == cal.get(cal.MONTH) && c.get(c.YEAR) == cal.get(cal.YEAR)) // Here we check to see if the current day is today
-                                {
-                                    todayColor = "#ffffff";
-                                    today=1;
-                                }
-                                else
-                                {
-                                    todayColor = "#ffffff";
-                                }
-                        %>
-                        <td bgcolor ="<%=todayColor%>" width="<%=boxSize%>" align="center" align-vertical="true" height="<%=boxSize%>" valign="center">
-                            <% if(today==1) {%>
-                                <div class="today-date"/>
-                            <% today=0; } %>
-                            <div ><font size="4" color="#707070"><%=dispDay%></font></div><br>
-                            <% if(cardDate.indexOf(dispDay) != -1) {%>
-                            <div id="haveDate"><img height=8px weight=8px src="image/date_on.png"/></div>
-                            <% } %>
-                        </td>
-                        <%
-                            count += 1;
-                            dispDay += 1;
-                        }
-                        else
-                        {
-                        %>
-                        <td width="<%=boxSize%>" align="left" height="<%=boxSize%>" valign="top">&nbsp;</td>
-                        <%
-                                    }
-                                }
-                            }
-                        %>
-                    </tr>
-                    <%
-                        }
                     %>
                 </table>
             </td>
@@ -611,48 +553,106 @@
 
     //Calendar 정보 불러오기
     function loadCalendarList(response){
+        var haveDateList = "";
         var i;
         var end_date;
 
         for (i in response) {
-            end_date = response[i].card_end_date.toString().substr(8,2);
+            end_date = response[i].card_end_date.toString().substr(8, 2);
             dateList[i] = end_date;
             dateString += end_date + " ";
         }
+
+
+        var todayColor;
+        var count = 1;
+        var dispDay = 1;
+
+        var today = 0;
+
+        haveDateList ="<tr><td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#F02E0B\"><b>Sun</b></font></td>\n"+
+            "                        <td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#707070\"><b>Mon</b></font></td>\n" +
+            "                        <td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#707070\"><b>Tue</b></font></td>\n" +
+            "                        <td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#707070\"><b>Wed</b></font></td>\n" +
+            "                        <td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#707070\"><b>Thu</b></font></td>\n" +
+            "                        <td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#707070\"><b>Fri</b></font></td>\n" +
+            "                        <td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#707070\"><b>Sat</b></font></td></tr>";
+
+            for (var w = 1; w < 7; w++) {
+            haveDateList += "<tr>";
+            for (var d = 1; d < 8; d++) {
+                if (!(count >= <%=calWeek%>)) {
+                    haveDateList += "<td width=\"90\" height=\"90\" valign=\"top\" align=\"left\">&nbsp;</td>";
+                    count += 1;
+                }
+
+
+                else {
+                    if (<%=isDate(currMonth + 1, dispDay, currYear)%>) { // use the isDate method
+
+                        if (dispDay == <%=daymonth%> && <%=cMonth%> == <%=calMonth%> && <%=cYear%> == <%=calYear%>) { // Here we check to see if the current day is today
+                            todayColor = "#ffffff";
+                            today = 1;
+                        }
+                        else {
+                            todayColor = "#ffffff";
+                        }
+                        haveDateList += "<td bgcolor =\""+todayColor+"\" width=\"90\" align=\"center\" align-vertical=\"true\" height=\"90\" valign=\"center\">";
+
+                        if (today == 1) {
+                            haveDateList += "<div class=\"today-date\"/>";
+                            today = 0;
+                        }
+                        haveDateList += "<div ><font size=\"4\" color=\"#707070\">"+dispDay+"</font></div><br>";
+                        if (dateString.indexOf(dispDay) != -1) {
+                            haveDateList += "<div id=\"haveDate\"><img height=8px weight=8px src=\"image/date_on.png\"/></div>";
+                        }
+                        haveDateList += "</td>";
+                        count += 1;
+                        dispDay += 1;
+                    }
+                    else {
+                        haveDateList += "<td width=\"90\" align=\"left\" height=\"90\" valign=\"top\">&nbsp;</td>";
+                    }
+                }
+            }
+            haveDateList += "</tr>";
+        }
+        document.getElementById('date').innerHTML = haveDateList;
 
 
     }
 
     //D-DAY 카드 불러오기
     function loadEmerList(response){
-            var emerList = "";
-            var i;
-            var end_month;
-            var end_date;
+        var emerList = "";
+        var i;
+        var end_month;
+        var end_date;
 
-            for (i in response) {
-                end_month = response[i].card_end_date.toString().substr(5,2);
-                end_date = response[i].card_end_date.toString().substr(8,2);
+        for (i in response) {
+            end_month = response[i].card_end_date.toString().substr(5,2);
+            end_date = response[i].card_end_date.toString().substr(8,2);
 
-                emerList += "<li class='card'><span><span class=\"d-day\">D";
+            emerList += "<li class='card'><span><span class=\"d-day\">D";
 
-                if(response[i].d_day > 0) {
-                    emerList += '-' + response[i].d_day;
-                }
-                else {
-                    emerList += "+" + (-response[i].d_day);
-                }
-
-                emerList += "<br></span><span class=\"d-date\">&nbsp" + end_month + "." + end_date + "</span></span><span class=\"d-content\"> " + response[i].card_name + "</span>\n";
-
-                if (response[i].card_mark == 0) {
-                    emerList += "<img id=\"cardStar\" src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
-                }
-                else {
-                    emerList += "<img id=\"cardStar\" src=\"image/star_on.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
-                }
+            if(response[i].d_day > 0) {
+                emerList += '-' + response[i].d_day;
             }
-            document.getElementById('list-content').innerHTML = emerList;
+            else {
+                emerList += "+" + (-response[i].d_day);
+            }
+
+            emerList += "<br></span><span class=\"d-date\">&nbsp" + end_month + "." + end_date + "</span></span><span class=\"d-content\"> " + response[i].card_name + "</span>\n";
+
+            if (response[i].card_mark == 0) {
+                emerList += "<img id=\"cardStar\" src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
+            }
+            else {
+                emerList += "<img id=\"cardStar\" src=\"image/star_on.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
+            }
+        }
+        document.getElementById('list-content').innerHTML = emerList;
     }
 
     //카드 중요도 변경하기
@@ -688,21 +688,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

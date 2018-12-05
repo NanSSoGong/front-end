@@ -95,7 +95,6 @@ header {
     padding: calc(88px + 5%) 0 0 11%;
 }
 .side-menu-container {
-    position: fixed;
     padding:0;
     width: 360px;
     height: 100%;
@@ -186,7 +185,7 @@ header {
     font-size: 20px;
     color: #B5B5B5;
 }
-#create-board-modal-contents .container span {
+.container-span {
     display: block;
     font-family:"NanumSquare Regular";
     font-size: 20px;
@@ -196,16 +195,17 @@ header {
     margin: 40px 0 23px 89px;
 }
 .color-button-container {
-    padding: 0 100px 0 170px;
+    padding: 0 100px 0 145px;
 }
 .color-button-container li {
     display:inline-block;
+    margin: 0 30px 0 0;
 }
 .board-color-button {
     display:inline-block;
     width: 50px;
     height: 50px;
-    margin: 0 14px 0 0;
+    margin: 0 30px 0 0;
     border: 0;
     border-radius: 5px;
 }
@@ -291,8 +291,9 @@ header {
     font-size: 25px;
 }
 .d-day-list {
+    margin-top: 50px;
     position: absolute;
-    top: 45%;
+    top: 500px;
     left: calc(50% - 300px);
     width:600px;
     height: 100%;
@@ -302,7 +303,7 @@ header {
 .card-list {
     position: relative;
     width:600px;
-    height: 300px;
+    height: 250px;
     padding: 30px 50px 0 50px;
     margin:0 0 30px 0;
     background-color: #FAFAFA;

@@ -154,7 +154,7 @@
 </header>
 
 
-    <%-- search bar --%>
+<%-- search bar --%>
 <section class="sub-header">
     <div class="search-bar">
         <input type="text" name="search" placeholder="검색">
@@ -240,10 +240,10 @@
 <script>
     //추가했습니다////필요합니다////
     var token = sessionStorage.getItem("user_token");
-    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+    var myUrl = 'http://localhost:3000/api/';
     var user_idx = sessionStorage.getItem("user_idx");
     var user_name = sessionStorage.getItem("user_name");
-	
+
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
     });
@@ -258,7 +258,7 @@
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
         };
-        if(data) {
+        if(body) {
             var data = JSON.stringify(body);
             xhr.send(data);
         }
@@ -294,15 +294,15 @@
                 alert("카드 로드 실패");
             }
         });
-/*        getJson('GET', calendarUrl, body, function (status, response) {
-            if (status == 201) { // 성공
-                displayCalendar(0);
-                //loadCalendar(response.data);
-            }
-            else { // 실패
-                alert("캘린더 로드 실패");
-            }
-        });*/
+        /*        getJson('GET', calendarUrl, body, function (status, response) {
+                    if (status == 201) { // 성공
+                        displayCalendar(0);
+                        //loadCalendar(response.data);
+                    }
+                    else { // 실패
+                        alert("캘린더 로드 실패");
+                    }
+                });*/
 
         document.getElementsByClassName('user_name').innerText = user_name;
 
@@ -338,10 +338,10 @@
     function loadCardList(response) {
         var cardList = "";
         var i;
-/*
-        var todayCard = "<div class='today-shadow'></div><ul><li><span class='today-header'>TODAY</span></li><li><span class='today-card-name'>" +
-            response[0].card_name + "</span></li><li><span class='today-date'>Oct, 4th (THU)</span></li></ul>";
-*/
+        /*
+                var todayCard = "<div class='today-shadow'></div><ul><li><span class='today-header'>TODAY</span></li><li><span class='today-card-name'>" +
+                    response[0].card_name + "</span></li><li><span class='today-date'>Oct, 4th (THU)</span></li></ul>";
+        */
         for (i=0; i < response.length; i++) {
             cardList += "<li><div class='card-list'><div class='card-header'><span class='board-name'><b>" +
                 response[i].card_name + "</b></span><span class='colon'>: </span><span class='list-name'>" +
@@ -372,11 +372,12 @@
         var boardName = f.boardName.value;
         var boardColor = f.boardColor.value;
         var createBoardUrl = myUrl + "board/" + user_idx;
+        alert(boardName);
         var body={
-			"board_name" : boardName,
-			"board_background" : boardColor
+            "board_name" : boardName,
+            "board_background" : boardColor
         };
-		
+
         getJson('POST', createBoardUrl, body, function (status, response) {
             if (status == 201) { // 성공
                 $("#board-list").append("<li class='board-li'><a href='board.jsp' class='board-a'><span>-</span><span>" + boardName + "</span><span id='board-idx' style='display:none;'>" + "9999" + "</span><span id='board-color' style='display: none'>" + boardColor + "</span></a></li>");
