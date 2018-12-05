@@ -10,7 +10,6 @@
 <head>
     <title>Home | Card-it</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery.ui.css">
 
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/display-calendar.js"></script>
@@ -75,6 +74,62 @@
         .calendar td:first-child {
             color:#F02E0B;
         }
+
+        .color-button-container input {
+            display: none;
+            cursor: pointer;
+        }
+        .color-button-container label {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .checkmark {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            margin: 0 0 0 0;
+            border: 0;
+            border-radius: 5px;
+        }
+        /* On mouse-over, add a grey background color */
+        .color-button-container input:hover ~ .checkmark {
+            background-color: #ccc;
+        }
+        /* When the radio button is checked, add a blue background */
+        .color-button-container input:checked + .checkmark {
+            background-color: #2196F3;
+        }
+        /* Create the indicator (the dot/circle - hidden when not checked) */
+        .color-button-container:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        /* Show the indicator (dot/circle) when checked */
+        .color-button-container input:checked ~ .checkmark:after {
+            position: absolute;
+            display: block;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0,0,0, 0.3);
+            content:"";
+        }
+        /* Style the indicator (dot/circle) */
+        .color-button-container .checkmark:after {
+            border-radius: 5px;
+            background: white;
+        }
+
+
+        .board-a {
+            cursor: pointer;
+        }
+
         @media screen and (max-width: 1000px) {
             .side-menu {
                 display: none;
@@ -117,30 +172,29 @@
         </div>
         <%--  create a board button 클릭 할 때 나오는 화면--%>
         <div id="create-board-modal">
-            <form id="create-board-modal-contents">
+            <form id="create-board-modal-contents" name="createBoardForm">
                 <div class="create-board-modal-header">
                     <span class="modal-header-name">Create a Board</span>
                     <img src="image/multiply.png" class="modal-close-button create-board-close-button" onclick="document.getElementById('create-board-modal').style.display='none'">
                 </div>
                 <hr style="width: 700px; border: 0; border-top:1px solid #707070;">
                 <div class="container">
-                    <span class="create-board-container-name">Board Name</span>
-                    <input id="create-board-name" type="text">
-                    <span class="create-board-container-bg">Background</span>
+                    <span class="create-board-container-name container-span">Board Name</span>
+                    <input id="create-board-name" name="boardName" type="text">
+                    <span class="create-board-container-bg container-span">Background</span>
                     <ul class="color-button-container">
-                        <li><button class="board-color-button" type="button" title="blue" style="background-color:#3178BA;"></button></li>
-                        <li><button class="board-color-button" type="button" title="orange" style="background-color:#C99247;"></button></li>
-                        <li><button class="board-color-button" type="button" title="green" style="background-color:#639646;"></button></li>
-                        <li><button class="board-color-button" type="button" title="red" style="background-color:#A44C39;"></button></li>
-                        <li><button class="board-color-button" type="button" title="purple" style="background-color:#83639A;"></button></li>
-                        <li><button class="board-color-button" type="button" title="pink" style="background-color:#BF628F;"></button></li>
-                        <li><button class="board-color-button" type="button" title="more color" style="background: #F6F6F6 url(/image/add.png) no-repeat; background-size: 20px 20px; background-position: 15px 15px;"></button></li>
+                        <li><label><input class="board-color-button" type="radio" title="blue" name="boardColor" value="0"><span class="checkmark" style="background-color:#3178BA;"></span></label></li>
+                        <li><label><input class="board-color-button" type="radio" title="orange" name="boardColor" value="1"><span class="checkmark" style="background-color:#C99247;"></span></label></li>
+                        <li><label><input class="board-color-button" type="radio" title="green" name="boardColor" value="2"><span class="checkmark" style="background-color:#639646;"></span></label></li>
+                        <li><label><input class="board-color-button" type="radio" title="red" name="boardColor" value="3"><span class="checkmark" style="background-color:#A44C39;"></span></label></li>
+                        <li><label><input class="board-color-button" type="radio" title="purple" name="boardColor" value="4"><span class="checkmark" style="background-color:#83639A;"></span></label></li>
+                        <li><label><input class="board-color-button" type="radio" title="pink" name="boardColor" value="5"><span class="checkmark" style="background-color:#BF628F;"></span></label></li>
                     </ul>
-                    <span class="invite-user-span">Invite members</span>
+                    <span class="invite-user-span container-span">Invite members</span>
                     <div class="invite-user"><input type="text" class="invite-user-name" placeholder="       search by user ID"></div>
-                    <button class="invite-user-button">invite</button>
+                    <button type="button" class="invite-user-button">invite</button>
                 </div>
-                <button class="create-board-button">OK</button>
+                <button type="button" onclick="createBoard()" class="create-board-button">OK</button>
             </form>
         </div>
     </section>
@@ -187,7 +241,9 @@
     //추가했습니다////필요합니다////
     var token = sessionStorage.getItem("user_token");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
-
+    var user_idx = sessionStorage.getItem("user_idx");
+    var user_name = sessionStorage.getItem("user_name");
+	
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
     });
@@ -211,8 +267,7 @@
 
     // 메인페이지 로드
     function loadPage() {
-        var user_idx = sessionStorage.getItem("user_idx");
-        var user_name = sessionStorage.getItem("user_name");
+
 
         var boardUrl = myUrl + "board/1"; /*"/board/:user_idx"*/
         var cardUrl = myUrl + "/calender/emergency/"+ user_idx +"/-1";  /*"/card/:board_idx"*/
@@ -250,17 +305,34 @@
         });*/
 
         document.getElementsByClassName('user_name').innerText = user_name;
+
     }
+
+
 
     function loadBoardList(response) {
         var boardList = "";
         var i;
 
         for (i in response) {
-            boardList += "<li class='board-li'><a href='board.jsp'><span>- " + response[i].board_name + "</span></a></li>";
+            boardList += "<li class='board-li'><a class='board-a'><span>-</span><span>" + response[i].board_name + "</span><span id='board-idx' style='display:none;'>" + response[i].board_idx + "</span><span id='board-color' style='display: none'>" + response[i].background + "</span></a></li>";
         }
 
         document.getElementById('board-list').innerHTML = boardList;
+        $(function() {
+            $(".board-a").on("click", function() {
+                var b = $(this).children();
+                var board_name = b[1].innerText;
+                var board_idx = b[2].innerText;
+                var board_color = b[3].innerText;
+
+                sessionStorage.setItem("now_board_name", board_name);
+                sessionStorage.setItem("now_board_idx", board_idx);
+                sessionStorage.setItem("now_board_color", board_color);
+
+                location.replace("board.jsp");
+            });
+        });
     }
 
     function loadCardList(response) {
@@ -294,6 +366,45 @@
         }
 
     }*/
+
+    function createBoard() {
+        var f = document.createBoardForm;
+        var boardName = f.boardName.value;
+        var boardColor = f.boardColor.value;
+        var createBoardUrl = myUrl + "board/" + user_idx;
+        var body={
+			"board_name" : boardName,
+			"board_background" : boardColor
+        };
+		
+        getJson('POST', createBoardUrl, body, function (status, response) {
+            if (status == 201) { // 성공
+                //$("#board-list").append("<li class='board-li'><a href='board.jsp'><span>- " + boardName + "</span><span id='board-idx' style='display:none;'>" + response[i].board_idx + "</span><span id='board-color' style='display: none'>" + response[i].background + "</span></a></li>");
+            }
+            else { // 실패
+                alert("board 로드 실패");
+				$("#board-list").append("<li class='board-li'><a href='board.jsp' class='board-a'><span>-</span><span>" + boardName + "</span><span id='board-idx' style='display:none;'>" + "9999" + "</span><span id='board-color' style='display: none'>" + boardColor + "</span></a></li>");
+
+				//클릭했을 때 idx와 name 저장 이벤트 재등록
+                $(function() {
+                    $(".board-a").on("click", function() {
+                        var b = $(this).children();
+                        var board_name = b[1].innerText;
+                        var board_idx = b[2].innerText;
+                        var board_color = b[3].innerText;
+
+                        sessionStorage.setItem("now_board_name", board_name);
+                        sessionStorage.setItem("now_board_idx", board_idx);
+                        sessionStorage.setItem("now_board_color", board_color);
+
+                        location.replace("board.jsp");
+                    });
+                });
+            }
+        });
+
+        document.getElementById('create-board-modal').style.display = "none";
+    }
 
     function calDDay(endDate) {
         var now = new Date();
