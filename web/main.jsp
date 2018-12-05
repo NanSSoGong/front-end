@@ -274,9 +274,6 @@
         var calendarUrl = "json_test/card.json";/*myUrl + "calendar";*/
         var body = "";
 
-
-
-
         getJson('GET', boardUrl, body, function (status, response) {
             if (status == 201) { // 성공
                 loadBoardList(response.data);
