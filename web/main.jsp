@@ -343,10 +343,10 @@
             response[0].card_name + "</span></li><li><span class='today-date'>Oct, 4th (THU)</span></li></ul>";
 */
         for (i=0; i < response.length; i++) {
-            cardList += "<li><div class='card-list'><div class='card-header'><span class='board-name'>" +
-                response[i].card_name + "</span><span class='colon'>: </span><span class='list-name'>" +
+            cardList += "<li><div class='card-list'><div class='card-header'><span class='board-name'><b>" +
+                response[i].card_name + "</b></span><span class='colon'>: </span><span class='list-name'>" +
                 response[i].list_name + "</span><span class='d-day-number'>D-2</span></div><div class='card-contents'><span class='card-name'>" +
-                /*response[i].card_content + */"</span><span class='card-duedate'>Due Date : Oct, 6th</span></div><button class='done-button'>Done</button><button class='hide-button'>Hide</button></div></li>"
+                /*response[i].card_content + */"</span><span class='card-duedate'>Due Date : Oct, 6th</span></div></div></li>"
         }
 
         //document.getElementById('today').innerHTML = todayCard;
