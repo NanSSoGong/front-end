@@ -60,18 +60,19 @@
     </div>
 </main>
 <script>
-
     //추가했습니다////필요합니다////
     var token = sessionStorage.getItem("user_token");
     var user_name = sessionStorage.getItem("user_name");
-    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/history/';
-    var parm_board = sessionStorage.getItem("board_idx");
+    var myUrl = 'http://localhost:3000/api/history/';
+    //var parm_board = sessionStorage.getItem("board_idx");
+    var parm_board = 1;
     myUrl = myUrl + parm_board;
-
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
-        document.getElementById('user-name-label').innerHTML = user_name;
     });
+    document.getElementById('user-name-label').innerText = user_name;
+    //$('#user-name-label').innerText = user_name;
+    //alert($('#user-name-label').innerText);
     // 로그인
     var getJson = function(method, url, body, callback) {
         var xhr = new XMLHttpRequest();
@@ -83,7 +84,7 @@
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
         };
-        if(data) {
+        if(body) {
             var data = JSON.stringify(body);
             xhr.send(data);
         }
