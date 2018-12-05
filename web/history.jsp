@@ -62,10 +62,9 @@
 <script>
 
     //추가했습니다////필요합니다////
-    //var token = sessionStorage.getItem("user_token");
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NDM4MTg1NzQsImV4cCI6MTU0NjQxMDU3NH0.fGAuub9Qean8dXUUEmfldjlQ4a7nxe09-buwFQzwv-w";
+    var token = sessionStorage.getItem("user_token");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/history/';
-    var parm_board = '1';
+    var parm_board = sessionStorage.getItem("board_idx");
     myUrl = myUrl + parm_board;
 
     $(document).ready(function() {
