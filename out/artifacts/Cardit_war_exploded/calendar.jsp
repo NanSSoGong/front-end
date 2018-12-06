@@ -178,7 +178,8 @@
         }
         .list-header {
             font-family:"NanumSquareOTF ExtraBold";
-            margin: 10px;
+            margin-top: 15px;
+            margin-left: 10px;
             font-size: 22px;
             color: #707070;
             height: 50px;
@@ -413,9 +414,9 @@
 <%-- top menu --%>
 <header>
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
-    <a href="#" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
+    <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="#" class="user-box text"><span class="user-name">amoogae</span></a>
+        <a href="logout.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
         <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
@@ -424,11 +425,7 @@
     <span class="board-name">NanSsoGong</span>
     <a href="board.jsp"><img src="image/post_it_off.png" class="post-it"></a>
     <a href ="calendar.jsp"><img src="image/calendar_on.png" class="calendar-img"></a>
-    <div class="search-bar">
-        <input type="text" name="search" placeholder="검색">
-    </div>
-    <img src="image/more.png" class="more-menu" onclick="document.getElementById('more-menu-modal').style.display='block'">
-    <img src="image/settings.png" class="settings-menu">
+    <img src="image/delete.png" class="settings-menu">
 </section>
 
 
@@ -471,8 +468,7 @@
 
     <div id="DDAY" class="list sortable">
         <div class="list-header">
-            <span class="list-name">D-DAY</span>
-            <a href="#" class="list-tool-button-box"><img src="image/more_black.png" class="list-tool-box"></a>
+            <span class="list-name"><b>D-DAY</b></span>
         </div>
         <ul id="list-content" class="list-contents">
         </ul>
@@ -480,6 +476,8 @@
 </main>
 
 <script>
+
+
     /*
     if (!(request.getParameter("action") == null)) // Have the calendar up or down in this if block
     {
@@ -498,7 +496,8 @@
             currYear = cal.get(cal.YEAR);
         }
     }
-*/
+    */
+
 
     //var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NDM4MTg1NzQsImV4cCI6MTU0NjQxMDU3NH0.fGAuub9Qean8dXUUEmfldjlQ4a7nxe09-buwFQzwv-w";
     var token = sessionStorage.getItem("user_token");
@@ -506,6 +505,9 @@
 
     var dateList = new Array();
     var dateString ="";
+
+
+    var responseCnt=0;
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
@@ -569,6 +571,7 @@
         var dispDay = 1;
 
         var today = 0;
+        var w, d;
 
         haveDateList ="<tr><td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#F02E0B\"><b>Sun</b></font></td>\n"+
             "                        <td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#707070\"><b>Mon</b></font></td>\n" +
@@ -578,9 +581,9 @@
             "                        <td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#707070\"><b>Fri</b></font></td>\n" +
             "                        <td width=\"<%=boxSize%>\" align=\"center\" nowrap ><font size=4 color=\"#707070\"><b>Sat</b></font></td></tr>";
 
-            for (var w = 1; w < 7; w++) {
+            for (w = 1; w < 7; w++) {
             haveDateList += "<tr>";
-            for (var d = 1; d < 8; d++) {
+            for (d = 1; d < 8; d++) {
                 if (!(count >= <%=calWeek%>)) {
                     haveDateList += "<td width=\"90\" height=\"90\" valign=\"top\" align=\"left\">&nbsp;</td>";
                     count += 1;
@@ -603,7 +606,9 @@
                             haveDateList += "<div class=\"today-date\"/>";
                             today = 0;
                         }
-                        haveDateList += "<div ><font size=\"4\" color=\"#707070\">"+dispDay+"</font></div><br>";
+                        if(dispDay<32){
+                            haveDateList += "<div ><font size=\"4\" color=\"#707070\">"+dispDay+"</font></div><br>";
+                        }
                         if (dateString.indexOf(dispDay) != -1) {
                             haveDateList += "<div id=\"haveDate\"><img height=8px weight=8px src=\"image/date_on.png\"/></div>";
                         }
@@ -630,43 +635,65 @@
         var end_month;
         var end_date;
 
+        var card_name;
+
         for (i in response) {
+            responseCnt +=1;
             end_month = response[i].card_end_date.toString().substr(5,2);
             end_date = response[i].card_end_date.toString().substr(8,2);
 
-            emerList += "<li class='card'><span><span class=\"d-day\">D";
+            emerList += "<li class='card'><span><span class=\"d-day\">";
 
             if(response[i].d_day > 0) {
-                emerList += '-' + response[i].d_day;
+                emerList += 'D-' + response[i].d_day;
+            }
+            else if(response[i].d_day ==0 ){
+                emerList += 'Today';
             }
             else {
-                emerList += "+" + (-response[i].d_day);
+                emerList += "D+" + (-response[i].d_day);
             }
 
             emerList += "<br></span><span class=\"d-date\">&nbsp" + end_month + "." + end_date + "</span></span><span class=\"d-content\"> " + response[i].card_name + "</span>\n";
 
+            card_name = response[i].card_name;
+
             if (response[i].card_mark == 0) {
-                emerList += "<img id=\"cardStar\" src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
+                emerList += "<img id=\"cardStar" + i + "\"" + "src=\"image/star_off.png\" class=\"star-img\" onclick=\"changeStar(\'" +i+ "," +card_name+"\')\"/></li>";
             }
             else {
-                emerList += "<img id=\"cardStar\" src=\"image/star_on.png\" class=\"star-img\" onclick=\"changeStar()\"/></li>";
+                emerList += "<img id=\"cardStar" + i + "\"" + "src=\"image/star_on.png\" class=\"star-img\" onclick=\"changeStar(\'" +i+ "," +card_name+"\')\"/></li>";
             }
         }
         document.getElementById('list-content').innerHTML = emerList;
     }
 
     //카드 중요도 변경하기
-    function changeStar(card_name) {
-        var card_mark =0;
+    function changeStar(m) {
+        var card_name;
+        var num;
 
-        if(document.getElementById("cardStar").src=="http://localhost:8080/image/star_off.png") {
-            document.getElementById("cardStar").src="image/star_on.png";
+        num  = m.toString().substr(0, 1);
+        card_name = m.toString().substr(2);
+
+        var card_mark =0;
+        var cardStar = new Array();
+
+        for(var i=0; i<responseCnt; i++){
+            cardStar.push("cardStar"+i);
+        }
+
+
+        if(document.getElementById(cardStar[num].toString()).src == "http://localhost:8080/image/star_off.png") {
+            document.getElementById(cardStar[num].toString()).src = "image/star_on.png";
             card_mark=1;
         }
         else {
-            document.getElementById("cardStar").src = "image/star_off.png";
+            document.getElementById(cardStar[num].toString()).src = "image/star_off.png";
             card_mark=0;
         }
+
+
 
         var body = {
             "card_name": card_name,

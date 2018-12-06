@@ -611,9 +611,9 @@
 <%-- top menu --%>
 <header>
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
-    <a href="#" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
+    <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="#" class="user-box text"><span class="user-name">amoogae</span></a>
+        <a href="logout.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
         <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
@@ -621,11 +621,8 @@
     <span class="board-name">NanSsoGong</span>
     <img src="image/post_it_on.png" class="post-it">
     <a href ="calendar.jsp"><img  src="image/calendar_off.png" class="calendar"></a>
-    <div class="search-bar">
-        <input type="text" name="search" placeholder="   검색">
-    </div>
     <img src="image/more.png" class="more-menu" onclick="document.getElementById('more-menu-modal').style.display='block'">
-    <img src="image/settings.png" class="settings-menu">
+    <img src="image/delete.png" class="settings-menu">
 </section>
 <main>
     <div id="list">
@@ -933,6 +930,7 @@
 <script>
     var token = sessionStorage.getItem("user_token");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+
     function loadData() {
         //board_data.board_idx = sessionStorage.getItem("board_idx");
         board_data.board_idx = 1;
@@ -941,10 +939,10 @@
         board_data.board_master = sessionStorage.getItem("board_master");
         alert('board_idx : ' + board_data.board_idx + ', board_name : ' + board_data.board_name + ', board_background : ' + board_data.board_background + ', board_master : ' + board_data.board_master);
 
-        getLostAndCard();
+        getListAndCard();
     };
 
-    function getLostAndCard() {
+    function getListAndCard() {
         if(!checkValidation()) { alert('유효하지 않은 보드입니다.\n보드 정보를 불러올 수 없습니다.'); return false; }
 
         getJson('GET', myUrl.concat('card/', board_data.board_idx), null, function (status, response) {
@@ -962,15 +960,6 @@
                     crrList.card.push(card);
                 });
                 if (crrList != null) list_data.push(crrList);
-
-                var str = '';
-                list_data.forEach(function (list, index, array) {
-                    str += "list : " + list.list_name.toString() + '\n';
-                    list.card.forEach(function (card, index, array) {
-                        str += " - card :" +  card.card_name.toString() + " + order :" + card.card_order.toString() + '\n';
-                    })
-                });
-                alert(str);
             }
             else {
                 alert('보드 정보를 불러올 수 없습니다.');
@@ -1028,14 +1017,15 @@
                     alert(item.list_name);
                 });*/
 
-                var index = list_data.findIndex(function(element){
-                    return element.list_idx == list.list_idx;
+                list_data.some(function (item) {
+                    if(item.list_idx == list.list_idx)
+                    {
+                        item.list_name = list.list_name;
+                        item.list_position_x = list.list_position_x;
+                        item.list_position_y = list.list_position_y;
+                        return true;
+                    }
                 });
-                if (index != -1) {
-                    list_data[index].list_name = list.list_name;
-                    list_data[index].list_position_x = list.list_position_x;
-                    list_data[index].list_position_y = list.list_position_y;
-                }
 
                 //리스트 UI 변경 함수
             }
@@ -1094,7 +1084,15 @@
 
         getJson('POST', myUrl.concat('card/', board_data.board_idx, '/', list_idx.toString()), body, function (status, response) {
             if(status == 201) { // 성공
-                list_data.push(response.data);
+
+                list_data.some(function (item) {
+                    if(item.list_idx == list_idx)
+                    {
+                        var card = new Card(response.card_idx, body.card_name, body.card_content, body.card_mark, body.card_end_date, body.card_order, body.list_idx);
+                        item.card.push(card);
+                        return true;
+                    }
+                });
                 //카드 추가 UI 구현
             }
             else {
@@ -1103,21 +1101,53 @@
         });
     };
 
-    function editCard(list_idx) {
-        if(!checkValidation() || !list_idx) { alert('유효하지 않은 접근입니다.'); return false; }
+    function editCard(ori_list_idx, new_list_idx) {
+        if(!checkValidation() || !ori_list_idx || !new_list_idx) { alert('유효하지 않은 접근입니다.'); return false; }
 
         var body = {
-            card_idx : 13,
+            card_idx : 22,
             card_name: 'test card : ' + Date.now(),
             card_end_date: '2018-12-06',
-            card_order: 1,
+            card_order: 7,
             card_content: "카드 내용2",
             card_mark: 1
         };
 
-        getJson('PUT', myUrl.concat('card/', board_data.board_idx, '/', list_idx.toString(), '/', body.card_idx), body, function (status, response) {
+        getJson('PUT', myUrl.concat('card/', board_data.board_idx, '/', ori_list_idx.toString(), '/', body.card_idx), body, function (status, response) {
             if(status == 201) { // 성공
-                response.card_idx; //추가된 카드 idx
+
+                var card = null;
+                list_data.some(function (list) {
+                    if(list.list_idx == ori_list_idx)
+                    {
+                        if (list.card.some(function (item) {
+                            if(item.card_idx == body.card_idx) {
+                                item.list_idx = new_list_idx;
+                                item.card_idx = body.card_idx;
+                                item.card_name = body.card_name;
+                                item.card_content = body.card_content;
+                                item.card_end_date = body.card_end_date;
+                                item.card_mark = body.card_idx;
+                                item.card_order = body.card_order;
+                                if (ori_list_idx != new_list_idx) {
+                                    card = item;
+                                }
+                                return true;
+                            }
+                        })) return true;
+                    }
+                });
+                if(card){
+                    list_data.some(function (list) {
+                        if(list.list_idx == new_list_idx)
+                        {
+                            list.card.push(card);
+                            return true;
+                        }
+                    });
+                }
+
+
                 //카드 수정 UI 구현
             }
             else {
@@ -1126,16 +1156,26 @@
         });
     };
 
-    function deleteCard() {
+    function deleteCard(list_idx, card_idx, card_name) {
         if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
 
         var body = {
-            card_idx : 13,
-            card_name: 'test card : ' + Date.now(),
+            card_idx : card_idx,
+            card_name: card_name
         };
 
         getJson('DELETE', myUrl.concat('card/', board_data.board_idx, '/', body.card_idx), body, function (status, response) {
             if(status == 201) { // 성공
+
+                list_data.some(function (list) {
+                    if(list.list_idx == list_idx)
+                    {
+                        list.card.forEach(function (item, index, array) {
+                            if(item.card_idx == card_idx) {list.splice(index, 1);}
+                        });
+                        return true;
+                    }
+                });
                 //카드 삭제 UI 구현
             }
             else {
@@ -1165,6 +1205,18 @@
     };
 
     var userBackGroundArray = new Array(15);
+    function linkBoard(user_idx) {
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+
+        getJson('LINK', myUrl.concat('board/', user_idx, '/', board_data.board_idx), null, function (status, response) {
+            if(status == 201) { // 성공
+                alert('보드 공유를 완료했습니다.');
+            }
+            else {
+                alert('보드를 공유할 수 없습니다.');
+            }
+        });
+    };
 
     function searchUser(id) {
         if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
@@ -1190,6 +1242,7 @@
             }
         });
     };
+
     function changeBackground(obj){
         if(obj.style.backgroundColor == "white" ){
             obj.style.backgroundColor = "#e1e1e1";
@@ -1220,8 +1273,6 @@
             };
         });
     };
-
-
 </script>
 
 </body>
