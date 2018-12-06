@@ -692,7 +692,7 @@
                     <span class="invite-users-span">invite users..</span>
                 </a>
                 <hr style="width: 302px; border: 0; border-top: 1px solid #E7E7E7;">
-                <a href="history.jsp">
+                <a onclick="hrefHistory()">
                     <img src="image/time_passing.png" class="see-history-img">
                     <span class="see-history-span">see history..</span>
                 </a>
@@ -924,8 +924,7 @@
     }
 
     function loadData() {
-        //board_data.board_idx = sessionStorage.getItem("board_idx");
-        board_data.board_idx = 1;
+        board_data.board_idx = sessionStorage.getItem("board_idx");
         board_data.board_name = sessionStorage.getItem("board_name");
         board_data.board_background = sessionStorage.getItem("board_background");
         board_data.board_master = sessionStorage.getItem("board_master");
@@ -1233,6 +1232,14 @@
         });
     };
 
+    function hrefHistory() {
+
+        sessionStorage.setItem("board_idx", board_data.board_idx);
+        sessionStorage.setItem("board_name", board_data.board_name);
+        sessionStorage.setItem("board_background", board_data.board_background);
+
+        location.href = "history.jsp";
+    }
 
 </script>
 

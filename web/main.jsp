@@ -276,6 +276,7 @@
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
+        alert(user_idx);
     });
 
     var getJson = function(method, url, body, callback) {
@@ -299,7 +300,7 @@
     function loadPage() {
 
 
-        var boardUrl = myUrl + "board/1"; /*"/board/:user_idx"*/
+        var boardUrl = myUrl + "/board/" + user_idx;
         var cardUrl = myUrl + "/calender/emergency/"+ user_idx +"/-1";  /*"/card/:board_idx"*/
         var calendarUrl = "json_test/card.json";/*myUrl + "calendar";*/
         var body = "";
@@ -345,7 +346,7 @@
         var i;
 
         for (i in response) {
-            boardList += "<li class='board-li'><a class='board-a'><span>-</span><span>" + response[i].board_name + "</span><span id='board-idx' style='display:none;'>" + response[i].board_idx + "</span><span id='board-color' style='display: none'>" + response[i].background + "</span></a></li>";
+            boardList += "<li class='board-li'><a class='board-a'><span>-</span><span>" + response[i].board_name + "</span><span id='board-idx' style='display:none;'>" + response[i].board_idx + "</span><span id='board-color' style='display: none'>" + response[i].board_background + "</span><span id='board-master' style='display: none'>" + response[i].board_master + "</span></a></li>";
         }
 
         document.getElementById('board-list').innerHTML = boardList;
@@ -354,11 +355,13 @@
                 var b = $(this).children();
                 var board_name = b[1].innerText;
                 var board_idx = b[2].innerText;
-                var board_color = b[3].innerText;
+                var board_background = b[3].innerText;
+                var board_master = b[4].innerText;
 
-                sessionStorage.setItem("now_board_name", board_name);
-                sessionStorage.setItem("now_board_idx", board_idx);
-                sessionStorage.setItem("now_board_color", board_color);
+                sessionStorage.setItem("board_name", board_name);
+                sessionStorage.setItem("board_idx", board_idx);
+                sessionStorage.setItem("board_background", board_background);
+                sessionStorage.setItem("board_master", board_master);
 
                 location.replace("board.jsp");
             });
@@ -418,11 +421,12 @@
                         var b = $(this).children();
                         var board_name = b[1].innerText;
                         var board_idx = b[2].innerText;
-                        var board_color = b[3].innerText;
+                        var board_background = b[3].innerText;
 
-                        sessionStorage.setItem("now_board_name", board_name);
-                        sessionStorage.setItem("now_board_idx", board_idx);
-                        sessionStorage.setItem("now_board_color", board_color);
+                        sessionStorage.setItem("board_name", board_name);
+                        sessionStorage.setItem("board_idx", board_idx);
+                        sessionStorage.setItem("board_background", board_background);
+                        sessionStorage.setItem("board_master", "1");
 
                         location.replace("board.jsp");
                     });
