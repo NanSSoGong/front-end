@@ -715,7 +715,7 @@
                 <ul id = "user-list">
                 </ul>
             </div>
-            <button type="button" class="user-invite-ok-button">OK</button>
+            <button type="button" class="user-invite-ok-button" id = "send-invite-user" onclick="linkBoard()">OK</button>
         </form>
     </div>
 
@@ -1164,25 +1164,7 @@
         });
     };
 
-    function linkBoard() {
-        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
-
-        var body = {
-            board_idx : board_data.board_idx,
-            board_name : board_data.board_name,
-            board_master : board_data.board_master
-        }
-
-        getJson('DELETE', myUrl.concat('board/', sessionStorage.getItem("user_idx"), '/', body.board_idx, '/', body.board_master), body, function (status, response) {
-            if(status == 201) { // 성공
-                if(token) location.replace("main.jsp");
-                else location.replace("index.jsp");
-            }
-            else {
-                alert('보드를 삭제할 수 없습니다.');
-            }
-        });
-    };
+    var userBackGroundArray = new Array(15);
 
     function searchUser(id) {
         if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
@@ -1190,14 +1172,17 @@
             "user_id" : id
         };
         var userList="";
+
         getJson('POST', myUrl.concat('user/'), body, function (status, response) {
             if(status == 201) { // 성공
                 ///showUser(response.data); 함수 구현
                 var str = '';
                 response.data.forEach(function(item, index){
                     str = (index + 1) + ')  ' + item.user_name;
-                    userList +="<div type='button' name='user-invite-list' style='background-color: white'  onclick='changeBackground(this)'>&nbsp;&nbsp;<font color='#707070' size='3px'>"+str + "</font></div><br>";
-                }); // 테스트 코드
+                    var userindex = item.user_idx;
+                    userList +="<div type=\"button\" name=\"user-invite-list\" style=\"background-color: white\"  onclick=\"changeBackground(this)\" id=\""+ userindex + "\"><font color=\"#707070\" size=\"3px\">"+str + "</font></div><br>";
+                    userBackGroundArray[userindex] = 0;
+                });
                 document.getElementById('user-list').innerHTML = userList;
             }
             else {
@@ -1208,9 +1193,35 @@
     function changeBackground(obj){
         if(obj.style.backgroundColor == "white" ){
             obj.style.backgroundColor = "#e1e1e1";
+            userBackGroundArray[obj.id] = 1;
+            alert(userBackGroundArray[obj.id]);
+        }else{
+            obj.style.backgroundColor = "white";
+            userBackGroundArray[obj.id] = 0;
         }
-        alert(obj.style.background);
     }
+
+    function linkBoard() {
+        var userStr = "[";
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+        for(var i = 0;i<15;i++){
+            if(userBackGroundArray[i] == 1)
+                userStr+=i+',';
+        }
+        userStr +="]";
+        alert(userStr);
+        var body="";
+        getJson('LINK', myUrl.concat('board/', userStr, '/', board_data.board_idx), body, function (status, response) {
+            if(status == 201) { // 성공
+                alert("성공입니다");
+            }
+            else {
+                alert('보드를 삭제할 수 없습니다.');
+            };
+        });
+    };
+
+
 </script>
 
 </body>
