@@ -35,7 +35,8 @@
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="index.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
+
+        <a href="index.jsp" class="user-box text"><span class="user-name" id = "user-name-label"></span></a>
         <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
@@ -60,19 +61,20 @@
     </div>
 </main>
 <script>
-
     //추가했습니다////필요합니다////
-    //var token = sessionStorage.getItem("user_token");
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NDM4MTg1NzQsImV4cCI6MTU0NjQxMDU3NH0.fGAuub9Qean8dXUUEmfldjlQ4a7nxe09-buwFQzwv-w";
+    var token = sessionStorage.getItem("user_token");
+    var user_name = sessionStorage.getItem("user_name");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/history/';
-    var parm_board = '1';
+    var parm_board = sessionStorage.getItem("board_idx");
+    //var parm_board = 1;
     myUrl = myUrl + parm_board;
-
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
     });
+    document.getElementById('user-name-label').innerText = user_name;
+    //$('#user-name-label').innerText = user_name;
+    //alert($('#user-name-label').innerText);
     // 로그인
-
     var getJson = function(method, url, body, callback) {
         var xhr = new XMLHttpRequest();
 
@@ -83,7 +85,7 @@
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
         };
-        if(data) {
+        if(body) {
             var data = JSON.stringify(body);
             xhr.send(data);
         }
@@ -102,7 +104,6 @@
         })
     }
     function loadHistoryList(response){
-        alert(response);
         var historyList = "";
         var i;
         for (i in response){

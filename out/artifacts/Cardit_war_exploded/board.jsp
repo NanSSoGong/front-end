@@ -20,7 +20,7 @@
             font-family: "NanumSquare", light;
             overflow-x:scroll;
             overflow-y:hidden;
-/**/
+            /**/
         }
         .list-wrap {
             float: left;
@@ -170,9 +170,9 @@
             width:34px;
             height:34px;
         }
-/*        .float {
-            float: left;
-        }*/
+        /*        .float {
+                    float: left;
+                }*/
 
         /*-----------------------sub-header-------------------------*/
         .sub-header {
@@ -709,10 +709,10 @@
             </div>
             <hr style="width: 632px; border: 0; border-top:1px solid rgba(112, 112, 112, 0.5);">
             <div class="container">
-                <input type="text" class="invite-user-name" placeholder="      search by user ID">
-                <button class="user-invite-button">invite</button>
+                <input type="text" class="invite-user-name" name="invite-user-text" placeholder="      search by user ID">
+                <button type="button" class="user-invite-button" id="invite-user-button">invite</button>
             </div>
-            <button class="user-invite-ok-button">OK</button>
+            <button type="button" class="user-invite-ok-button">OK</button>
         </form>
     </div>
 
@@ -745,27 +745,40 @@
 </footer>
 
 <script>
-    function boardPageLoad(){
-        var token = sessionStorage.getItem("user_token");
-        var myUrl = 'ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+    var token = sessionStorage.getItem("user_token");
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+    //var myUrl = 'http://localhost:3000/api/';
+    var board_data = {
+        board_idx : -1,
+        board_name : '',
+        board_background : '',
+        board_master : 0
+    };
+    var list_data = [];
 
-        var getJson = function(method, url, body, callback) {
-            var xhr = new XMLHttpRequest();
+    $(document).ready(function() {
+        if(!token) location.replace("index.jsp");
+        loadData();
+    });
 
-            xhr.open(method, url, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('authorization', token);
-            xhr.responseType = 'json';
-            xhr.onload = function() {
-                callback(xhr.status, xhr.response);
-            };
-            if(data) {
-                var data = JSON.stringify(body);
-                xhr.send(data);
-            }
-            else xhr.send();
-        };
-    }
+    var getJson = function(method, url, body, callback) {
+
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('authorization', token);
+        xhr.responseType = 'json';
+        xhr.onload = function() {  callback(xhr.status, xhr.response); };
+
+        if(body) {
+            var data = JSON.stringify(body);
+            xhr.send(data);
+        }
+        else {
+            xhr.send();
+        }
+
+    };
 
     function loadList(response) {
         document.getElementById("list").innerHTML = list;
@@ -776,7 +789,7 @@
         }).disableSelection();
         $(".sortable").draggable({ containment: "#list", scroll: false });
         $(".open-add-card-modal").on("click", function() {
-            document.getElementById('add-card-modal').style.display = 'block' // add-modal 보이기
+            document.getElementById('add-card-modal').style.display = 'block'; // add-modal 보이기
             var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
             sessionStorage.setItem("click_list_id", div_id);
         });
@@ -803,103 +816,395 @@
             $(this).attr("class", 'star-before');
         });
     });
+    // 유저 검색 기능
+    $(function() {
+        $('input[name="invite-user-text"]').keyup(function (e) {
+            if (e.keyCode == 13) {
+                searchUser($('input[name="invite-user-text"]').val());
+            }
+        });
+    });
+    $(function() {
+        $("#invite-user-button").on("click", function () {
+            searchUser($('input[name="invite-user-text"]').val());
+        });
+    });
 
-    function loadCard(response) {
+    /*List 간 Card 이동*/
+    $(function () {
+        $(".sortable .list-contents").sortable({
+            connectWith: ".sortable .list-contents"
+        }).disableSelection();
+    });
+    /*List 안에서 Card 이동*/
+    $(function () {
+        $(".sortable").draggable({ containment: "#list", scroll: false });
+    });
+    /* Card 추가 */
+    $(function() {
+        $(".open-add-card-modal").on("click", function() {
+            document.getElementById('add-card-modal').style.display='block' // add-modal 보이기
+            var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
+            sessionStorage.setItem("click_list_id", div_id);
+        });
+    });
+    /* Card 추가 */
+    $(function() {
+        $(".add-card-button").on("click", function() {
+            // modal 에서 입력한 List 이름 가져오기
+            var add_card_name = $("#add-card-name").val();
+            var click_list_id = sessionStorage.getItem("click_list_id");
+            var clicked_list = document.getElementById(click_list_id).children[1]; // div 의 자식노드중 두번째 (ul - .list-contents)
+            $(clicked_list).append("<li class=\"card\"><span>" + add_card_name + "</span><img src=\"/image/star_off.png\" class=\"star-before\"></li>");
+            // Card 생성 후 modal 종료
+            var modal = document.getElementById('add-card-modal');
+            modal.style.display = "none";
+            //sessionStorage.clear();
+        });
+    });
+    /* List 추가 */
+    $(function() {
+    $(".add-list-button").on("click", function() {
+        // modal 에서 입력한 List 이름 가져오기
+        var add_list_name = $("#add-list-name").val();
+        var list = document.getElementById('list');
+        var i;
+        var top = 0; var left = 0;
+        for (i = 0; i < list.childElementCount; i++) {
+            var list_position = document.getElementById(list.children[i].getAttribute("id")).getBoundingClientRect();
+            if( list_position.left > left) {
+                left = list_position.left;
+                top = list_position.top;
+            }
+        }
+        // List 추가
+        $("#list").append("<div id='" + add_list_name + "' class='list sortable'><div class='list-header'><span class='list-name'>" + add_list_name + "</span><a href='#' class='list-tool-button-box'><img src='image/more_2.png' class='list-tool-box'></a></div><ul class='list-contents'></ul><img src='image/plus.png' class='open-add-card-modal'></div>");
+        var rect = document.getElementById(add_list_name).getBoundingClientRect();
+        left = left + rect.width;
+        top = top - 92;
+        $("#"+ add_list_name).css({"left" : left, "top" : top});
+        // List 생성 후 modal 종료
+        var modal = document.getElementById('add-list-modal');
+        modal.style.display = "none";
+        // element 추가할 때 이벤트 다시 등록하기
+        $(".sortable .list-contents").sortable({
+            connectWith: ".sortable .list-contents"
+        }).disableSelection();
+        $(".sortable").draggable({ containment: "#list", scroll: false });
+        $(".open-add-card-modal").on("click", function() {
+            document.getElementById('add-card-modal').style.display = 'block' // add-modal 보이기
+            var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
+            sessionStorage.setItem("click_list_id", div_id);
+        });
+    });
+});
 
+    function List(list_idx, list_name, list_position_x, list_position_y) {
+        return {
+            list_idx : list_idx,
+            list_name : list_name,
+            list_position_x : list_position_x,
+            list_position_y : list_position_y,
+            card : []
+        };
     }
 
+    function Card(card_idx, card_name, card_content, card_mark, card_end_date, card_order, list_idx) {
+        return {
+            list_idx : list_idx,
+            card_idx : card_idx,
+            card_name : card_name,
+            card_content : card_content,
+            card_mark : card_mark,
+            card_end_date : card_end_date,
+            card_order : card_order
+        };
+    }
 
-</script>
+    function checkValidation(){
+        return board_data.board_idx != -1;
+    }
 
-
-
-
+<<<<<<< HEAD
 <script>
     var token = sessionStorage.getItem("user_token");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+=======
+    function loadData() {
+        //board_data.board_idx = sessionStorage.getItem("board_idx");
+        board_data.board_idx = 1;
+        board_data.board_name = sessionStorage.getItem("board_name");
+        board_data.board_background = sessionStorage.getItem("board_background");
+        board_data.board_master = sessionStorage.getItem("board_master");
+        alert('board_idx : ' + board_data.board_idx + ', board_name : ' + board_data.board_name + ', board_background : ' + board_data.board_background + ', board_master : ' + board_data.board_master);
 
-    $(document).ready(function() {
-        if(!token) location.replace("index.jsp");
-    });
+        getLostAndCard();
+    };
 
-    $(document).ready(function() {
-        /*List 간 Card 이동*/
-        $(function () {
-            $(".sortable .list-contents").sortable({
-                connectWith: ".sortable .list-contents"
-            }).disableSelection();
-        });
+    function getLostAndCard() {
+        if(!checkValidation()) { alert('유효하지 않은 보드입니다.\n보드 정보를 불러올 수 없습니다.'); return false; }
 
-        /*List 안에서 Card 이동*/
-        $(function () {
-            $(".sortable").draggable({ containment: "#list", scroll: false });
-        });
+        getJson('GET', myUrl.concat('card/', board_data.board_idx), null, function (status, response) {
+            if(status == 201) { // 성공
+                var oldListIdx = -1;
+                var crrList = null;
 
-        /* Card 추가 */
-        $(function() {
-            $(".open-add-card-modal").on("click", function() {
-                document.getElementById('add-card-modal').style.display='block' // add-modal 보이기
-                var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
-                sessionStorage.setItem("click_list_id", div_id);
-            });
-        });
-        /* Card 추가 */
-        $(function() {
-            $(".add-card-button").on("click", function() {
-                // modal 에서 입력한 List 이름 가져오기
-                var add_card_name = $("#add-card-name").val();
-                var click_list_id = sessionStorage.getItem("click_list_id");
-                var clicked_list = document.getElementById(click_list_id).children[1]; // div 의 자식노드중 두번째 (ul - .list-contents)
-                $(clicked_list).append("<li class=\"card\"><span>" + add_card_name + "</span><img src=\"/image/star_off.png\" class=\"star-before\"></li>");
-
-                // Card 생성 후 modal 종료
-                var modal = document.getElementById('add-card-modal');
-                modal.style.display = "none";
-                //sessionStorage.clear();
-            });
-        });
-        /* List 추가 */
-        $(function() {
-            $(".add-list-button").on("click", function() {
-                // modal 에서 입력한 List 이름 가져오기
-                var add_list_name = $("#add-list-name").val();
-                var list = document.getElementById('list');
-                var i;
-                var top = 0; var left = 0;
-                for (i = 0; i < list.childElementCount; i++) {
-                    var list_position = document.getElementById(list.children[i].getAttribute("id")).getBoundingClientRect();
-                    if( list_position.left > left) {
-                        left = list_position.left;
-                        top = list_position.top;
+                response.data.forEach(function (item, index, array) {
+                    if (oldListIdx != item.list_idx) {
+                        if (crrList != null) list_data.push(crrList);
+                        crrList = new List(item.list_idx, item.list_name, item.list_position_x, item.list_position_y);
+                        oldListIdx = item.list_idx;
                     }
-                }
-                // List 추가
-                $("#list").append("<div id='" + add_list_name + "' class='list sortable'><div class='list-header'><span class='list-name'>" + add_list_name + "</span><a href='#' class='list-tool-button-box'><img src='image/more_2.png' class='list-tool-box'></a></div><ul class='list-contents'></ul><img src='image/plus.png' class='open-add-card-modal'></div>");
-
-                var rect = document.getElementById(add_list_name).getBoundingClientRect();
-                left = left + rect.width;
-                top = top - 92;
-
-                $("#"+ add_list_name).css({"left" : left, "top" : top});
-                // List 생성 후 modal 종료
-                var modal = document.getElementById('add-list-modal');
-                modal.style.display = "none";
-
-                // element 추가할 때 이벤트 다시 등록하기
-                $(".sortable .list-contents").sortable({
-                    connectWith: ".sortable .list-contents"
-                }).disableSelection();
-                $(".sortable").draggable({ containment: "#list", scroll: false });
-                $(".open-add-card-modal").on("click", function() {
-                    document.getElementById('add-card-modal').style.display = 'block' // add-modal 보이기
-                    var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
-                    sessionStorage.setItem("click_list_id", div_id);
+                    var card = new Card(item.card_idx, item.card_name, item.card_content, item.card_mark, item.card_end_date, item.card_order, item.list_idx);
+                    crrList.card.push(card);
                 });
-            });
+                if (crrList != null) list_data.push(crrList);
+
+                var str = '';
+                list_data.forEach(function (list, index, array) {
+                    str += "list : " + list.list_name.toString() + '\n';
+                    list.card.forEach(function (card, index, array) {
+                        str += " - card :" +  card.card_name.toString() + " + order :" + card.card_order.toString() + '\n';
+                    })
+                });
+                alert(str);
+            }
+            else {
+                alert('보드 정보를 불러올 수 없습니다.');
+            }
         });
+    }
 
+    function addList() {
+        if(!checkValidation()) { alert('유효하지 않은 보드입니다.'); return false; }
 
-    });
+        //테스트 코드 START
+        var list_name = 'test' + Date.now(); // ex) test1543991086330
+        var list_position_x = 0;
+        var list_position_y = 0;
+        //테스트 코드 END
+
+        var body = {
+            "list_name": list_name,
+            "list_position_x": list_position_x,
+            "list_position_y": list_position_y
+        };
+
+        getJson('POST', myUrl.concat('list/', board_data.board_idx), body, function (status, response) {
+            if(status == 201) { // 성공
+                list_data.push(new List(response.list_idx, body.list_name, body.list_position_x, body.list_position_y));
+                //리스트 추가 UI 구현
+            }
+            else {
+                alert('리스트를 추가할 수 없습니다..');
+            }
+        });
+    };
+
+    function editList() {
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+
+        //테스트 코드 START
+        var list = {
+            list_idx : 16,
+            list_name : 'test' + Date.now(), // ex) test1543991086330
+            list_position_x : 3,
+            list_position_y : 4
+        };
+        //테스트 코드 END
+
+        var body = {
+            "list_name": list.list_name,
+            "list_position_x": list.list_position_x,
+            "list_position_y": list.list_position_y
+        };
+
+        getJson('PUT', myUrl.concat('list/', board_data.board_idx, '/', list.list_idx), body, function (status, response) {
+            if(status == 201) { // 성공
+                /*list_data.forEach(function (item, index, array) { //조회 테스트
+                    alert(item.list_name);
+                });*/
+
+                var index = list_data.findIndex(function(element){
+                    return element.list_idx == list.list_idx;
+                });
+                if (index != -1) {
+                    list_data[index].list_name = list.list_name;
+                    list_data[index].list_position_x = list.list_position_x;
+                    list_data[index].list_position_y = list.list_position_y;
+                }
+
+                //리스트 UI 변경 함수
+            }
+            else {
+                alert('리스트를 수정할 수 없습니다.');
+            }
+        });
+    };
+
+    function deleteList() {
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+
+        //테스트 코드 START
+        var list = {
+            list_idx : 17,
+            list_name : 'test',
+            list_position_x: 0,
+            list_position_y: 0
+        }
+        //테스트 코드 END
+
+        var list_idx = list.list_idx;
+        var body = {
+            "list_name": list.list_name
+        };
+
+        getJson('DELETE', myUrl.concat('list/', board_data.board_idx, '/', list_idx.toString()), body, function (status, response) {
+            if(status == 201) { // 성공
+                list_data.forEach(function (item, index, array) {
+                    if(item.list_idx == list_idx) {list_data.splice(index, 1);}
+                    //alert(item.list_name);
+                });
+
+                //리스트 UI 변경 함수
+            }
+            else if(status == 500) {
+                alert('이미 삭제된 리스트입니다.');
+            }
+            else {
+                alert('리스트를 삭제할 수 없습니다.');
+            }
+        });
+    };
+
+    function addCard() {
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+
+        var list_idx = 2;
+        var body = {
+            card_name: 'test card : ' + Date.now(),
+            card_end_date: '2018-12-08',
+            card_order: 1,
+            card_content: "카드 내용",
+            card_mark: 1
+        };
+
+        getJson('POST', myUrl.concat('card/', board_data.board_idx, '/', list_idx.toString()), body, function (status, response) {
+            if(status == 201) { // 성공
+                list_data.push(response.data);
+                //카드 추가 UI 구현
+            }
+            else {
+                alert('카드를 추가할 수 없습니다.');
+            }
+        });
+    };
+
+    function editCard(list_idx) {
+        if(!checkValidation() || !list_idx) { alert('유효하지 않은 접근입니다.'); return false; }
+
+        var body = {
+            card_idx : 13,
+            card_name: 'test card : ' + Date.now(),
+            card_end_date: '2018-12-06',
+            card_order: 1,
+            card_content: "카드 내용2",
+            card_mark: 1
+        };
+
+        getJson('PUT', myUrl.concat('card/', board_data.board_idx, '/', list_idx.toString(), '/', body.card_idx), body, function (status, response) {
+            if(status == 201) { // 성공
+                response.card_idx; //추가된 카드 idx
+                //카드 수정 UI 구현
+            }
+            else {
+                alert('카드 정보를 수정할 수 없습니다.');
+            }
+        });
+    };
+
+    function deleteCard() {
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+
+        var body = {
+            card_idx : 13,
+            card_name: 'test card : ' + Date.now(),
+        };
+
+        getJson('DELETE', myUrl.concat('card/', board_data.board_idx, '/', body.card_idx), body, function (status, response) {
+            if(status == 201) { // 성공
+                //카드 삭제 UI 구현
+            }
+            else {
+                alert('카드를 삭제할 수 없습니다.');
+            }
+        });
+    };
+
+    function deleteBoard() {
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+
+        var body = {
+            board_idx : board_data.board_idx,
+            board_name : board_data.board_name,
+            board_master : board_data.board_master
+        }
+
+        getJson('DELETE', myUrl.concat('board/', sessionStorage.getItem("user_idx"), '/', body.board_idx, '/', body.board_master), body, function (status, response) {
+            if(status == 201) { // 성공
+                if(token) location.replace("main.jsp");
+                else location.replace("index.jsp");
+            }
+            else {
+                alert('보드를 삭제할 수 없습니다.');
+            }
+        });
+    };
+
+    function linkBoard() {
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+
+        var body = {
+            board_idx : board_data.board_idx,
+            board_name : board_data.board_name,
+            board_master : board_data.board_master
+        }
+
+        getJson('DELETE', myUrl.concat('board/', sessionStorage.getItem("user_idx"), '/', body.board_idx, '/', body.board_master), body, function (status, response) {
+            if(status == 201) { // 성공
+                if(token) location.replace("main.jsp");
+                else location.replace("index.jsp");
+            }
+            else {
+                alert('보드를 삭제할 수 없습니다.');
+            }
+        });
+    };
+
+    function searchUser(id) {
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+
+        var body = {
+            "user_id" : id
+        };
+
+        alert('hi');
+        alert(id);
+        getJson('POST', myUrl.concat('user/'), body, function (status, response) {
+            if(status == 201) { // 성공
+                ///showUser(response.data); 함수 구현
+                var str = '';
+                response.data.forEach(function(item, index){
+                    str += (index + 1) + ' : ' + item.user_name + '\n';
+                }); // 테스트 코드
+                alert(str);
+            }
+            else {
+                alert('유저 목록을 불러올 수 없습니다.');
+            }
+        });
+    };
+
 
 </script>
 
