@@ -1204,19 +1204,6 @@
     };
 
     var userBackGroundArray = new Array(15);
-    function linkBoard(user_idx) {
-        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
-
-        getJson('LINK', myUrl.concat('board/', user_idx, '/', board_data.board_idx), null, function (status, response) {
-            if(status == 201) { // 성공
-                alert('보드 공유를 완료했습니다.');
-            }
-            else {
-                alert('보드를 공유할 수 없습니다.');
-            }
-        });
-    };
-
     function searchUser(id) {
         if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
         var body = {
@@ -1224,7 +1211,7 @@
         };
         var userList="";
 
-        getJson('POST', myUrl.concat('user/'), body, function (status, response) {
+        getJson('POST', myUrl.concat('user/', board_data.board_idx), body, function (status, response) {
             if(status == 201) { // 성공
                 ///showUser(response.data); 함수 구현
                 var str = '';
@@ -1242,16 +1229,40 @@
         });
     };
 
-    function changeBackground(obj) {
-        if (obj.style.backgroundColor == "white") {
+    function changeBackground(obj){
+        if(obj.style.backgroundColor == "white" ){
             obj.style.backgroundColor = "#e1e1e1";
             userBackGroundArray[obj.id] = 1;
             alert(userBackGroundArray[obj.id]);
-        } else {
+        }else{
             obj.style.backgroundColor = "white";
             userBackGroundArray[obj.id] = 0;
         }
+    }
+
+    function linkBoard() {
+        var userStr = "[";
+        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
+        for(var i = 0;i<15;i++){
+            if(userBackGroundArray[i] == 1)
+                userStr+=i+',';
+        }
+        userStr = userStr.substring(0,userStr.length-1);
+        userStr +="]";
+        alert(userStr);
+        var body = {
+            "user_idx" : userStr
+        };
+        getJson('PUT', myUrl.concat('user/share/', board_data.board_idx), body, function (status, response) {
+            if(status == 201) { // 성공
+                alert("성공입니다");
+            }
+            else {
+                alert('보드를 삭제할 수 없습니다.');
+            };
+        });
     };
+
     function hrefHistory() {
 
         sessionStorage.setItem("board_idx", board_data.board_idx);
