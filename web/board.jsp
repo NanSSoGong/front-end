@@ -1233,7 +1233,6 @@
         if(obj.style.backgroundColor == "white" ){
             obj.style.backgroundColor = "#e1e1e1";
             userBackGroundArray[obj.id] = 1;
-            alert(userBackGroundArray[obj.id]);
         }else{
             obj.style.backgroundColor = "white";
             userBackGroundArray[obj.id] = 0;
@@ -1258,7 +1257,7 @@
                 alert("성공입니다");
             }
             else {
-                alert('보드를 삭제할 수 없습니다.');
+                alert('보드를 공유할 수 없습니다.');
             };
         });
     };

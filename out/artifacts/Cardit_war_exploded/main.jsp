@@ -16,6 +16,38 @@
     <script type="text/javascript" src="js/main.js"></script>
 
     <style>
+        .card-list {
+            position: relative;
+            width:600px;
+            height: 250px;
+            padding: 30px 50px 0 50px;
+            margin:0 0 30px 0;
+            background-color: #FAFAFA;
+            opacity: 0.82;
+            border:0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
+        }
+        .today-shadow {
+            z-index:-1;
+            position:absolute;
+            top:51px;
+            left:calc(50% - 49px);
+            width: 104px;
+            height: 28px;
+            background-color: #EFCE4A;
+            margin-bottom: 50px;
+        }
+        .d-day-list {
+            margin-top: 200px;
+            position: absolute;
+            top: 500px;
+            left: calc(50% - 300px);
+            width:600px;
+            height: 100%;
+            padding: 0;
+            margin:0;
+        }
         .calendar {
             width: 296px;
             height: 336px;
@@ -148,7 +180,7 @@
 <header>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="#" class="user-box text"><span class="user-name">amoogae</span></a>
+        <a href="logout.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
         <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
@@ -157,8 +189,6 @@
 <%-- search bar --%>
 <section class="sub-header">
     <div class="search-bar">
-        <input type="text" name="search" placeholder="검색">
-        <button type="button" onclick="calDDay('july 10,2019')"></button>
     </div>
 </section>
 
@@ -191,8 +221,8 @@
                         <li><label><input class="board-color-button" type="radio" title="pink" name="boardColor" value="5"><span class="checkmark" style="background-color:#BF628F;"></span></label></li>
                     </ul>
                     <span class="invite-user-span container-span">Invite members</span>
-                    <div class="invite-user"><input type="text" class="invite-user-name" placeholder="       search by user ID" id="invite-user-input"></div>
-                    <button type="button" class="invite-user-button" onclick="inviteUser()">invite</button>
+                    <div class="invite-user"><input type="text" class="invite-user-name" placeholder="       search by user ID"></div>
+                    <button type="button" class="invite-user-button">invite</button>
                 </div>
                 <button type="button" onclick="createBoard()" class="create-board-button">OK</button>
             </form>
@@ -246,6 +276,7 @@
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
+        alert(user_idx);
     });
 
     var getJson = function(method, url, body, callback) {
@@ -258,7 +289,7 @@
         xhr.onload = function() {
             callback(xhr.status, xhr.response);
         };
-        if(data) {
+        if(body) {
             var data = JSON.stringify(body);
             xhr.send(data);
         }
@@ -269,7 +300,7 @@
     function loadPage() {
 
 
-        var boardUrl = myUrl + "board/1"; /*"/board/:user_idx"*/
+        var boardUrl = myUrl + "/board/" + user_idx;
         var cardUrl = myUrl + "/calender/emergency/"+ user_idx +"/-1";  /*"/card/:board_idx"*/
         var calendarUrl = "json_test/card.json";/*myUrl + "calendar";*/
         var body = "";
@@ -315,7 +346,7 @@
         var i;
 
         for (i in response) {
-            boardList += "<li class='board-li'><a class='board-a'><span>-</span><span>" + response[i].board_name + "</span><span id='board-idx' style='display:none;'>" + response[i].board_idx + "</span><span id='board-color' style='display: none'>" + response[i].background + "</span></a></li>";
+            boardList += "<li class='board-li'><a class='board-a'><span>-</span><span>" + response[i].board_name + "</span><span id='board-idx' style='display:none;'>" + response[i].board_idx + "</span><span id='board-color' style='display: none'>" + response[i].board_background + "</span><span id='board-master' style='display: none'>" + response[i].board_master + "</span></a></li>";
         }
 
         document.getElementById('board-list').innerHTML = boardList;
@@ -324,11 +355,13 @@
                 var b = $(this).children();
                 var board_name = b[1].innerText;
                 var board_idx = b[2].innerText;
-                var board_color = b[3].innerText;
+                var board_background = b[3].innerText;
+                var board_master = b[4].innerText;
 
-                sessionStorage.setItem("now_board_name", board_name);
-                sessionStorage.setItem("now_board_idx", board_idx);
-                sessionStorage.setItem("now_board_color", board_color);
+                sessionStorage.setItem("board_name", board_name);
+                sessionStorage.setItem("board_idx", board_idx);
+                sessionStorage.setItem("board_background", board_background);
+                sessionStorage.setItem("board_master", board_master);
 
                 location.replace("board.jsp");
             });
@@ -377,6 +410,7 @@
             "board_name" : boardName,
             "board_background" : boardColor
         };
+
         getJson('POST', createBoardUrl, body, function (status, response) {
             if (status == 201) { // 성공
                 $("#board-list").append("<li class='board-li'><a href='board.jsp' class='board-a'><span>-</span><span>" + boardName + "</span><span id='board-idx' style='display:none;'>" + "9999" + "</span><span id='board-color' style='display: none'>" + boardColor + "</span></a></li>");
@@ -387,11 +421,12 @@
                         var b = $(this).children();
                         var board_name = b[1].innerText;
                         var board_idx = b[2].innerText;
-                        var board_color = b[3].innerText;
+                        var board_background = b[3].innerText;
 
-                        sessionStorage.setItem("now_board_name", board_name);
-                        sessionStorage.setItem("now_board_idx", board_idx);
-                        sessionStorage.setItem("now_board_color", board_color);
+                        sessionStorage.setItem("board_name", board_name);
+                        sessionStorage.setItem("board_idx", board_idx);
+                        sessionStorage.setItem("board_background", board_background);
+                        sessionStorage.setItem("board_master", "1");
 
                         location.replace("board.jsp");
                     });
@@ -413,22 +448,6 @@
         var d_day = "D" + Math.floor(gap / (1000 * 60 * 60 * 24));
 
         alert(d_day);
-    }
-
-    function inviteUser(){
-        var user_id = document.getElementById('invite-user-input').innerText;
-        alert(user_id);
-        var inviteUserUrl = myUrl + "user/";
-        var body={
-            "user_id" : user_id
-        }
-        getJson('POST',inviteUserUrl,body,function (status, response) {
-            if(status == 201){
-                alert(response.data);
-            }else{
-                alert("user 로드 실패");
-            }
-        })
     }
 </script>
 
