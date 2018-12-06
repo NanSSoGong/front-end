@@ -377,11 +377,6 @@
 			"board_name" : boardName,
 			"board_background" : boardColor
         };
-<<<<<<< HEAD
-		
-=======
-
->>>>>>> a55c5b727d3b2f111554b3cf9c0971267576ae5a
         getJson('POST', createBoardUrl, body, function (status, response) {
             if (status == 201) { // 성공
                 $("#board-list").append("<li class='board-li'><a href='board.jsp' class='board-a'><span>-</span><span>" + boardName + "</span><span id='board-idx' style='display:none;'>" + "9999" + "</span><span id='board-color' style='display: none'>" + boardColor + "</span></a></li>");
