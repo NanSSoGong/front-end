@@ -33,9 +33,9 @@
 <%-- top menu --%>
 <header>
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
-    <a href="#" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
+    <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="#" class="user-box text"><span class="user-name">amoogae</span></a>
+        <a href="index.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
         <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>

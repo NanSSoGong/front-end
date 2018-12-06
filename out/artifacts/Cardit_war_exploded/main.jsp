@@ -16,6 +16,38 @@
     <script type="text/javascript" src="js/main.js"></script>
 
     <style>
+        .card-list {
+            position: relative;
+            width:600px;
+            height: 250px;
+            padding: 30px 50px 0 50px;
+            margin:0 0 30px 0;
+            background-color: #FAFAFA;
+            opacity: 0.82;
+            border:0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
+        }
+        .today-shadow {
+            z-index:-1;
+            position:absolute;
+            top:51px;
+            left:calc(50% - 49px);
+            width: 104px;
+            height: 28px;
+            background-color: #EFCE4A;
+            margin-bottom: 50px;
+        }
+        .d-day-list {
+            margin-top: 200px;
+            position: absolute;
+            top: 500px;
+            left: calc(50% - 300px);
+            width:600px;
+            height: 100%;
+            padding: 0;
+            margin:0;
+        }
         .calendar {
             width: 296px;
             height: 336px;
@@ -157,8 +189,6 @@
     <%-- search bar --%>
 <section class="sub-header">
     <div class="search-bar">
-        <input type="text" name="search" placeholder="검색">
-        <button type="button" onclick="calDDay('july 10,2019')"></button>
     </div>
 </section>
 

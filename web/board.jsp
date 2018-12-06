@@ -611,21 +611,20 @@
 <%-- top menu --%>
 <header>
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
-    <a href="#" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
+    <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
         <a href="#" class="user-box text"><span class="user-name">amoogae</span></a>
         <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
+
+
 <section class="sub-header">
     <span class="board-name">NanSsoGong</span>
     <img src="image/post_it_on.png" class="post-it">
     <a href ="calendar.jsp"><img  src="image/calendar_off.png" class="calendar"></a>
-    <div class="search-bar">
-        <input type="text" name="search" placeholder="   검색">
-    </div>
     <img src="image/more.png" class="more-menu" onclick="document.getElementById('more-menu-modal').style.display='block'">
-    <img src="image/settings.png" class="settings-menu">
+    <img src="image/delete.png" class="settings-menu">
 </section>
 <main>
     <div id="list">

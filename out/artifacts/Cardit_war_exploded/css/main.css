@@ -266,15 +266,6 @@ header {
     text-align: center;
     box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
 }
-.today-shadow {
-    z-index:-1;
-    position:absolute;
-    top:51px;
-    left:calc(50% - 49px);
-    width: 104px;
-    height: 28px;
-    background-color: #EFCE4A;
-}
 .today li {
     margin-bottom: 53px;
 }
@@ -289,16 +280,6 @@ header {
 .today .today-date {
     font-family:"NanumSquare Light";
     font-size: 25px;
-}
-.d-day-list {
-    margin-top: 50px;
-    position: absolute;
-    top: 500px;
-    left: calc(50% - 300px);
-    width:600px;
-    height: 100%;
-    padding: 0;
-    margin:0;
 }
 .card-list {
     position: relative;

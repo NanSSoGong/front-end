@@ -97,8 +97,8 @@ function moveCalendar(moveMonth) {
     var day = parseInt(document.getElementsByClassName('dayNow').innerText) ;
 
     displayCalendar(moveMonth, year, month, day);
-}
 
+}
 /*
    <td class='dayNow' onMouseOver='this.style.background=\"#FF0000\"; this.style.color=\"#FFFFFF\"' " +
                 "onMouseOut='this.style.background=\"#FFFFFF\"; this.style.color=\"#00FF00\"'>

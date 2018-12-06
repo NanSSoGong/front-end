@@ -106,11 +106,7 @@
         var historyList = "";
         var i;
         for (i in response){
-            if(response[i].d_day == 0){
-                historyList += "<img class = 'history-image-margin' src = 'image/history.png'>&nbsp;&nbsp;&nbsp;&nbsp;" + response[i].history_string + "<font class=\"float-right\">" + " Today </font><br><br>";
-            }else{
-                historyList += "<img class = 'history-image-margin' src = 'image/history.png'>&nbsp;&nbsp;&nbsp;&nbsp;" + response[i].history_string + "<font class=\"float-right\">"+ response[i].d_day.toString().substring(1,2) + " days ago</font><br><br>";
-            }
+            historyList += "<img class = 'history-image-margin' src = 'image/history.png'>&nbsp;&nbsp;&nbsp;&nbsp;" + response[i].history_string + "<font class=\"float-right\">"+ response[i].d_day.toString().substring(1,2) + " days ago</font><br><br>";
         }
         document.getElementById('history-list').innerHTML = historyList;
     }

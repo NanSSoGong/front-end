@@ -50,7 +50,7 @@
       <form class="login-form" name="loginForm">
         <h1>Card-it</h1>
         <input type="text" placeholder="아이디" name="user_id">
-        <input type="password" placeholder="비밀번호" name="user_pwd">
+        <input type="password" placeholder="비밀번호" name="user_pwd" onkeyup="if(event.keyCode==13){login()}">
         <button type="button" onclick="login()">로그인</button>
         <p class="bar">──────── 혹은 ────────</p>
         <p class="message">비밀번호를 읽어버리셨나요?</p>
