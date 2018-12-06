@@ -692,7 +692,7 @@
                     <span class="invite-users-span">invite users..</span>
                 </a>
                 <hr style="width: 302px; border: 0; border-top: 1px solid #E7E7E7;">
-                <a href="history.jsp">
+                <a onclick="hrefHistory()">
                     <img src="image/time_passing.png" class="see-history-img">
                     <span class="see-history-span">see history..</span>
                 </a>
@@ -932,8 +932,7 @@
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
 
     function loadData() {
-        //board_data.board_idx = sessionStorage.getItem("board_idx");
-        board_data.board_idx = 1;
+        board_data.board_idx = sessionStorage.getItem("board_idx");
         board_data.board_name = sessionStorage.getItem("board_name");
         board_data.board_background = sessionStorage.getItem("board_background");
         board_data.board_master = sessionStorage.getItem("board_master");
@@ -1243,36 +1242,24 @@
         });
     };
 
-    function changeBackground(obj){
-        if(obj.style.backgroundColor == "white" ){
+    function changeBackground(obj) {
+        if (obj.style.backgroundColor == "white") {
             obj.style.backgroundColor = "#e1e1e1";
             userBackGroundArray[obj.id] = 1;
             alert(userBackGroundArray[obj.id]);
-        }else{
+        } else {
             obj.style.backgroundColor = "white";
             userBackGroundArray[obj.id] = 0;
         }
-    }
-
-    function linkBoard() {
-        var userStr = "[";
-        if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
-        for(var i = 0;i<15;i++){
-            if(userBackGroundArray[i] == 1)
-                userStr+=i+',';
-        }
-        userStr +="]";
-        alert(userStr);
-        var body="";
-        getJson('LINK', myUrl.concat('board/', userStr, '/', board_data.board_idx), body, function (status, response) {
-            if(status == 201) { // 성공
-                alert("성공입니다");
-            }
-            else {
-                alert('보드를 삭제할 수 없습니다.');
-            };
-        });
     };
+    function hrefHistory() {
+
+        sessionStorage.setItem("board_idx", board_data.board_idx);
+        sessionStorage.setItem("board_name", board_data.board_name);
+        sessionStorage.setItem("board_background", board_data.board_background);
+
+        location.href = "history.jsp";
+    }
 </script>
 
 </body>

@@ -13,13 +13,17 @@
 <head>
     <title>Logout</title>
 </head>
-<body>
+<body onload="check()">
 <script>
-    sessionStorage.clear();
-
-    token="";
-
+    var r = confirm("LOGOUT?");
+    if(r==true){
+        sessionStorage.clear();
+        token="";
         if(!token) location.replace("index.jsp");
+    }
+    else{
+        history.back();
+    }
 
 </script>
 </body>
