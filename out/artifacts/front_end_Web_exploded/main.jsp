@@ -191,8 +191,8 @@
                         <li><label><input class="board-color-button" type="radio" title="pink" name="boardColor" value="5"><span class="checkmark" style="background-color:#BF628F;"></span></label></li>
                     </ul>
                     <span class="invite-user-span container-span">Invite members</span>
-                    <div class="invite-user"><input type="text" class="invite-user-name" placeholder="       search by user ID"></div>
-                    <button type="button" class="invite-user-button">invite</button>
+                    <div class="invite-user"><input type="text" class="invite-user-name" placeholder="       search by user ID" id="invite-user-input"></div>
+                    <button type="button" class="invite-user-button" onclick="inviteUser()">invite</button>
                 </div>
                 <button type="button" onclick="createBoard()" class="create-board-button">OK</button>
             </form>
@@ -414,6 +414,22 @@
         var d_day = "D" + Math.floor(gap / (1000 * 60 * 60 * 24));
 
         alert(d_day);
+    }
+
+    function inviteUser(){
+        var user_id = document.getElementById('invite-user-input').innerText;
+        alert(user_id);
+        var inviteUserUrl = myUrl + "user/";
+        var body={
+            "user_id" : user_id
+        }
+        getJson('POST',inviteUserUrl,body,function (status, response) {
+            if(status == 201){
+                alert(response.data);
+            }else{
+                alert("user 로드 실패");
+            }
+        })
     }
 </script>
 
