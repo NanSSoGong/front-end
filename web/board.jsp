@@ -18,7 +18,7 @@
             z-index: 0;
             background-color: #FAFAFA;
             font-family: "NanumSquare", light;
-            overflow-x:scroll;
+            overflow-x:auto;
             overflow-y:hidden;
             /**/
         }
@@ -735,11 +735,14 @@
                 <span class="card-container-description">Description</span>
                 <textarea id="add-card-description" placeholder="Write a description..."></textarea>
                 <span class="card-container-duedate">Due Date</span>
-                <div id='duedate'><script type="text/javascript">Today('null','null','null');</script></div>
+                <div id='duedate'>
+                    <script type="text/javascript">Today('null','null','null');</script>
+                </div>
             </div>
             <button class="add-card-button" type="button" onclick='addCard()'>create</button>
         </form>
     </div>
+    <%----%>
     <div id="edit-card-modal">
         <form id="edit-card-modal-contents" name="editCardForm">
             <div class="card-modal-header">
@@ -838,7 +841,6 @@
         if(!token) location.replace("index.jsp");
         loadData();
         setBackgroundColor(board_data.board_background);
-        initEvent();
     });
 
     var getJson = function(method, url, body, callback) {
@@ -884,90 +886,103 @@
             searchUser($('input[name="invite-user-text"]').val());
         });
     });
-    /*
-        /!*List 간 Card 이동*!/
-        $(function () {
-            $(".sortable .list-contents").sortable({
-                connectWith: ".sortable .list-contents"
-            }).disableSelection();
+    /*카드를 클릭했을 때 수정화면 보이기*/
+    $(document).on("click",".card", function() {
+        document.getElementById('edit-card-modal').style.display='block'; // add-modal 보이기
+        var card_id = $(this).attr("id");  // 클릭한 버튼이 속한 div 선택
+        var selectCard = card_id.split('-');
+        var list_idx = selectCard[0], card_idx = selectCard[1];
+        var f = document.editCardForm;
+        //sessionStorage.setItem("selectList_idx", list_idx);
+        //sessionStorage.setItem("selectCard_idx", card_idx);
+
+        list_data.some(function (list) {
+            if(list.list_idx == list_idx)
+            {
+                list.card.some(function (card) {
+                    if (card.card_idx == card_idx) {
+                        var end_date = card.card_end_date.split('-');
+                        var day = end_date[2].split('T');
+                        f.editCardName.value = card.card_name;
+                        f.editCardContent.value = card.card_content;
+                        f.year.value = end_date[0];
+                        f.month.value = end_date[1];
+                        f.day.value = day[0];
+                    }
+                });
+            }
         });
-        /!*List 안에서 Card 이동*!/
-        $(function () {
-            $(".sortable").draggable({ containment: "#list", scroll: false });
-        });*/
-    function setEvent() {
+    });
+    /*수정 버튼 눌렀을 때*/
+    $(document).on("click", ".edit-card-button", function() {
+
+    });
+
+    /*카드 추가 화면 보이기*/
+    $(document).on("click",".open-add-card-modal", function() {
+        document.getElementById('add-card-modal').style.display='block'; // add-modal 보이기
+        var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
+        sessionStorage.setItem("click_list_id", div_id);
+    });
+    /*카드 이동가능*/
+    $(document).on("mousedown", ".sortable .list-contents", function() {
         $(".sortable .list-contents").sortable({
             connectWith: ".sortable .list-contents"
         }).disableSelection();
-        $(".sortable").draggable({ containment: "#list", scroll: false });
-        $(".open-add-card-modal").on("click", function() {
-            document.getElementById('add-card-modal').style.display='block'; // add-modal 보이기
-            var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
-            sessionStorage.setItem("click_list_id", div_id);
-        });
-        $(".list").on("mousedown", function() {
-            $('.list').css("z-index", 0);
-            $(this).css("z-index", 2);
-        });
-        $(".list").on("mouseup", function() {
-            $('.list').css("z-index", 0);
-            $(this).css("z-index", 1);
-        });
-        $(".card").on("click", function() {
-            document.getElementById('edit-card-modal').style.display='block'; // add-modal 보이기
-            var div_id = $(this).attr("id");  // 클릭한 버튼이 속한 div 선택
-            var selectCard = div_id.split('-');
-            var list_idx = selectCard[0], card_idx = selectCard[1];
-            var f = document.editCardForm;
-            //sessionStorage.setItem("selectList_idx", list_idx);
-            //sessionStorage.setItem("selectCard_idx", card_idx);
-
-            list_data.some(function (list) {
-                if(list.list_idx == list_idx)
-                {
-                    list.card.some(function (card) {
-                        if (card.card_idx == card_idx) {
-                            f.editCardName.value = card.card_name;
-                            f.editCardContent.value = card.card_content
-                        }
-                    });
-                }
-            });
-        });
-    }
-    function initEvent() {
-        $("body").on("mouseover", function(){
-            setEvent();
-        });
-    }
-    /* List 추가 */
-    $(function() {
-        $(".add-list-button").on("click", function() {
-            // modal 에서 입력한 List 이름 가져오기
-            var add_list_name = $("#add-list-name").val();
-            var list = document.getElementById('list');
-            var i;
-            var top = 0; var left = 0;
-            for (i = 0; i < list.childElementCount; i++) {
-                var list_position = document.getElementById(list.children[i].getAttribute("id")).getBoundingClientRect();
-                if( list_position.left > left) {
-                    left = list_position.left;
-                    top = list_position.top;
-                }
-            }
-            if(list.childElementCount!=0 ) {
-                left = left + 360;
-                top = top - 92;
-            }
-            addList(left, top, add_list_name);
-
-            // List 생성 후 modal 종료
-            var modal = document.getElementById('add-list-modal');
-            modal.style.display = "none";
-
-            setEvent();
-        });
     });
+    /*리스트 이동 가능*/
+    $(document).on("mouseover", ".sortable", function() {
+        $(".sortable").draggable({ containment: "#list", scroll: false });
+    });
+    /*리스트 클릭 할 때 제일 앞으로*/
+    $(document).on("mousedown", ".list", function() {
+        $('.list').css("z-index", 0);
+        $(this).css("z-index", 2);
+    });
+    /*리스트를 드랍했을 때 원래대로, 리스트 이동했을 때 위치 저장, 리스트 최대 크기 제한*/
+    $(document).on("mouseup", ".list", function() {
+        $('.list').css("z-index", 0);
+        $(this).css("z-index", 1);
+
+        var list_idx = $(this).attr("id");
+
+        editList(this);
+        var maxHeight = window.innerHeight;
+        var curPositionY = this.getBoundingClientRect().top;
+        var availableHeight = maxHeight - curPositionY - 10;
+
+        $(this).css("max-height",availableHeight);
+        $(this).children('ul').css("max-height", availableHeight-140);
+    });
+
+    /* List 추가 */
+    $(document).on("click",".add-list-button", function() {
+        // modal 에서 입력한 List 이름 가져오기
+        var add_list_name = $("#add-list-name").val();
+        var list = document.getElementById('list');
+        var i;
+        var top = 0; var left = 0;
+        for (i = 0; i < list.childElementCount; i++) {
+            var list_position = document.getElementById(list.children[i].getAttribute("id")).getBoundingClientRect();
+            if( list_position.left > left) {
+                left = list_position.left;
+                top = list_position.top;
+            }
+        }
+        if(list.childElementCount!=0 ) {
+            left = left + 360;
+            top = top - 92;
+        }
+        addList(left, top, add_list_name);
+
+        // List 생성 후 modal 종료
+        var modal = document.getElementById('add-list-modal');
+        modal.style.display = "none";
+
+        //setEvent();
+        document.getElementById('add-list-modal-contents').reset();
+    });
+
 
     function List(list_idx, list_name, list_position_x, list_position_y) {
         return {
@@ -1043,7 +1058,7 @@
         list_data.forEach(function (list, index, array) {
             str += "<div id='"+ list.list_idx.toString() +"'class='list sortable' style='top: "+ list.list_position_y +"px; left:" +
                 list.list_position_x + "px;'><span  style='display:none;'></span><div class='list-header'><span class='list-name'>" +
-                list.list_name + "</span><a onclick='deleteList(" + list.list_idx.toString() + ", \"" + list.list_name.toString() + "\")' class='list-tool-button-box'><img src='image/more_2.png' class='list-tool-box'></a></div>" +
+                list.list_name + "</span><a onclick='deleteList(" + list.list_idx.toString() + ", \"" + list.list_name + "\")' class='list-tool-button-box'><img src='image/more_2.png' class='list-tool-box'></a></div>" +
                 "<ul class='list-contents'>";
             // 카드를 order 순으로 정렬
             list.card.sort(function(a, b){
@@ -1090,24 +1105,22 @@
         sessionStorage.removeItem("click_list_id");
     };
 
-    function editList() {
+    function editList(obj) {
         if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
 
-        //테스트 코드 START
+        var list_idx = $(obj).attr('id')
         var list = {
-            list_idx : 16,
-            list_name : 'test' + Date.now(), // ex) test1543991086330
-            list_position_x : 3,
-            list_position_y : 4
+            list_idx : list_idx,
+            list_name : obj.children[1].children[0].innerText, // ex) test1543991086330
+            list_position_x : document.getElementById(list_idx).style.left,
+            list_position_y : document.getElementById(list_idx).style.top
         };
-        //테스트 코드 END
 
         var body = {
             "list_name": list.list_name,
             "list_position_x": list.list_position_x,
             "list_position_y": list.list_position_y
         };
-
         getJson('PUT', myUrl.concat('list/', board_data.board_idx, '/', list.list_idx), body, function (status, response) {
             if(status == 201) { // 성공
                 /*list_data.forEach(function (item, index, array) { //조회 테스트
@@ -1175,9 +1188,9 @@
         var card_content = $('#add-card-description').val();
         var list_idx = sessionStorage.getItem("click_list_id");
         var clicked_list = document.getElementById(list_idx).children[2]; // div 의 자식노드중 세번째 (ul - .list-contents)
-        var f = document.addCardForm;
-        var card_end_date = f.year + "-" +f.month +"-"+ f.day;
-        var card_order = clicked_list.length;
+        var f = document.forms['addCardForm'];
+        var card_end_date = f['year'].value + "-" + f['month'].value + "-" + f['day'].value;
+        var card_order = clicked_list.children.length + 1;
 
         //var list_idx = 2;
         var body = {
@@ -1382,6 +1395,11 @@
         sessionStorage.setItem("board_background", board_data.board_background);
 
         location.href = "history.jsp";
+    }
+
+    function closeModal(obj) {
+        obj.parentElement.parentElement.parentElement.style.display = 'none'; // modal창 최상위 div
+        obj.parentElement.parentElement.reset(); // form reset
     }
 </script>
 
