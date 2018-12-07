@@ -100,12 +100,7 @@
             cursor: pointer;
             margin: 0px calc(50% - 16px) 10px calc(50% - 16px);
         }
-        .star-before {
-            float: right;
-            width: 16px;
-            height: 16px;
-        }
-        .star-after {
+        .cardStar {
             float: right;
             width: 16px;
             height: 16px;
@@ -356,21 +351,21 @@
             padding: 20px 20px 20px 20px;
             background-color: #FFFFFF;
         }
-        .add-card-modal-header span {
+        .card-modal-header span {
             margin: 10px 0 10px 34px;
         }
-        .add-card-close-button{
+        .card-close-button{
             top: 48px;
             right: 49px;
         }
-        .modal-star-off {
+        .modal-cardStar {
             position: absolute;
             width: 25px;
             height: 25px;
             top: 45px;
             right: 80px;
         }
-        .add-card-container-name {
+        .card-container-name {
             margin: 32px 0 0 68px;
         }
         #add-card-name {
@@ -390,7 +385,7 @@
             font-size: 20px;
             color: #707070;
         }
-        .add-card-container-description {
+        .card-container-description {
             margin: 36px 0 10px 68px;
         }
         #add-card-description {
@@ -405,7 +400,7 @@
             font-size: 20px;
             color: #B5B5B5;
         }
-        .add-card-container-duedate {
+        .card-container-duedate {
             margin: 40px 0 0 68px;
         }
         #duedate {
@@ -413,6 +408,73 @@
             margin: 40px 0 0 344px;
         }
         #add-card-modal button {
+            position:absolute;
+            background: #707070;
+            width: 250px;
+            height: 50px;
+            bottom: 60px;
+            left: calc(50% - 125px);
+            border: 0;
+            border-radius: 5px;
+            font-size: 20px;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+        #edit-card-modal {
+            display: none;
+            position:fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        #edit-card-modal-contents {
+            position: fixed;
+            top: calc(50% - 300px);
+            left: calc(50% - 400px);
+            width: 800px;
+            height: 600px;
+            border: 0;
+            border-radius: 5px;
+            padding: 20px 20px 20px 20px;
+            background-color: #FFFFFF;
+        }
+        #edit-card-name {
+            width: 617px;
+            height: 40px;
+            margin: 0 0 0 68px;
+            border: 0;
+            border-bottom: 1px solid #E7E7E7;
+            padding-left: 14px;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #B5B5B5;
+        }
+        #edit-card-modal-contents .container span {
+            display: inline-block;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #707070;
+        }
+        #edit-card-description {
+            resize: none;
+            width: 615px;
+            height: 100px;
+            margin: 0 98px 0 68px;
+            padding: 14px 18px 14px 18px;
+            border: 1px solid #E7E7E7;
+            background-color: #FAFAFA;
+            font-family:"NanumSquare Regular";
+            font-size: 20px;
+            color: #B5B5B5;
+        }
+        #edit-duedate {
+            display: inline-block;
+            margin: 40px 0 0 344px;
+        }
+        #edit-card-modal button {
             position:absolute;
             background: #707070;
             width: 250px;
@@ -660,7 +722,7 @@
         </div>
     </div>
     <div id="add-card-modal">
-        <form id="add-card-modal-contents">
+        <form id="add-card-modal-contents" name="addCardForm">
             <div class="card-modal-header">
                 <span class="modal-header-name">Create a Card</span>
                 <img src="image/multiply.png" class="modal-close-button card-close-button" onclick="document.getElementById('add-card-modal').style.display='none'">
@@ -855,9 +917,9 @@
             list_data.some(function (list) {
                 if(list.list_idx == list_idx)
                 {
-                    f.editCardName.value = list.list_name;
                     list.card.some(function (card) {
                         if (card.card_idx == card_idx) {
+                            f.editCardName.value = card.card_name;
                             f.editCardContent.value = card.card_content
                         }
                     });
@@ -1105,12 +1167,15 @@
         var card_content = $('#add-card-description').val();
         var list_idx = sessionStorage.getItem("click_list_id");
         var clicked_list = document.getElementById(list_idx).children[2]; // div 의 자식노드중 세번째 (ul - .list-contents)
+        var f = document.addCardForm;
+        var card_end_date = f.year + "-" +f.month +"-"+ f.day;
+        var card_order = clicked_list.length;
 
         //var list_idx = 2;
         var body = {
             card_name: card_name,
-            card_end_date: '2018-12-08',
-            card_order: 1,
+            card_end_date: card_end_date,
+            card_order: card_order,
             card_content: card_content,
             card_mark: 1
         };
