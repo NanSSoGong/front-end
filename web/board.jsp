@@ -905,6 +905,14 @@
             var div_id = $(this).closest("div").attr("id");  // 클릭한 버튼이 속한 div 선택
             sessionStorage.setItem("click_list_id", div_id);
         });
+        $(".list").on("mousedown", function() {
+            $('.list').css("z-index", 0);
+            $(this).css("z-index", 2);
+        });
+        $(".list").on("mouseup", function() {
+            $('.list').css("z-index", 0);
+            $(this).css("z-index", 1);
+        });
         $(".card").on("click", function() {
             document.getElementById('edit-card-modal').style.display='block'; // add-modal 보이기
             var div_id = $(this).attr("id");  // 클릭한 버튼이 속한 div 선택
@@ -928,7 +936,7 @@
         });
     }
     function initEvent() {
-        $("html").on("mousemove", function(){
+        $("body").on("mouseover", function(){
             setEvent();
         });
     }
