@@ -100,7 +100,12 @@
             cursor: pointer;
             margin: 0px calc(50% - 16px) 10px calc(50% - 16px);
         }
-        .cardStar {
+        .star-before {
+            float: right;
+            width: 16px;
+            height: 16px;
+        }
+        .star-after {
             float: right;
             width: 16px;
             height: 16px;
@@ -351,21 +356,21 @@
             padding: 20px 20px 20px 20px;
             background-color: #FFFFFF;
         }
-        .card-modal-header span {
+        .add-card-modal-header span {
             margin: 10px 0 10px 34px;
         }
-        .card-close-button{
+        .add-card-close-button{
             top: 48px;
             right: 49px;
         }
-        .modal-cardStar {
+        .modal-star-off {
             position: absolute;
             width: 25px;
             height: 25px;
             top: 45px;
             right: 80px;
         }
-        .card-container-name {
+        .add-card-container-name {
             margin: 32px 0 0 68px;
         }
         #add-card-name {
@@ -385,7 +390,7 @@
             font-size: 20px;
             color: #707070;
         }
-        .card-container-description {
+        .add-card-container-description {
             margin: 36px 0 10px 68px;
         }
         #add-card-description {
@@ -400,12 +405,12 @@
             font-size: 20px;
             color: #B5B5B5;
         }
-        .card-container-duedate {
+        .add-card-container-duedate {
             margin: 40px 0 0 68px;
         }
         #duedate {
             display: inline-block;
-            margin: 40px 0 0 250px;
+            margin: 40px 0 0 344px;
         }
         #add-card-modal button {
             position:absolute;
@@ -419,73 +424,6 @@
             font-size: 20px;
             color: #FFFFFF;
             cursor: pointer;
-        }
-        #edit-card-modal {
-            display: none;
-            position:fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-        }
-        #edit-card-modal-contents {
-            position: fixed;
-            top: calc(50% - 300px);
-            left: calc(50% - 400px);
-            width: 800px;
-            height: 600px;
-            border: 0;
-            border-radius: 5px;
-            padding: 20px 20px 20px 20px;
-            background-color: #FFFFFF;
-        }
-        #edit-card-modal-contents .container span {
-            display: inline-block;
-            font-family:"NanumSquare Regular";
-            font-size: 20px;
-            color: #707070;
-        }
-        #edit-card-name {
-            width: 617px;
-            height: 40px;
-            margin: 0 0 0 68px;
-            border: 0;
-            border-bottom: 1px solid #E7E7E7;
-            padding-left: 14px;
-            font-family:"NanumSquare Regular";
-            font-size: 20px;
-            color: #B5B5B5;
-        }
-        #edit-card-description {
-            resize: none;
-            width: 615px;
-            height: 100px;
-            margin: 0 98px 0 68px;
-            padding: 14px 18px 14px 18px;
-            border: 1px solid #E7E7E7;
-            background-color: #FAFAFA;
-            font-family:"NanumSquare Regular";
-            font-size: 20px;
-            color: #B5B5B5;
-        }
-        #edit-card-modal button {
-            position:absolute;
-            background: #707070;
-            width: 250px;
-            height: 50px;
-            bottom: 60px;
-            left: calc(50% - 125px);
-            border: 0;
-            border-radius: 5px;
-            font-size: 20px;
-            color: #FFFFFF;
-            cursor: pointer;
-        }
-        #edit-duedate {
-            display: inline-block;
-            margin: 40px 0 0 250px;
         }
         #more-menu-modal {
             display: none;
@@ -789,8 +727,6 @@
             <div class="container">
                 <input type="text" class="invite-user-name" name="invite-user-text" placeholder="      search by user ID">
                 <button type="button" class="user-invite-button" id="invite-user-button">invite</button>
-                <ul id = "user-list">
-                </ul>
             </div>
             <button type="button" class="user-invite-ok-button" id = "send-invite-user" onclick="linkBoard()">OK</button>
         </form>
