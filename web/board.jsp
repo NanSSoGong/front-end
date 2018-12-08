@@ -691,7 +691,7 @@
         <div id="listName1" class="list sortable">
             <div class="list-header">
                 <span class="list-name">To Do</span>
-                <a href="#" class="list-tool-button-box"><img src="image/more_2.png" class="list-tool-box"></a>
+                <a href="#" class="list-tool-button-box"><img width="8px" height="8px" src="image/multiply.png" class="list-tool-box"></a>
             </div>
             <ul class="list-contents">
                 <li class="card"><span>Card1</span><img src="/image/star_off.png"  class="star-before"></li>
@@ -1089,7 +1089,7 @@
         list_data.forEach(function (list, index, array) {
             str += "<div id='"+ list.list_idx.toString() +"'class='list sortable' style='top: "+ list.list_position_y +"px; left:" +
                 list.list_position_x + "px;'><span  style='display:none;'></span><div class='list-header'><span class='list-name'>" +
-                list.list_name + "</span><a onclick='deleteList(" + list.list_idx.toString() + ", \"" + list.list_name + "\")' class='list-tool-button-box'><img src='image/more_2.png' class='list-tool-box'></a></div>" +
+                list.list_name + "</span><a onclick='deleteList(" + list.list_idx.toString() + ", \"" + list.list_name + "\")' class='list-tool-button-box'><img height='5px' width='5px' src='image/multiply.png' class='list-tool-box'></a></div>" +
                 "<ul class='list-contents'>";
             // 카드를 order 순으로 정렬
             list.card.sort(function(a, b){
@@ -1132,7 +1132,7 @@
                 //리스트 추가 UI 구현
                 $("#list").append("<div id='"+ response.list_idx +"'class='list sortable' style='top: "+ body.list_position_y +"px; left:" +
                     body.list_position_x + "px;'><span  style='display:none;'></span><div class='list-header'><span class='list-name'>" +
-                    body.list_name + "</span><a onclick='deleteList(" + response.list_idx + ", \"" + body.list_name + "\")' class='list-tool-button-box'><img src='image/more_2.png' class='list-tool-box'></a></div>" +
+                    body.list_name + "</span><a onclick='deleteList(" + response.list_idx + ", \"" + body.list_name + "\")' class='list-tool-button-box'><img height='5px' width='5px' src='image/multiply.png' class='list-tool-box'></a></div>" +
                     "<ul class='list-contents'></ul><img src='image/plus.png' class='open-add-card-modal'></div>");
             }
             else {
