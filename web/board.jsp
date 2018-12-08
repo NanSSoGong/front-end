@@ -104,6 +104,7 @@
             float: right;
             width: 16px;
             height: 16px;
+            cursor:pointer;
         }
         /*-----------------------------------header-------------------------------------*/
         header {
@@ -726,7 +727,7 @@
             <div class="card-modal-header">
                 <span class="modal-header-name">Create a Card</span>
                 <img src="image/multiply.png" class="modal-close-button card-close-button" onclick="document.getElementById('add-card-modal').style.display='none'">
-                <img src="image/star_off.png" class="modal-cardStar">
+                <img src="image/star_off.png" class="modal-cardStar" id="cardStar" alt="off">
             </div>
             <hr style="width: 702px; border: 0; border-top:1px solid rgba(112, 112, 112, 0.5);">
             <div class="container">
@@ -887,18 +888,17 @@
         });
     });
     /*카드를 클릭했을 때 수정화면 보이기*/
-    $(document).on("click",".card", function() {
-        document.getElementById('edit-card-modal').style.display='block'; // add-modal 보이기
-        var card_id = $(this).attr("id");  // 클릭한 버튼이 속한 div 선택
+    $(document).on("click",".card-name", function() {
+        document.getElementById('edit-card-modal').style.display = 'block'; // add-modal 보이기
+        var card_id = $(this).parent().attr("id");  // 클릭한 버튼이 속한 div 선택
         var selectCard = card_id.split('-');
         var list_idx = selectCard[0], card_idx = selectCard[1];
         var f = document.editCardForm;
-        //sessionStorage.setItem("selectList_idx", list_idx);
-        //sessionStorage.setItem("selectCard_idx", card_idx);
+        sessionStorage.setItem("selectList_idx", list_idx);
+        sessionStorage.setItem("selectCard_idx", card_idx);
 
         list_data.some(function (list) {
-            if(list.list_idx == list_idx)
-            {
+            if (list.list_idx == list_idx) {
                 list.card.some(function (card) {
                     if (card.card_idx == card_idx) {
                         var end_date = card.card_end_date.split('-');
@@ -913,11 +913,6 @@
             }
         });
     });
-    /*수정 버튼 눌렀을 때*/
-    $(document).on("click", ".edit-card-button", function() {
-
-    });
-
     /*카드 추가 화면 보이기*/
     $(document).on("click",".open-add-card-modal", function() {
         document.getElementById('add-card-modal').style.display='block'; // add-modal 보이기
@@ -944,9 +939,10 @@
         $('.list').css("z-index", 0);
         $(this).css("z-index", 1);
 
-        var list_idx = $(this).attr("id");
-
         editList(this);
+    });
+    /*드래그 할 때 리스트의 최대 높이 제한*/
+    $(document).on("drag",".list", function() {
         var maxHeight = window.innerHeight;
         var curPositionY = this.getBoundingClientRect().top;
         var availableHeight = maxHeight - curPositionY - 10;
@@ -954,7 +950,6 @@
         $(this).css("max-height",availableHeight);
         $(this).children('ul').css("max-height", availableHeight-140);
     });
-
     /* List 추가 */
     $(document).on("click",".add-list-button", function() {
         // modal 에서 입력한 List 이름 가져오기
@@ -982,6 +977,42 @@
         //setEvent();
         document.getElementById('add-list-modal-contents').reset();
     });
+    /*수정 버튼 눌렀을 때*/
+    $(document).on("click", ".edit-card-button", function() {
+        var ori_list_idx = sessionStorage.getItem("selectList_idx");
+        var card_idx = sessionStorage.getItem("selectCard_idx");
+
+        //editCard(ori_list_idx, null, card_idx);
+        //document.getElementById('edit-card-modal-contents').reset();
+        document.getElementById('edit-card-modal').style.display='none'
+    });
+    /*카드가 리스트 사이를 이동 할 때 카드의 소속 리스트 수정*/
+    $(document).on("mouseup",".card", function() {
+        var card_id = $(this).attr('id');
+        var selectCard = card_id.split('-');
+        var list_idx = selectCard[0], card_idx = selectCard[1];
+
+        var new_list_idx = $(".ui-sortable-placeholder").parent().parent().attr('id');
+        if(new_list_idx != null) {
+            editCard(list_idx ,new_list_idx, card_idx);
+        }
+    });
+    /*중요도 표시*/
+    $(document).on("click", ".cardStar", function() {
+        var curAlt = $(this).attr('alt');
+
+        if(curAlt == 'off') {
+            $(this).attr('src', '/image/star_on.png');
+            $(this).attr('alt', 'on');
+            $(this).parent().css("border", "2px solid yellow")
+        }
+        else {
+            $(this).attr('src', 'http://localhost:8080/image/star_off.png');
+            $(this).attr('alt', 'off');
+            $(this).parent().css("border", "0")
+        }
+    });
+
 
 
     function List(list_idx, list_name, list_position_x, list_position_y) {
@@ -1065,14 +1096,20 @@
                 return a.card_order - b.card_order;
             });
             list.card.forEach(function (card, index, array) {
-                // card 마크, 마감일, content 출력 해야함.
                 if(card.card_idx != null) {
-                    str += "<li id='"+ list.list_idx.toString() +"-"+ card.card_idx +"' class='card'><span class='card_idx' style='display: none;'>" + card.card_idx +
-                        "</span><span>" + card.card_name +
-                        "</span><img src='/image/star_off.png' class='cardStar' ></li>";
-                }/*onclick='changeStar(\""+ card.card_name +"\", "+ card.card_idx +")'*/
+                    if(card.card_mark == 0) {
+                        str += "<li id='" + list.list_idx.toString() + "-" + card.card_idx + "' class='card' alt='off'><span class='card_idx' style='display: none;'>" + card.card_idx +
+                            "</span><span class='card-name'>" + card.card_name +
+                            "</span><img src='/image/star_off.png' class='cardStar' alt='off'></li>";
+                    }
+                    else {
+                        str += "<li id='" + list.list_idx.toString() + "-" + card.card_idx + "' class='card' alt='off'><span class='card_idx' style='display: none;'>" + card.card_idx +
+                            "</span><span class='card-name'>" + card.card_name +
+                            "</span><img src='/image/star_on.png' class='cardStar' alt='on'></li>";
+                    }
+                }
             });
-
+            /*onclick='changeStar(\""+ card.card_name +"\", "+ card.card_idx +")'*/
             str += "</ul><img src='image/plus.png' class='open-add-card-modal'></div>";
         });
 
@@ -1214,7 +1251,7 @@
                 });
                 //카드 추가 UI 구현
                 $(clicked_list).append("<li id='"+ list_idx.toString() +"-"+ response.card_idx +"' class='card'><span class='card_idx' style='display: none;'>" + response.card_idx +
-                    "</span><span>" + card_name +
+                    "</span><span class='card-name'>" + card_name +
                     "</span><img src='/image/star_off.png' class='cardStar'></li>");
             }
             else {
@@ -1226,18 +1263,48 @@
         modal.style.display = "none";
     }
 
-    function editCard(ori_list_idx, new_list_idx) {
+    function editCard(ori_list_idx, new_list_idx, card_idx) {
         if(!checkValidation() || !ori_list_idx || !new_list_idx) { alert('유효하지 않은 접근입니다.'); return false; }
+        var i;
+        var select_list = document.getElementById(new_list_idx).children[2];
+        var order_class, card_order = 1;
+        var countCard = select_list.children.length + 1;
+        for(i=0; i< select_list.children.length; i++ ) {
+            order_class = document.getElementById(new_list_idx).children[2].children[i].getAttribute('class');
+            if(order_class == 'ui-sortable-placeholder card ui-sortable-handle') {
+                card_order = i+1; break;
+            }
+        }
 
         var body = {
-            card_idx : 22,
-            card_name: 'test card : ' + Date.now(),
+            card_idx : new_list_idx,
+            card_name: '',
             card_end_date: '2018-12-06',
-            card_order: 7,
-            card_content: "카드 내용2",
+            card_order: card_order,
+            card_content: "카드 내용",
             card_mark: 1
         };
 
+        list_data.some(function (list) {
+            if (list.list_idx == ori_list_idx) {
+                list.card.some(function (card) {
+                    if (card.card_idx == card_idx) {
+                        var end_date = card.card_end_date.split('T');
+                        body.card_name = card.card_name;
+                        body.card_end_date = end_date[0];
+                        body.card_content = card.card_content;
+                        body.card_mark = card.card_mark;
+                    }
+                    else if(ori_list_idx == new_list_idx) {
+                        body.card_order = card.card_order;
+                    }
+                    else {
+                        body.card_order = card_order;
+                    }
+                });
+            }
+        });
+alert(body.card_name+" "+body.card_end_date+" "+body.card_content +""+ body.card_mark+" "+body.card_order);
         getJson('PUT', myUrl.concat('card/', board_data.board_idx, '/', ori_list_idx.toString(), '/', body.card_idx), body, function (status, response) {
             if(status == 201) { // 성공
 
