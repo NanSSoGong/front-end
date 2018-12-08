@@ -1317,7 +1317,7 @@
                 });
             }
         });
-alert(body.list_idx+ " "+body.card_name+" "+body.card_end_date+" "+body.card_content +" "+ body.card_mark+" "+body.card_order);
+//alert(body.list_idx+ " "+body.card_name+" "+body.card_end_date+" "+body.card_content +" "+ body.card_mark+" "+body.card_order);
         getJson('PUT', myUrl.concat('card/', board_data.board_idx, '/', ori_list_idx.toString(), '/', body.card_idx), body, function (status, response) {
                 if(status == 201) { // 성공
                 var card = null;
