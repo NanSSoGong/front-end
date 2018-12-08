@@ -1,4 +1,8 @@
 function displayCalendar(moveMonth, curYear, curMonth, curDay) {
+
+    alert("ddi");
+
+    loadPage();
     var htmlContent = "";
     var FebNumberOfDays = "";
     var counter = 1;
@@ -59,6 +63,7 @@ function displayCalendar(moveMonth, curYear, curMonth, curDay) {
     // loop to build the calander body.
     while (counter <= numOfDays) {
 
+
         // When to start new line.
         if (weekdays2 > 6) {
             weekdays2 = 0;
@@ -68,10 +73,21 @@ function displayCalendar(moveMonth, curYear, curMonth, curDay) {
         // if counter is current day.
         // highlight current day using the CSS defined in header.
         if (counter == day) {
-            htmlContent += "<td class='dayNow'><span class='day'>" + counter + "</span><span class='check'>'</span></td>";
+            htmlContent += "<td class='dayNow'><span class='day'>" + counter + "</span>";
+            if (dateString.indexOf(day) != -1) {
+                htmlContent += "<span id=\"haveDate\"><img height=8px weight=8px src=\"image/date_on.png\"</span></td>";
+            }
+            else{
+                htmlContent += "</td>";
+            }
         } else {
-            htmlContent += "<td class='monthNow'><span class='day'>" + counter + "</span><span class='check'>'</span></td>";
-
+            htmlContent += "<td class='monthNow'><span class='day'>" + counter + "</span>";
+            if (dateString.indexOf(day) != -1) {
+                htmlContent += "<span id=\"haveDate\"><img height=8px weight=8px src=\"image/date_on.png\"></span></td>";
+            }
+            else{
+                htmlContent += "</td>";
+            }
         }
 
         weekdays2++;
@@ -92,6 +108,7 @@ function displayCalendar(moveMonth, curYear, curMonth, curDay) {
 }
 
 function moveCalendar(moveMonth) {
+    alert("Yong");
     var year = parseInt(document.getElementById('year').innerText);
     var month = parseInt(document.getElementById('month').innerText) - 1;
     var day = parseInt(document.getElementsByClassName('dayNow').innerText) ;
@@ -107,3 +124,69 @@ function moveCalendar(moveMonth) {
                 " onMouseOut='this.style.background=\"#FFFFFF\"'>
 * */
 
+
+//추가했습니다////필요합니다////
+var token = sessionStorage.getItem("user_token");
+var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+var user_idx = sessionStorage.getItem("user_idx");
+var user_name = sessionStorage.getItem("user_name");
+
+$(document).ready(function() {
+    if(!token) location.replace("index.jsp");
+    alert(user_idx);
+});
+
+var getJson = function(method, url, body, callback) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.open(method, url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('authorization', token);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+        callback(xhr.status, xhr.response);
+    };
+    if(body) {
+        var data = JSON.stringify(body);
+        xhr.send(data);
+    }
+    else xhr.send();
+};
+
+// 메인페이지 로드
+function loadPage() {
+
+    alert("Yeji");
+
+    var calUrl = myUrl + "/emergency/" + user_idx + "/1";
+    var body = "";
+
+    getJson('GET', calUrl, body, function (status, response) {
+        if (status == 201) { // 성공
+            loadCalendarList(response.data);
+        }
+        else { // 실패
+            alert("D-Day 로드 실패");
+        }
+    });
+
+
+
+}
+
+
+var dateList = new Array();
+var dateString ="";
+
+//Calendar 정보 불러오기
+function loadCalendarList(response){
+    var i;
+    var end_date;
+    alert("Yejiii");
+
+    for (i in response) {
+        end_date = response[i].card_end_date.toString().substr(8, 2);
+        dateList[i] = end_date;
+        dateString += end_date + " ";
+    }
+}

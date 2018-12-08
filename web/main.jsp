@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.Date" %><%--
   Created by IntelliJ IDEA.
   User: iua94
   Date: 2018-10-13
@@ -6,13 +7,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
 <html>
 <head>
     <title>Home | Card-it</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/display-calendar.js"></script>
+   <script type="text/javascript" src="js/display-calendar.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
     <style>
@@ -80,6 +83,32 @@
             font-size: 12px;
             color: #707070;
             text-align: center;
+        }
+
+        #calendar {
+            position: fixed;
+            width: 380px;
+            height: 380px;
+            float: left;
+            align-content: center;
+
+            right:calc(88px + 5%);
+            border:0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
+            background-color: #FFFFFF;
+        }
+
+        #calendar-wrapper {
+            position: fixed;
+            right:calc(88px + 5%);
+            width: 380px;
+            height: 380px;
+            padding: 22px 42px 22px 42px;
+            border:0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
+            background-color: #FFFFFF;
         }
         .dayNum span {
             display:block;
@@ -302,9 +331,7 @@
 
         var boardUrl = myUrl + "/board/" + user_idx;
         var cardUrl = myUrl + "/calender/emergency/"+ user_idx +"/-1";  /*"/card/:board_idx"*/
-        var calendarUrl = "json_test/card.json";/*myUrl + "calendar";*/
         var body = "";
-
 
 
 
@@ -441,6 +468,8 @@
         document.getElementById('create-board-modal').style.display = "none";
     }
 
+
+    /*
     function calDDay(endDate) {
         var now = new Date();
         var then = new Date(endDate);
@@ -449,6 +478,7 @@
 
         alert(d_day);
     }
+    */
 </script>
 
 </body>

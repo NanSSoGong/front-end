@@ -144,10 +144,17 @@
             width:100%;
         }
         .today-date{
+            display: inline-block;
+            z-index: 2;
             opacity: 0.3;
             width: 32px;
             height: 32px;
-            background-image: url("image/date_circle.png");
+            background-image: url('image/date_circle.png');
+        }
+        .today-content{
+            opacity: 1;
+            display: block;
+            z-index: 1;
         }
         .calendar-y-m{
             margin-top: 10px;
@@ -555,7 +562,6 @@
 
     //Calendar 정보 불러오기
     function loadCalendarList(response){
-        var haveDateList = "";
         var i;
         var end_date;
 
@@ -603,12 +609,18 @@
                         haveDateList += "<td bgcolor =\""+todayColor+"\" width=\"90\" align=\"center\" align-vertical=\"true\" height=\"90\" valign=\"center\">";
 
                         if (today == 1) {
-                            haveDateList += "<div class=\"today-date\"/>";
-                            today = 0;
+                            if(dispDay<32){
+                                haveDateList += "<div class=\"today-date\">";
+                                today = 0;
+                                haveDateList += "<font class=\"today-content\" size=\"4\" color=\"#000000\">"+dispDay+"</font><br></div>";
+                            }
                         }
-                        if(dispDay<32){
-                            haveDateList += "<div ><font size=\"4\" color=\"#707070\">"+dispDay+"</font></div><br>";
+                        else {
+                            if(dispDay<32) {
+                                haveDateList += "<div ><font size=\"4\" color=\"#707070\">" + dispDay + "</font></div><br>";
+                            }
                         }
+
                         if (dateString.indexOf(dispDay) != -1) {
                             haveDateList += "<div id=\"haveDate\"><img height=8px weight=8px src=\"image/date_on.png\"/></div>";
                         }
@@ -624,8 +636,6 @@
             haveDateList += "</tr>";
         }
         document.getElementById('date').innerHTML = haveDateList;
-
-
     }
 
     //D-DAY 카드 불러오기

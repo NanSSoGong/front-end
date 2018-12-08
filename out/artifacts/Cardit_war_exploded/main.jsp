@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.Date" %><%--
   Created by IntelliJ IDEA.
   User: iua94
   Date: 2018-10-13
@@ -6,13 +7,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
 <html>
 <head>
     <title>Home | Card-it</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/display-calendar.js"></script>
+   <script type="text/javascript" src="js/display-calendar.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
     <style>
@@ -80,6 +83,32 @@
             font-size: 12px;
             color: #707070;
             text-align: center;
+        }
+
+        #calendar {
+            position: fixed;
+            width: 380px;
+            height: 380px;
+            float: left;
+            align-content: center;
+
+            right:calc(88px + 5%);
+            border:0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
+            background-color: #FFFFFF;
+        }
+
+        #calendar-wrapper {
+            position: fixed;
+            right:calc(88px + 5%);
+            width: 380px;
+            height: 380px;
+            padding: 22px 42px 22px 42px;
+            border:0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
+            background-color: #FFFFFF;
         }
         .dayNum span {
             display:block;
@@ -276,6 +305,7 @@
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
+        alert(user_idx);
     });
 
     var getJson = function(method, url, body, callback) {
@@ -299,11 +329,9 @@
     function loadPage() {
 
 
-        var boardUrl = myUrl + "board/1"; /*"/board/:user_idx"*/
+        var boardUrl = myUrl + "/board/" + user_idx;
         var cardUrl = myUrl + "/calender/emergency/"+ user_idx +"/-1";  /*"/card/:board_idx"*/
-        var calendarUrl = "json_test/card.json";/*myUrl + "calendar";*/
         var body = "";
-
 
 
 
@@ -345,7 +373,7 @@
         var i;
 
         for (i in response) {
-            boardList += "<li class='board-li'><a class='board-a'><span>-</span><span>" + response[i].board_name + "</span><span id='board-idx' style='display:none;'>" + response[i].board_idx + "</span><span id='board-color' style='display: none'>" + response[i].background + "</span></a></li>";
+            boardList += "<li class='board-li'><a class='board-a'><span>-</span><span>" + response[i].board_name + "</span><span id='board-idx' style='display:none;'>" + response[i].board_idx + "</span><span id='board-color' style='display: none'>" + response[i].board_background + "</span><span id='board-master' style='display: none'>" + response[i].board_master + "</span></a></li>";
         }
 
         document.getElementById('board-list').innerHTML = boardList;
@@ -354,11 +382,13 @@
                 var b = $(this).children();
                 var board_name = b[1].innerText;
                 var board_idx = b[2].innerText;
-                var board_color = b[3].innerText;
+                var board_background = b[3].innerText;
+                var board_master = b[4].innerText;
 
-                sessionStorage.setItem("now_board_name", board_name);
-                sessionStorage.setItem("now_board_idx", board_idx);
-                sessionStorage.setItem("now_board_color", board_color);
+                sessionStorage.setItem("board_name", board_name);
+                sessionStorage.setItem("board_idx", board_idx);
+                sessionStorage.setItem("board_background", board_background);
+                sessionStorage.setItem("board_master", board_master);
 
                 location.replace("board.jsp");
             });
@@ -418,11 +448,12 @@
                         var b = $(this).children();
                         var board_name = b[1].innerText;
                         var board_idx = b[2].innerText;
-                        var board_color = b[3].innerText;
+                        var board_background = b[3].innerText;
 
-                        sessionStorage.setItem("now_board_name", board_name);
-                        sessionStorage.setItem("now_board_idx", board_idx);
-                        sessionStorage.setItem("now_board_color", board_color);
+                        sessionStorage.setItem("board_name", board_name);
+                        sessionStorage.setItem("board_idx", board_idx);
+                        sessionStorage.setItem("board_background", board_background);
+                        sessionStorage.setItem("board_master", "1");
 
                         location.replace("board.jsp");
                     });
@@ -437,6 +468,8 @@
         document.getElementById('create-board-modal').style.display = "none";
     }
 
+
+    /*
     function calDDay(endDate) {
         var now = new Date();
         var then = new Date(endDate);
@@ -445,6 +478,7 @@
 
         alert(d_day);
     }
+    */
 </script>
 
 </body>
