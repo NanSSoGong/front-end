@@ -567,7 +567,8 @@
             top: calc(50% - 160px);
             left: calc(50% - 365px);
             width: 730px;
-            height: 320px;
+            height: auto;
+            min-height: 320px;
             border: 0;
             border-radius: 5px;
             padding: 10px 20px 10px 20px;
@@ -610,17 +611,21 @@
             cursor: pointer;
         }
         .user-invite-ok-button {
-            position:absolute;
             background: #707070;
             width: 250px;
             height: 50px;
-            bottom: 35px;
-            left: calc(50% - 125px);
+            margin: 0 0 10px calc(50% - 125px);
             border: 0;
             border-radius: 5px;
             font-size: 20px;
             color: #FFFFFF;
             cursor: pointer;
+        }
+        #user-list {
+            display:block;
+            width: 632px;
+            height: auto;
+            margin:10px 0 0 37px;
         }
 
         /* 브라우저 별 호환성 확인 */
@@ -794,6 +799,7 @@
                 <input type="text" class="invite-user-name" name="invite-user-text" placeholder="      search by user ID">
                 <button type="button" class="user-invite-button" id="invite-user-button">invite</button>
             </div>
+            <ul id="user-list"></ul>
             <button type="button" class="user-invite-ok-button" id = "send-invite-user" onclick="linkBoard()">OK</button>
         </form>
     </div>
@@ -982,8 +988,10 @@
         var ori_list_idx = sessionStorage.getItem("selectList_idx");
         var card_idx = sessionStorage.getItem("selectCard_idx");
 
-        //editCard(ori_list_idx, null, card_idx);
-        //document.getElementById('edit-card-modal-contents').reset();
+        if(ori_list_idx != null) {
+            //editCard(ori_list_idx, ori_list_idx, card_idx);
+        }
+        document.getElementById('edit-card-modal-contents').reset();
         document.getElementById('edit-card-modal').style.display='none'
     });
     /*카드가 리스트 사이를 이동 할 때 카드의 소속 리스트 수정*/
@@ -994,7 +1002,7 @@
 
         var new_list_idx = $(".ui-sortable-placeholder").parent().parent().attr('id');
         if(new_list_idx != null) {
-            editCard(list_idx ,new_list_idx, card_idx);
+            editCard(list_idx, new_list_idx, card_idx);
         }
     });
     /*중요도 표시*/
@@ -1265,19 +1273,24 @@
 
     function editCard(ori_list_idx, new_list_idx, card_idx) {
         if(!checkValidation() || !ori_list_idx || !new_list_idx) { alert('유효하지 않은 접근입니다.'); return false; }
+
         var i;
         var select_list = document.getElementById(new_list_idx).children[2];
         var order_class, card_order = 1;
-        var countCard = select_list.children.length + 1;
+        var orderCard = select_list.children.length + 1;
         for(i=0; i< select_list.children.length; i++ ) {
             order_class = document.getElementById(new_list_idx).children[2].children[i].getAttribute('class');
             if(order_class == 'ui-sortable-placeholder card ui-sortable-handle') {
                 card_order = i+1; break;
             }
+            else {
+                //card_order =
+            }
         }
 
         var body = {
-            card_idx : new_list_idx,
+            new_list_idx : new_list_idx,
+            card_idx : card_idx,
             card_name: '',
             card_end_date: '2018-12-06',
             card_order: card_order,
@@ -1304,10 +1317,9 @@
                 });
             }
         });
-alert(body.card_name+" "+body.card_end_date+" "+body.card_content +""+ body.card_mark+" "+body.card_order);
+alert(body.list_idx+ " "+body.card_name+" "+body.card_end_date+" "+body.card_content +" "+ body.card_mark+" "+body.card_order);
         getJson('PUT', myUrl.concat('card/', board_data.board_idx, '/', ori_list_idx.toString(), '/', body.card_idx), body, function (status, response) {
-            if(status == 201) { // 성공
-
+                if(status == 201) { // 성공
                 var card = null;
                 list_data.some(function (list) {
                     if(list.list_idx == ori_list_idx)
@@ -1396,7 +1408,8 @@ alert(body.card_name+" "+body.card_end_date+" "+body.card_content +""+ body.card
         });
     };
 
-    var userBackGroundArray = new Array(15);
+    var userBackGroundArray = new Array(15)
+    ;
     function searchUser(id) {
         if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
         var body = {
@@ -1411,7 +1424,7 @@ alert(body.card_name+" "+body.card_end_date+" "+body.card_content +""+ body.card
                 response.data.forEach(function(item, index){
                     str = (index + 1) + ')  ' + item.user_name;
                     var userindex = item.user_idx;
-                    userList +="<div type=\"button\" name=\"user-invite-list\" style=\"background-color: white\"  onclick=\"changeBackground(this)\" id=\""+ userindex + "\"><font color=\"#707070\" size=\"3px\">"+str + "</font></div><br>";
+                    userList +="<div class = '' type=\"button\" name=\"user-invite-list\" style=\"background-color: white\"  onclick=\"changeBackground(this)\" id=\""+ userindex + "\"><font color=\"#707070\" size=\"3px\">"+str + "</font></div><br>";
                     userBackGroundArray[userindex] = 0;
                 });
                 document.getElementById('user-list').innerHTML = userList;
