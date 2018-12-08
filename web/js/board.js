@@ -4,30 +4,15 @@ $(document).ready(function() {
     var modal_more_menu = document.getElementById('more-menu-modal');
 
 // modal 밖 클릭시 modal 종료
-    $(function () {
-        window.onclick = function (event) {
-            if (event.target == modal_list) {
-                modal_list.style.display = "none";
-            }
-        };
-    });
-
-// modal 밖 클릭시 modal 종료
-    $(function () {
-        window.onclick = function (event) {
-            if (event.target == modal_card) {
-                modal_card.style.display = "none";
-            }
-        };
-    });
-
-// modal 밖 클릭시 modal 종료
-    $(function () {
-        window.onclick = function (event) {
-            if (event.target == modal_more_menu) {
-                modal_more_menu.style.display = "none";
-            }
-        };
-    });
+    window.onclick = function (event) {
+        if (event.target == modal_list) {
+            modal_list.style.display = "none";
+        }
+        else if (event.target == modal_card) {
+            modal_card.style.display = "none";
+        }
+        else if (event.target == modal_more_menu) {
+            modal_more_menu.style.display = "none";
+        }
+    }
 });
-
