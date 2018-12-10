@@ -42,9 +42,9 @@
 </header>
 
 <section class="sub-header">
-    <div class="search-bar">
-        <input type="text" name="search" placeholder="   검색">
-    </div>
+    <span class="board-name">NanSsoGong</span>
+    <img src="image/post_it_on.png" class="post-it">
+    <a href ="calendar.jsp"><img  src="image/calendar_off.png" class="calendar"></a>
 </section>
 
 <main>
@@ -107,7 +107,7 @@
         var historyList = "";
         var i;
         for (i in response){
-            historyList += "<img class = 'history-image-margin' src = 'image/history.png'>&nbsp;&nbsp;&nbsp;&nbsp;" + response[i].history_string + "<font class=\"float-right\">"+ response[i].d_day.toString().substring(1,2) + " days ago</font><br><br>";
+            historyList += "<img class = 'history-image-margin' src = 'image/history.png'>&nbsp;&nbsp;&nbsp;&nbsp;" + response[i].history_string + "<font class=\"float-right\">"+ response[i].d_day.toString().substr(1,2) + " days ago</font><br><br>";
         }
         document.getElementById('history-list').innerHTML = historyList;
     }

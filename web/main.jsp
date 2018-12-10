@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <script type="text/javascript" src="js/jquery.min.js"></script>
-   <script type="text/javascript" src="js/display-calendar.js"></script>
+    <%--<script type="text/javascript" src="js/display-calendar.js"></script>--%>
     <script type="text/javascript" src="js/main.js"></script>
 
     <style>
@@ -204,21 +204,20 @@
     </style>
 
 </head>
-<body onload="loadPage()">
+<body>
 <%-- top menu --%>
 <header>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="logout.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
-        <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
+        <a href="#" onclick="logout()" class="user-box text"><span id="user-name" class="user-name"></span></a>
+        <a href="#" onclick="logout()" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
 
 
 <%-- search bar --%>
-<section class="sub-header">
-    <div class="search-bar">
-    </div>
+<section>
+
 </section>
 
 <main>
@@ -226,11 +225,12 @@
     <section class="side-menu float">
         <div class="side-menu-container">
             <ul id="board-list">
+                <%-- board list --%>
             </ul>
             <button type="button" style="vertical-align:middle" onclick="document.getElementById('create-board-modal').style.display='block'"><div class="button-img-wrap"><img src="image/add.png"></div><span>Create a board</span></button>
         </div>
         <%--  create a board button 클릭 할 때 나오는 화면--%>
-        <div id="create-board-modal">
+        <div id="create-board-modal" style = "z-index:60;">
             <form id="create-board-modal-contents" name="createBoardForm">
                 <div class="create-board-modal-header">
                     <span class="modal-header-name">Create a Board</span>
@@ -249,9 +249,6 @@
                         <li><label><input class="board-color-button" type="radio" title="purple" name="boardColor" value="4"><span class="checkmark" style="background-color:#83639A;"></span></label></li>
                         <li><label><input class="board-color-button" type="radio" title="pink" name="boardColor" value="5"><span class="checkmark" style="background-color:#BF628F;"></span></label></li>
                     </ul>
-                    <span class="invite-user-span container-span">Invite members</span>
-                    <div class="invite-user"><input type="text" class="invite-user-name" placeholder="       search by user ID"></div>
-                    <button type="button" class="invite-user-button">invite</button>
                 </div>
                 <button type="button" onclick="createBoard()" class="create-board-button">OK</button>
             </form>
@@ -260,17 +257,12 @@
 
     <%-- D-Day --%>
     <section class="d-day float">
-        <div class="today">
-            <div class="today-shadow"></div>
-            <ul>
-                <li><span class="today-header">TODAY</span></li>
-                <li><span class="today-card-name">Home UI 완성하기</span></li>
-                <li><span class="today-date">Oct, 4th (THU)</span></li>
-            </ul>
+        <div id="today" class="today">
+            <%-- D-0 --%>
         </div>
         <div class="d-day-list">
             <ul id="d-day-wrapper">
-                <%----%>
+                <%-- D-1 ~ D-9999 --%>
             </ul>
         </div>
 
@@ -297,15 +289,21 @@
 --%>
 
 <script>
-    //추가했습니다////필요합니다////
     var token = sessionStorage.getItem("user_token");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+    //var myUrl = 'http://localhost:3000/api/';
     var user_idx = sessionStorage.getItem("user_idx");
     var user_name = sessionStorage.getItem("user_name");
+    var dateToday = "";
+    var dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var monthName = ["Jan", "Fab", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
-        alert(user_idx);
+        document.createBoardForm.boardColor.value = 0;
+        loadPage();
+        setUserName();
+        setToday();
     });
 
     var getJson = function(method, url, body, callback) {
@@ -325,33 +323,36 @@
         else xhr.send();
     };
 
+    /* 유저 이름 설정 */
+    function setUserName() {
+        document.getElementById('user-name').innerText = user_name;
+    }
+
+    /* 오늘의 날짜 */
+    function setToday() {
+        var now = new Date();
+        var today = String(now).split(' ');
+        dateToday = today[1] + ", " + dayCount(today[2]) + " (" + today[0] +")";
+    }
+
+    /* d-day style 적용하기 */
+    function setDdayStyle(d_day) {
+        if(d_day >= 0 && d_day <= 3) return ("<span class='d-day-number' style='color:#F02E0B;'>D" + d_day + "</span>");
+        else return ("<span class='d-day-number' style='color:#4F61F0;'>D" + d_day + "</span>");
+    }
+
+    function dayCount(day) {
+        if(day == 1) return day += "st";
+        else if(day == 2) return day += "nd";
+        else if(day == 3) return day += "rd";
+        else return day += "th";
+    }
+
     // 메인페이지 로드
     function loadPage() {
+        loadBoardList();
+        loadCardList();
 
-
-        var boardUrl = myUrl + "/board/" + user_idx;
-        var cardUrl = myUrl + "/calender/emergency/"+ user_idx +"/-1";  /*"/card/:board_idx"*/
-        var body = "";
-
-
-
-        getJson('GET', boardUrl, body, function (status, response) {
-            if (status == 201) { // 성공
-                loadBoardList(response.data);
-            }
-            else { // 실패
-                alert("board 로드 실패");
-            }
-        });
-        getJson('GET', cardUrl, body, function (status, response) {
-            if (status == 201) { // 성공
-                loadCardList(response.data);
-                displayCalendar(0);
-            }
-            else { // 실패
-                alert("카드 로드 실패");
-            }
-        });
         /*        getJson('GET', calendarUrl, body, function (status, response) {
                     if (status == 201) { // 성공
                         displayCalendar(0);
@@ -361,56 +362,82 @@
                         alert("캘린더 로드 실패");
                     }
                 });*/
-
-        document.getElementsByClassName('user_name').innerText = user_name;
-
     }
 
+    /* 보드 리스트 불러오기 */
+    function loadBoardList() {
+        var boardUrl = myUrl + "/board/" + user_idx;
+        var i, boardList = "", body = "";
 
+        /* Board 목록 가져오기 */
+        getJson('GET', boardUrl, body, function (status, response) {
+            if (status == 201) { // 성공
+                for (i in response.data) {
+                    boardList += "<li class='board-li'><a class='board-a'><span>-</span><span>" + response.data[i].board_name +
+                        "</span><span id='board-idx' style='display:none;'>" + response.data[i].board_idx +
+                        "</span><span id='board-color' style='display: none;'>" + response.data[i].board_background +
+                        "</span><span id='board-master' style='display: none;'>" + response.data[i].board_master + "</span></a></li>";
+                }
 
-    function loadBoardList(response) {
-        var boardList = "";
-        var i;
-
-        for (i in response) {
-            boardList += "<li class='board-li'><a class='board-a'><span>-</span><span>" + response[i].board_name + "</span><span id='board-idx' style='display:none;'>" + response[i].board_idx + "</span><span id='board-color' style='display: none'>" + response[i].board_background + "</span><span id='board-master' style='display: none'>" + response[i].board_master + "</span></a></li>";
-        }
-
-        document.getElementById('board-list').innerHTML = boardList;
-        $(function() {
-            $(".board-a").on("click", function() {
-                var b = $(this).children();
-                var board_name = b[1].innerText;
-                var board_idx = b[2].innerText;
-                var board_background = b[3].innerText;
-                var board_master = b[4].innerText;
-
-                sessionStorage.setItem("board_name", board_name);
-                sessionStorage.setItem("board_idx", board_idx);
-                sessionStorage.setItem("board_background", board_background);
-                sessionStorage.setItem("board_master", board_master);
-
-                location.replace("board.jsp");
-            });
+                document.getElementById('board-list').innerHTML = boardList;
+            }
+            else { // 실패
+                alert("보드를 불러올 수 없습니다.");
+            }
         });
     }
 
-    function loadCardList(response) {
-        var cardList = "";
-        var i;
-        /*
-                var todayCard = "<div class='today-shadow'></div><ul><li><span class='today-header'>TODAY</span></li><li><span class='today-card-name'>" +
-                    response[0].card_name + "</span></li><li><span class='today-date'>Oct, 4th (THU)</span></li></ul>";
-        */
-        for (i=0; i < response.length; i++) {
-            cardList += "<li><div class='card-list'><div class='card-header'><span class='board-name'><b>" +
-                response[i].card_name + "</b></span><span class='colon'>: </span><span class='list-name'>" +
-                response[i].list_name + "</span><span class='d-day-number'>D-2</span></div><div class='card-contents'><span class='card-name'>" +
-                /*response[i].card_content + */"</span><span class='card-duedate'>Due Date : Oct, 6th</span></div></div></li>"
-        }
+    /* 카드 불러와서 d-day 출력 */
+    function loadCardList() {
+        var cardUrl = myUrl + "/calender/emergency/"+ user_idx +"/-1";  /*"/card/:board_idx"*/
+        var cardList = "", body = "", i, count=0;
+        var todayCard = "<div class='today-shadow'></div><ul><li><span class='today-header'>TODAY</span></li><li>";
 
-        //document.getElementById('today').innerHTML = todayCard;
-        document.getElementById('d-day-wrapper').innerHTML = cardList;
+        /* 캘린더 가져오기 */
+        getJson('GET', cardUrl, body, function (status, response) {
+            if (status == 201) { // 성공
+                // 카드를 D_day 순으로 정렬
+                response.data.sort(function(a, b){
+                    return a.d_day - b.d_day;
+                });
+
+                for (i in response.data) {
+                    var end_date = response.data[i].card_end_date.split('-');
+                    var todayMonthName = monthName[Number(end_date[1] - 1)];
+                    var day = end_date[2].split('T');
+                    var todayOfWeek = dayCount(day[0]);
+                    var card_d_day = response.data[i].d_day - 1;
+
+                    // 마감일이 오늘인 카드들
+                    if(card_d_day == 0) {
+                        todayCard += "<span class='today-card-name'>" + response.data[i].card_name + "</span>";
+                        count++;
+                    }
+                    else {
+                        // 마감일이 하루 이상 남은 카드들
+                        cardList += "<li><div class='card-list'><div class='card-header'><span class='board-name'><b>" +
+                            response.data[i].board_name + "</b></span><span class='colon'>: </span><span class='list-name'>" +
+                            response.data[i].list_name + "</span>" + setDdayStyle(card_d_day) + "</div><div class='card-contents'><span class='card-name'>" +
+                            response.data[i].card_name + "</span><span class='card-duedate'>Due Date : " + todayMonthName + ", " + todayOfWeek + "</span></div></div></li>"
+                    }
+                }
+
+                // Today 일정이 없을 경우
+                if(count == 0) {
+                    todayCard += "<span class='today-card-name'>Today is Free</span>";
+                }
+
+                todayCard += "</li><li style='margin:0;'><span class='today-date'>"+ dateToday +"</span></li></ul>";
+
+                displayCalendar(0);
+
+                document.getElementById('today').innerHTML = todayCard;
+                document.getElementById('d-day-wrapper').innerHTML = cardList;
+            }
+            else { // 실패
+                alert("카드를 불러올 수 없습니다.");
+            }
+        });
     }
 
     /*function loadCalendar(response) {
@@ -424,15 +451,15 @@
 
             if(response.
         }
-
     }*/
 
+    /* 보드 만들기 */
     function createBoard() {
         var f = document.createBoardForm;
         var boardName = f.boardName.value;
         var boardColor = f.boardColor.value;
         var createBoardUrl = myUrl + "board/" + user_idx;
-        alert(boardName);
+
         var body={
             "board_name" : boardName,
             "board_background" : boardColor
@@ -440,45 +467,184 @@
 
         getJson('POST', createBoardUrl, body, function (status, response) {
             if (status == 201) { // 성공
-                $("#board-list").append("<li class='board-li'><a href='board.jsp' class='board-a'><span>-</span><span>" + boardName + "</span><span id='board-idx' style='display:none;'>" + "9999" + "</span><span id='board-color' style='display: none'>" + boardColor + "</span></a></li>");
-
-                //클릭했을 때 idx와 name 저장 이벤트 재등록
-                $(function() {
-                    $(".board-a").on("click", function() {
-                        var b = $(this).children();
-                        var board_name = b[1].innerText;
-                        var board_idx = b[2].innerText;
-                        var board_background = b[3].innerText;
-
-                        sessionStorage.setItem("board_name", board_name);
-                        sessionStorage.setItem("board_idx", board_idx);
-                        sessionStorage.setItem("board_background", board_background);
-                        sessionStorage.setItem("board_master", "1");
-
-                        location.replace("board.jsp");
-                    });
-                });
+                $("#board-list").append("<li class='board-li'><a class='board-a'><span>-</span><span>" + boardName +
+                    "</span><span id='board-idx' style='display:none;'>" + response.board_idx +
+                    "</span><span id='board-color' style='display: none;'>" + boardColor +
+                    "</span><span id='board-master' style='display: none;'>" + 1 + "</span></a></li>");
+            }
+            else if (status == 400) { // 중복된 보드
+                alert("이미 존재하는 보드입니다.");
             }
             else { // 실패
-                alert("board 로드 실패");
-
+                alert("보드를 생성할 수 없습니다.");
             }
+
+            f.boardName.value = "";
+            f.boardColor.value = 0;
         });
 
         document.getElementById('create-board-modal').style.display = "none";
     }
 
+    //클릭했을 때 idx와 name 저장 이벤트 재등록
+    $(document).on("click",".board-a", function() {
 
-    /*
-    function calDDay(endDate) {
-        var now = new Date();
-        var then = new Date(endDate);
-        var gap = then.getTime() - now.getTime();
-        var d_day = "D" + Math.floor(gap / (1000 * 60 * 60 * 24));
+        var b = $(this).children();
+        var board_name = b[1].innerText;
+        var board_idx = b[2].innerText;
+        var board_background = b[3].innerText;
+        var board_master = b[4].innerText;
 
-        alert(d_day);
+        sessionStorage.setItem("board_name", board_name);
+        sessionStorage.setItem("board_idx", board_idx);
+        sessionStorage.setItem("board_background", board_background);
+        sessionStorage.setItem("board_master", board_master);
+
+        location.href = "board.jsp";
+    });
+
+    function logout(){
+        var r = confirm("로그아웃 하시겠습니까?");
+        if (r == true) {
+            sessionStorage.clear();
+            location.href = "index.jsp";
+        }
     }
-    */
+
+    <%-- display-calendar --%>
+    function displayCalendar(moveMonth, curYear, curMonth, curDay) {
+
+        //alert("ddi");
+
+        //loadPage();
+        var htmlContent = "";
+        var FebNumberOfDays = "";
+        var counter = 1;
+
+        var dateNow;
+        if(curYear != null && curMonth != null) {
+            dateNow = new Date(curYear, curMonth);
+        }
+        else {
+            dateNow = new Date();
+        }
+        var year = dateNow.getFullYear();
+        var month = dateNow.getMonth() + moveMonth;
+        var day = dateNow.getDate();
+
+        // 년도 넘어갈 때
+        if(month == 12) {
+            month = 0;
+            year += 1;
+        }
+        else if(month <= -1) {
+            month = 11;
+            year -= 1;
+        }
+
+        var nextMonth = month + 1; // getMonth()는 0~11
+
+        // 윤달 구하기
+        if (month == 1) {
+            if ((year % 100 != 0) && (year % 4 == 0) || (year % 400 == 0)) {
+                FebNumberOfDays = 29;
+            } else {
+                FebNumberOfDays = 28;
+
+            }
+        }
+
+        // names of months and week days.
+        var monthNames = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+        var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        var dayPerMonth = ["31", "" + FebNumberOfDays + "", "31", "30", "31", "30", "31", "31", "30", "31", "30", "31"]
+
+
+        // days in previous month and next one , and day of week.
+        var nextDate = new Date(nextMonth + ' 1 ,' + year);
+        var weekdays = nextDate.getDay();
+        var weekdays2 = weekdays
+        var numOfDays = dayPerMonth[month];
+
+        // this leave a white space for days of pervious month.
+        while (weekdays > 0) {
+            htmlContent += "<td class='monthPre'></td>";
+
+            // used in next loop.
+            weekdays--;
+        }
+
+        // loop to build the calander body.
+        while (counter <= numOfDays) {
+
+
+            // When to start new line.
+            if (weekdays2 > 6) {
+                weekdays2 = 0;
+                htmlContent += "</tr><tr class='dayNum'>";
+            }
+
+            // if counter is current day.
+            // highlight current day using the CSS defined in header.
+            if (counter == day) {
+                htmlContent += "<td class='dayNow'><span class='day'>" + counter + "</span>";
+                if (dateString.indexOf(day) != -1) {
+                    htmlContent += "<span id=\"haveDate\"><img height=8px weight=8px src=\"image/date_on.png\"</span></td>";
+                }
+                else{
+                    htmlContent += "</td>";
+                }
+            } else {
+                htmlContent += "<td class='monthNow'><span class='day'>" + counter + "</span>";
+                if (dateString.indexOf(day) != -1) {
+                    htmlContent += "<span id=\"haveDate\"><img height=8px weight=8px src=\"image/date_on.png\"></span></td>";
+                }
+                else{
+                    htmlContent += "</td>";
+                }
+            }
+
+            weekdays2++;
+            counter++;
+        }
+
+        // building the calendar html body.
+        var calendarBody = "<table class='calendar'> <tr class='monthNow'>" +
+            "<th colspan='7'><button type='button' class='preMon' onclick='moveCalendar(-1)'><</button><span id='year'>" + year +
+            "</span>" + "." + "<span id='month'>" + monthNames[month] + "</span>" + "</span><button type='button' class='nextMon' onclick='moveCalendar(1)'>></button></th></tr>";
+        calendarBody += "<tr class='dayNames'>  <td>Sun</td>  <td>Mon</td> <td>Tue</td>" +
+            "<td>Wed</td> <td>Thu</td> <td>Fri</td> <td>Sat</td> </tr>";
+        calendarBody += "<tr class='dayNum'>";
+        calendarBody += htmlContent;
+        calendarBody += "</tr></table>";
+        // set the content of div.
+        document.getElementById("calendar-wrapper").innerHTML = calendarBody;
+    }
+
+    function moveCalendar(moveMonth) {
+        //alert("Yong");
+        var year = parseInt(document.getElementById('year').innerText);
+        var month = parseInt(document.getElementById('month').innerText) - 1;
+        var day = parseInt(document.getElementsByClassName('dayNow').innerText) ;
+
+        displayCalendar(moveMonth, year, month, day);
+    }
+
+    var dateList = new Array();
+    var dateString ="";
+
+    //Calendar 정보 불러오기
+    function loadCalendarList(response){
+        var i;
+        var end_date;
+
+        for (i in response) {
+            end_date = response[i].card_end_date.toString().substr(8, 2);
+            dateList[i] = end_date;
+            dateString += end_date + " ";
+        }
+    }
+
 </script>
 
 </body>
