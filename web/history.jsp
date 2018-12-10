@@ -42,9 +42,8 @@
 </header>
 
 <section class="sub-header">
-    <span class="board-name">NanSsoGong</span>
-    <img src="image/post_it_on.png" class="post-it">
-    <a href ="calendar.jsp"><img  src="image/calendar_off.png" class="calendar"></a>
+    <span id='board-name' class="board-name">NanSsoGong</span>
+    <a href="board.jsp"><img src="image/post_it_off.png" class="post-it"></a>
 </section>
 
 <main>
@@ -64,13 +63,18 @@
     //추가했습니다////필요합니다////
     var token = sessionStorage.getItem("user_token");
     var user_name = sessionStorage.getItem("user_name");
+    var board_name = sessionStorage.getItem("board_name");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/history/';
     var parm_board = sessionStorage.getItem("board_idx");
     //var parm_board = 1;
     myUrl = myUrl + parm_board;
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
+        setBoardName();
     });
+    function setBoardName() {
+        document.getElementById('board-name').innerText = board_name;
+    }
     document.getElementById('user-name-label').innerText = user_name;
     //$('#user-name-label').innerText = user_name;
     //alert($('#user-name-label').innerText);

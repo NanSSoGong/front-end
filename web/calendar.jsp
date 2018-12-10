@@ -423,13 +423,13 @@
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="#" onclick="logout()" class="user-box text"><span id="user-name" class="user-name"></span></a>
-        <a href="#" onclick="logout()" class="user-box image"><img src="image/user.png" class="user-image"></a>
+        <a href="logout.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
+        <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
 
 <section class="sub-header">
-    <span class="board-name">NanSsoGong</span>
+    <span id="board-name" class="board-name"></span>
     <a href="board.jsp"><img src="image/post_it_off.png" class="post-it"></a>
     <a href ="calendar.jsp"><img src="image/calendar_on.png" class="calendar-img"></a>
     <img src="image/delete.png" class="settings-menu">
@@ -485,6 +485,7 @@
 <script>
     var token = sessionStorage.getItem("user_token");
     var user_name = sessionStorage.getItem("user_name");
+    var board_name = sessionStorage.getItem("board_name");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calender';
 
     var dateList = new Array();
@@ -495,6 +496,8 @@
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
+        setUserName();
+        setBoardName();
     });
 
     var getJson = function(method, url, body, callback) {
@@ -517,6 +520,9 @@
     /* 유저 이름 설정 */
     function setUserName() {
         document.getElementById('user-name').innerText = user_name;
+    }
+    function setBoardName() {
+        document.getElementById('board-name').innerText = board_name;
     }
 
     //캘린더 페이지 불러오기

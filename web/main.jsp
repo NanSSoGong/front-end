@@ -42,6 +42,7 @@
             margin-bottom: 50px;
         }
         .d-day-list {
+            margin-top: 200px;
             position: absolute;
             top: 530px;
             left: calc(50% - 300px);
@@ -336,8 +337,8 @@
 
     /* d-day style 적용하기 */
     function setDdayStyle(d_day) {
-        if(d_day >= 0 && d_day <= 3) return ("<span class='d-day-number' style='color:#F02E0B;'>D" + d_day + "</span>");
-        else return ("<span class='d-day-number' style='color:#4F61F0;'>D" + d_day + "</span>");
+        if(d_day >= 0 && d_day <= 3) return ("<span class='d-day-number' style='color:#F02E0B;'>D-" + d_day + "</span>");
+        else return ("<span class='d-day-number' style='color:#4F61F0;'>D-" + d_day + "</span>");
     }
 
     function dayCount(day) {
