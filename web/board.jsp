@@ -680,7 +680,7 @@
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="logout.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
+        <a href="logout.jsp" class="user-box text"><span id="user-name" class="user-name"></span></a>
         <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
@@ -689,22 +689,11 @@
     <img src="image/post_it_on.png" class="post-it">
     <a href ="calendar.jsp"><img  src="image/calendar_off.png" class="calendar"></a>
     <img src="image/more.png" class="more-menu" onclick="document.getElementById('more-menu-modal').style.display='block'">
-    <img src="image/delete.png" class="settings-menu">
+    <img src="image/delete.png" class="settings-menu" onclick="deleteBoard();">
 </section>
 <main>
     <div id="list">
-        <div id="listName1" class="list sortable">
-            <div class="list-header">
-                <span class="list-name">To Do</span>
-                <a href="#" class="list-tool-button-box"><img width="8px" height="8px" src="image/multiply.png" class="list-tool-box"></a>
-            </div>
-            <ul class="list-contents">
-                <li class="card"><span>Card1</span><img src="/image/star_off.png"  class="star-before"></li>
-                <li class="card"><span>Card2</span><img src="/image/star_off.png"  class="star-before"></li>
-            </ul>
-            <img src="image/plus.png" class="open-add-card-modal">
-        </div>
-
+        <%-- List UI --%>
     </div>
 </main>
 
@@ -834,8 +823,9 @@
 
 <script>
     var token = sessionStorage.getItem("user_token");
+    var user_name = sessionStorage.getItem("user_name");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
-    //var myUrl = 'http://localhost:3000/api/';
+
     var board_data = {
         board_idx : -1,
         board_name : '',
@@ -848,6 +838,7 @@
         if(!token) location.replace("index.jsp");
         loadData();
         setBackgroundColor(board_data.board_background);
+        setUserName();
     });
 
     var getJson = function(method, url, body, callback) {
@@ -868,6 +859,11 @@
         }
 
     };
+
+    /* 유저 이름 설정 */
+    function setUserName() {
+        document.getElementById('user-name').innerText = user_name;
+    }
 
     function setBackgroundColor(color) {
         var bg = document.getElementById("list");
@@ -1469,11 +1465,10 @@
     };
 
     function hrefHistory() {
-
         sessionStorage.setItem("board_idx", board_data.board_idx);
         sessionStorage.setItem("board_name", board_data.board_name);
         sessionStorage.setItem("board_background", board_data.board_background);
-
+        alert(sessionStorage.getItem("board_idx"));
         location.href = "history.jsp";
     }
 

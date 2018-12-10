@@ -1,8 +1,8 @@
 function displayCalendar(moveMonth, curYear, curMonth, curDay) {
 
-    alert("ddi");
+    //alert("ddi");
 
-    loadPage();
+    //loadPage();
     var htmlContent = "";
     var FebNumberOfDays = "";
     var counter = 1;
@@ -108,13 +108,12 @@ function displayCalendar(moveMonth, curYear, curMonth, curDay) {
 }
 
 function moveCalendar(moveMonth) {
-    alert("Yong");
+    //alert("Yong");
     var year = parseInt(document.getElementById('year').innerText);
     var month = parseInt(document.getElementById('month').innerText) - 1;
     var day = parseInt(document.getElementsByClassName('dayNow').innerText) ;
 
     displayCalendar(moveMonth, year, month, day);
-
 }
 /*
    <td class='dayNow' onMouseOver='this.style.background=\"#FF0000\"; this.style.color=\"#FFFFFF\"' " +
@@ -126,15 +125,10 @@ function moveCalendar(moveMonth) {
 
 
 //추가했습니다////필요합니다////
-var token = sessionStorage.getItem("user_token");
-var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
-var user_idx = sessionStorage.getItem("user_idx");
-var user_name = sessionStorage.getItem("user_name");
-
-$(document).ready(function() {
-    if(!token) location.replace("index.jsp");
-    alert(user_idx);
-});
+/*    var token = sessionStorage.getItem("user_token");
+    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+    var user_idx = sessionStorage.getItem("user_idx");
+    var user_name = sessionStorage.getItem("user_name");*/
 
 var getJson = function(method, url, body, callback) {
     var xhr = new XMLHttpRequest();
@@ -153,26 +147,23 @@ var getJson = function(method, url, body, callback) {
     else xhr.send();
 };
 
-// 메인페이지 로드
-function loadPage() {
+/*    // 메인페이지 로드
+    function loadPage() {
+        var calUrl = myUrl + "calender/emergency/" + user_idx + "/1";
+        var body = "";
 
-    alert("Yeji");
-
-    var calUrl = myUrl + "/emergency/" + user_idx + "/1";
-    var body = "";
-
-    getJson('GET', calUrl, body, function (status, response) {
-        if (status == 201) { // 성공
-            loadCalendarList(response.data);
-        }
-        else { // 실패
-            alert("D-Day 로드 실패");
-        }
-    });
-
+        getJson('GET', calUrl, body, function (status, response) {
+            if (status == 201) { // 성공
+                loadCalendarList(response.data);
+            }
+            else { // 실패
+                alert("D-Day 로드 실패");
+                alert(status);
+            }
+        });
+    }*/
 
 
-}
 
 
 var dateList = new Array();
@@ -182,7 +173,6 @@ var dateString ="";
 function loadCalendarList(response){
     var i;
     var end_date;
-    alert("Yejiii");
 
     for (i in response) {
         end_date = response[i].card_end_date.toString().substr(8, 2);
