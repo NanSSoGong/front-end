@@ -567,7 +567,8 @@
             top: calc(50% - 160px);
             left: calc(50% - 365px);
             width: 730px;
-            height: 320px;
+            height: auto;
+            min-height: 320px;
             border: 0;
             border-radius: 5px;
             padding: 10px 20px 10px 20px;
@@ -610,17 +611,21 @@
             cursor: pointer;
         }
         .user-invite-ok-button {
-            position:absolute;
             background: #707070;
             width: 250px;
             height: 50px;
-            bottom: 35px;
-            left: calc(50% - 125px);
+            margin: 0 0 10px calc(50% - 125px);
             border: 0;
             border-radius: 5px;
             font-size: 20px;
             color: #FFFFFF;
             cursor: pointer;
+        }
+        #user-list {
+            display:block;
+            width: 632px;
+            height: auto;
+            margin:10px 0 0 37px;
         }
 
         /* 브라우저 별 호환성 확인 */
@@ -675,8 +680,8 @@
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="logout.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
-        <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
+        <a href="#" onclick="logout()" class="user-box text"><span id="user-name" class="user-name"></span></a>
+        <a href="#" onclick="logout()" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
 <section class="sub-header">
@@ -684,22 +689,11 @@
     <img src="image/post_it_on.png" class="post-it">
     <a href ="calendar.jsp"><img  src="image/calendar_off.png" class="calendar"></a>
     <img src="image/more.png" class="more-menu" onclick="document.getElementById('more-menu-modal').style.display='block'">
-    <img src="image/delete.png" class="settings-menu">
+    <img src="image/delete.png" class="settings-menu" onclick="deleteBoard();">
 </section>
 <main>
     <div id="list">
-        <div id="listName1" class="list sortable">
-            <div class="list-header">
-                <span class="list-name">To Do</span>
-                <a href="#" class="list-tool-button-box"><img width="8px" height="8px" src="image/multiply.png" class="list-tool-box"></a>
-            </div>
-            <ul class="list-contents">
-                <li class="card"><span>Card1</span><img src="/image/star_off.png"  class="star-before"></li>
-                <li class="card"><span>Card2</span><img src="/image/star_off.png"  class="star-before"></li>
-            </ul>
-            <img src="image/plus.png" class="open-add-card-modal">
-        </div>
-
+        <%-- List UI --%>
     </div>
 </main>
 
@@ -727,7 +721,7 @@
             <div class="card-modal-header">
                 <span class="modal-header-name">Create a Card</span>
                 <img src="image/multiply.png" class="modal-close-button card-close-button" onclick="document.getElementById('add-card-modal').style.display='none'">
-                <img src="image/star_off.png" class="modal-cardStar" id="cardStar" alt="off">
+                <img src="image/star_off.png" class="modal-cardStar" id="cardStar" alt="0">
             </div>
             <hr style="width: 702px; border: 0; border-top:1px solid rgba(112, 112, 112, 0.5);">
             <div class="container">
@@ -760,7 +754,7 @@
                 <span class="card-container-duedate">Due Date</span>
                 <div id='edit-duedate'><script type="text/javascript">Today('null','null','null');</script></div>
             </div>
-            <button class="edit-card-button" type="button" onclick='editCard()'>create</button>
+            <button class="edit-card-button" type="button">create</button>
         </form>
     </div>
     <div id="more-menu-modal">
@@ -794,6 +788,7 @@
                 <input type="text" class="invite-user-name" name="invite-user-text" placeholder="      search by user ID">
                 <button type="button" class="user-invite-button" id="invite-user-button">invite</button>
             </div>
+            <ul id="user-list"></ul>
             <button type="button" class="user-invite-ok-button" id = "send-invite-user" onclick="linkBoard()">OK</button>
         </form>
     </div>
@@ -828,8 +823,9 @@
 
 <script>
     var token = sessionStorage.getItem("user_token");
+    var user_name = sessionStorage.getItem("user_name");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
-    //var myUrl = 'http://localhost:3000/api/';
+
     var board_data = {
         board_idx : -1,
         board_name : '',
@@ -842,6 +838,7 @@
         if(!token) location.replace("index.jsp");
         loadData();
         setBackgroundColor(board_data.board_background);
+        setUserName();
     });
 
     var getJson = function(method, url, body, callback) {
@@ -862,6 +859,11 @@
         }
 
     };
+
+    /* 유저 이름 설정 */
+    function setUserName() {
+        document.getElementById('user-name').innerText = user_name;
+    }
 
     function setBackgroundColor(color) {
         var bg = document.getElementById("list");
@@ -982,8 +984,10 @@
         var ori_list_idx = sessionStorage.getItem("selectList_idx");
         var card_idx = sessionStorage.getItem("selectCard_idx");
 
-        //editCard(ori_list_idx, null, card_idx);
-        //document.getElementById('edit-card-modal-contents').reset();
+        if(ori_list_idx != null) {
+            editCard(ori_list_idx, ori_list_idx, card_idx);
+        }
+        document.getElementById('edit-card-modal-contents').reset();
         document.getElementById('edit-card-modal').style.display='none'
     });
     /*카드가 리스트 사이를 이동 할 때 카드의 소속 리스트 수정*/
@@ -994,26 +998,53 @@
 
         var new_list_idx = $(".ui-sortable-placeholder").parent().parent().attr('id');
         if(new_list_idx != null) {
-            editCard(list_idx ,new_list_idx, card_idx);
+            editCard(list_idx, new_list_idx, card_idx);
         }
     });
     /*중요도 표시*/
     $(document).on("click", ".cardStar", function() {
-        var curAlt = $(this).attr('alt');
+        var changeMarkUrl = myUrl + "calender";
+        var selectCard = this;
+        var curCardMark = $(this).attr('alt');
+        var cardName = $(this).prev().text();
+        var body = {
+            "card_name": cardName,
+            "card_mark": curCardMark
+        };
 
-        if(curAlt == 'off') {
+        getJson('PUT', changeMarkUrl, body, function (status, response) {
+            if(status == 201) { // 성공
+                if(curCardMark == '0') {
+                    selectCard.setAttribute('src', '/image/star_on.png');
+                    selectCard.setAttribute('alt', '1');
+                    //$(this).parent().css("border", "2px solid yellow")
+                }
+                else {
+                    selectCard.setAttribute('src', '/image/star_off.png');
+                    selectCard.setAttribute('alt', '0');
+                    //$(this).parent().css("border", "0")
+                }
+            }
+            else {
+                alert('중요도 수정 실패 ' + status);
+            }
+        });
+    });
+    /* 카드 만들때 중요도 표시 */
+    $(".modal-cardStar").on("click", function() {
+        var curCardMark = $(this).attr('alt');
+
+        if(curCardMark == '0') {
             $(this).attr('src', '/image/star_on.png');
-            $(this).attr('alt', 'on');
-            $(this).parent().css("border", "2px solid yellow")
+            $(this).attr('alt', '1');
+            //$(this).parent().css("border", "2px solid yellow")
         }
         else {
-            $(this).attr('src', 'http://localhost:8080/image/star_off.png');
-            $(this).attr('alt', 'off');
-            $(this).parent().css("border", "0")
+            $(this).attr('src', '/image/star_off.png');
+            $(this).attr('alt', '0');
+            //$(this).parent().css("border", "0")
         }
     });
-
-
 
     function List(list_idx, list_name, list_position_x, list_position_y) {
         return {
@@ -1041,18 +1072,12 @@
         return board_data.board_idx != -1;
     }
 
-</script>
-
-<script>
-    var token = sessionStorage.getItem("user_token");
-    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
-
     function loadData() {
         board_data.board_idx = sessionStorage.getItem("board_idx");
         board_data.board_name = sessionStorage.getItem("board_name");
         board_data.board_background = sessionStorage.getItem("board_background");
         board_data.board_master = sessionStorage.getItem("board_master");
-        alert('board_idx : ' + board_data.board_idx + ', board_name : ' + board_data.board_name + ', board_background : ' + board_data.board_background + ', board_master : ' + board_data.board_master);
+        //alert('board_idx : ' + board_data.board_idx + ', board_name : ' + board_data.board_name + ', board_background : ' + board_data.board_background + ', board_master : ' + board_data.board_master);
 
         getListAndCard();
     };
@@ -1100,20 +1125,24 @@
                     if(card.card_mark == 0) {
                         str += "<li id='" + list.list_idx.toString() + "-" + card.card_idx + "' class='card' alt='off'><span class='card_idx' style='display: none;'>" + card.card_idx +
                             "</span><span class='card-name'>" + card.card_name +
-                            "</span><img src='/image/star_off.png' class='cardStar' alt='off'></li>";
+                            "</span><img src='/image/star_off.png' class='cardStar' alt='0'></li>";
                     }
                     else {
-                        str += "<li id='" + list.list_idx.toString() + "-" + card.card_idx + "' class='card' alt='off'><span class='card_idx' style='display: none;'>" + card.card_idx +
+                        str += "<li id='" + list.list_idx.toString() + "-" + card.card_idx + "' class='card' alt='on'><span class='card_idx' style='display: none;'>" + card.card_idx +
                             "</span><span class='card-name'>" + card.card_name +
-                            "</span><img src='/image/star_on.png' class='cardStar' alt='on'></li>";
+                            "</span style=><img src='/image/star_on.png' class='cardStar' alt='1'></li>";
                     }
                 }
             });
             /*onclick='changeStar(\""+ card.card_name +"\", "+ card.card_idx +")'*/
             str += "</ul><img src='image/plus.png' class='open-add-card-modal'></div>";
         });
-
         document.getElementById('list').innerHTML = str;
+
+        var cardStar = $(".cardStar");
+        if(cardStar.attr('alt') == 'on') {
+            cardStar.parent().css("border", "2px solid yellow");
+        }
     }
 
     function addList(list_position_x, list_position_y, list_name) {
@@ -1228,14 +1257,13 @@
         var f = document.forms['addCardForm'];
         var card_end_date = f['year'].value + "-" + f['month'].value + "-" + f['day'].value;
         var card_order = clicked_list.children.length + 1;
-
-        //var list_idx = 2;
+        var card_mark = $(".modal-cardStar").attr('alt');
         var body = {
             card_name: card_name,
             card_end_date: card_end_date,
             card_order: card_order,
             card_content: card_content,
-            card_mark: 1
+            card_mark: card_mark
         };
 
         getJson('POST', myUrl.concat('card/', board_data.board_idx, '/', list_idx.toString()), body, function (status, response) {
@@ -1250,9 +1278,19 @@
                     }
                 });
                 //카드 추가 UI 구현
-                $(clicked_list).append("<li id='"+ list_idx.toString() +"-"+ response.card_idx +"' class='card'><span class='card_idx' style='display: none;'>" + response.card_idx +
-                    "</span><span class='card-name'>" + card_name +
-                    "</span><img src='/image/star_off.png' class='cardStar'></li>");
+                if(card_mark == 0) {
+                    $(clicked_list).append("<li id='" + list_idx.toString() + "-" + response.card_idx + "' class='card'><span class='card_idx' style='display: none;'>" + response.card_idx +
+                        "</span><span class='card-name'>" + card_name +
+                        "</span><img src='/image/star_off.png' class='cardStar' alt='0'></li>");
+                }
+                else if(card_mark == 1) {
+                    $(clicked_list).append("<li id='" + list_idx.toString() + "-" + response.card_idx + "' class='card'><span class='card_idx' style='display: none;'>" + response.card_idx +
+                        "</span><span class='card-name'>" + card_name +
+                        "</span><img src='/image/star_on.png' class='cardStar' alt='1'></li>");
+                }
+                else {
+                    alert("잘못된 중요도 값입니다.");
+                }
             }
             else {
                 alert('카드를 추가할 수 없습니다.');
@@ -1265,19 +1303,24 @@
 
     function editCard(ori_list_idx, new_list_idx, card_idx) {
         if(!checkValidation() || !ori_list_idx || !new_list_idx) { alert('유효하지 않은 접근입니다.'); return false; }
+
         var i;
         var select_list = document.getElementById(new_list_idx).children[2];
         var order_class, card_order = 1;
-        var countCard = select_list.children.length + 1;
+        var orderCard = select_list.children.length + 1;
         for(i=0; i< select_list.children.length; i++ ) {
             order_class = document.getElementById(new_list_idx).children[2].children[i].getAttribute('class');
             if(order_class == 'ui-sortable-placeholder card ui-sortable-handle') {
                 card_order = i+1; break;
             }
+            else {
+                //card_order =
+            }
         }
 
         var body = {
-            card_idx : new_list_idx,
+            new_list_idx : new_list_idx,
+            card_idx : card_idx,
             card_name: '',
             card_end_date: '2018-12-06',
             card_order: card_order,
@@ -1304,10 +1347,9 @@
                 });
             }
         });
-alert(body.card_name+" "+body.card_end_date+" "+body.card_content +""+ body.card_mark+" "+body.card_order);
+//alert(body.list_idx+ " "+body.card_name+" "+body.card_end_date+" "+body.card_content +" "+ body.card_mark+" "+body.card_order);
         getJson('PUT', myUrl.concat('card/', board_data.board_idx, '/', ori_list_idx.toString(), '/', body.card_idx), body, function (status, response) {
-            if(status == 201) { // 성공
-
+                if(status == 201) { // 성공
                 var card = null;
                 list_data.some(function (list) {
                     if(list.list_idx == ori_list_idx)
@@ -1397,6 +1439,7 @@ alert(body.card_name+" "+body.card_end_date+" "+body.card_content +""+ body.card
     };
 
     var userBackGroundArray = new Array(15);
+
     function searchUser(id) {
         if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
         var body = {
@@ -1411,7 +1454,7 @@ alert(body.card_name+" "+body.card_end_date+" "+body.card_content +""+ body.card
                 response.data.forEach(function(item, index){
                     str = (index + 1) + ')  ' + item.user_name;
                     var userindex = item.user_idx;
-                    userList +="<div type=\"button\" name=\"user-invite-list\" style=\"background-color: white\"  onclick=\"changeBackground(this)\" id=\""+ userindex + "\"><font color=\"#707070\" size=\"3px\">"+str + "</font></div><br>";
+                    userList +="<div class = '' type=\"button\" name=\"user-invite-list\" style=\"background-color: white\"  onclick=\"changeBackground(this)\" id=\""+ userindex + "\"><font color=\"#707070\" size=\"3px\">"+str + "</font></div><br>";
                     userBackGroundArray[userindex] = 0;
                 });
                 document.getElementById('user-list').innerHTML = userList;
@@ -1456,17 +1499,24 @@ alert(body.card_name+" "+body.card_end_date+" "+body.card_content +""+ body.card
     };
 
     function hrefHistory() {
-
         sessionStorage.setItem("board_idx", board_data.board_idx);
         sessionStorage.setItem("board_name", board_data.board_name);
         sessionStorage.setItem("board_background", board_data.board_background);
-
+        alert(sessionStorage.getItem("board_idx"));
         location.href = "history.jsp";
     }
 
     function closeModal(obj) {
         obj.parentElement.parentElement.parentElement.style.display = 'none'; // modal창 최상위 div
         obj.parentElement.parentElement.reset(); // form reset
+    }
+
+    function logout(){
+        var r = confirm("로그아웃 하시겠습니까?");
+        if (r == true) {
+            sessionStorage.clear();
+            location.replace("index.jsp");
+        }
     }
 </script>
 

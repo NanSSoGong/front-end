@@ -423,8 +423,8 @@
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="logout.jsp" class="user-box text"><span class="user-name">amoogae</span></a>
-        <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
+        <a href="#" onclick="logout()" class="user-box text"><span id="user-name" class="user-name"></span></a>
+        <a href="#" onclick="logout()" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
 
@@ -483,31 +483,8 @@
 </main>
 
 <script>
-
-
-    /*
-    if (!(request.getParameter("action") == null)) // Have the calendar up or down in this if block
-    {
-        currMonth = Integer.parseInt(request.getParameter("month"));
-        currYear = Integer.parseInt(request.getParameter("year"));
-
-        if (Integer.parseInt( request.getParameter("action")) == 1 ) {
-            cal.set(currYear, currMonth, 1);
-            cal.add(cal.MONTH, 1);
-            currMonth = cal.get(cal.MONTH);
-            currYear = cal.get(cal.YEAR);
-        } else {
-            cal.set(currYear, currMonth ,1);
-            cal.add(cal.MONTH, -1);
-            currMonth = cal.get(cal.MONTH);
-            currYear = cal.get(cal.YEAR);
-        }
-    }
-    */
-
-
-    //var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NDM4MTg1NzQsImV4cCI6MTU0NjQxMDU3NH0.fGAuub9Qean8dXUUEmfldjlQ4a7nxe09-buwFQzwv-w";
     var token = sessionStorage.getItem("user_token");
+    var user_name = sessionStorage.getItem("user_name");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calender';
 
     var dateList = new Array();
@@ -537,6 +514,10 @@
         else xhr.send();
     };
 
+    /* 유저 이름 설정 */
+    function setUserName() {
+        document.getElementById('user-name').innerText = user_name;
+    }
 
     //캘린더 페이지 불러오기
     function loadCalendar(){
@@ -545,8 +526,8 @@
 
         myUrl="http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calender";
 
-        var calUrl = myUrl + "/emergency/" + user_idx + "/1";
-        //var calUrl = myUrl + "/emergency/" + user_idx + "/" + board_idx;    // "/user_idx/board_idx"
+        //var calUrl = myUrl + "/emergency/" + user_idx + "/1";
+        var calUrl = myUrl + "/emergency/" + user_idx + "/" + board_idx;    // "/user_idx/board_idx"
         var body = "";
 
         getJson('GET', calUrl, body, function (status, response) {
@@ -718,7 +699,13 @@
         })
     }
 
-
+    function logout(){
+        var r = confirm("로그아웃 하시겠습니까?");
+        if (r == true) {
+            sessionStorage.clear();
+            location.replace("index.jsp");
+        }
+    }
 
 </script>
 

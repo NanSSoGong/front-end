@@ -157,7 +157,7 @@ header {
     top: calc(50% - 300px);
     left: calc(50% - 400px);
     width: 800px;
-    height: 600px;
+    height: 480px;
     border: 1px solid #707070;
     border-radius: 5px;
     padding: 10px 20px 10px 20px;
@@ -260,7 +260,8 @@ header {
     position: absolute;
     left: calc(50% - 300px);
     width:600px;
-    height: 320px;
+    min-height: 320px;
+    height: auto;
     padding: 40px;
     margin: 0 0 53px 0;
     text-align: center;
@@ -270,6 +271,7 @@ header {
     margin-bottom: 53px;
 }
 .today .today-header {
+    display: block;
     font-family:"NanumSquare Regular";
     font-size: 33px;
 }
@@ -294,10 +296,12 @@ header {
     box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1), 1px 1px 10px 0 rgba(0, 0, 0, 0.16);
 }
 .card-header {
-    width: 500px;
+    max-width: 450px;
+    width: 450px;
     height: 27px;
 }
 .board-name {
+    max-width: 120px;
     font-family:"NanumSquare Regular";
     font-size: 25px;
 }
@@ -307,11 +311,15 @@ header {
 }
 .list-name {
     display: inline-block;
+    max-width: 120px;
     width: 296px;
     font-family:"NanumSquare Regular";
     font-size: 25px;
 }
 .d-day-number {
+    position: absolute;
+    top: 28px;
+    right: 48px;
     font-family:"NanumSquare Bold";
     font-size: 22px;
     color: #F02E0B;
