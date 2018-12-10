@@ -291,6 +291,7 @@
 <script>
     var token = sessionStorage.getItem("user_token");
     var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
+    //var myUrl = 'http://localhost:3000/api/';
     var user_idx = sessionStorage.getItem("user_idx");
     var user_name = sessionStorage.getItem("user_name");
     var dateToday = "";
@@ -299,6 +300,7 @@
 
     $(document).ready(function() {
         if(!token) location.replace("index.jsp");
+        document.createBoardForm.boardColor.value = 0;
         loadPage();
         setUserName();
         setToday();
@@ -335,8 +337,8 @@
 
     /* d-day style 적용하기 */
     function setDdayStyle(d_day) {
-        if(d_day >= 0 && d_day <= 3) return ("<span class='d-day-number' style='color:#F02E0B;'>D-" + d_day + "</span>");
-        else return ("<span class='d-day-number' style='color:#4F61F0;'>D-" + d_day + "</span>");
+        if(d_day >= 0 && d_day <= 3) return ("<span class='d-day-number' style='color:#F02E0B;'>D" + d_day + "</span>");
+        else return ("<span class='d-day-number' style='color:#4F61F0;'>D" + d_day + "</span>");
     }
 
     function dayCount(day) {
@@ -351,15 +353,15 @@
         loadBoardList();
         loadCardList();
 
-/*        getJson('GET', calendarUrl, body, function (status, response) {
-            if (status == 201) { // 성공
-                displayCalendar(0);
-                //loadCalendar(response.data);
-            }
-            else { // 실패
-                alert("캘린더 로드 실패");
-            }
-        });*/
+        /*        getJson('GET', calendarUrl, body, function (status, response) {
+                    if (status == 201) { // 성공
+                        displayCalendar(0);
+                        //loadCalendar(response.data);
+                    }
+                    else { // 실패
+                        alert("캘린더 로드 실패");
+                    }
+                });*/
     }
 
     /* 보드 리스트 불러오기 */
@@ -380,7 +382,7 @@
                 document.getElementById('board-list').innerHTML = boardList;
             }
             else { // 실패
-                alert("board 로드 실패");
+                alert("보드를 불러올 수 없습니다.");
             }
         });
     }
@@ -433,7 +435,7 @@
                 document.getElementById('d-day-wrapper').innerHTML = cardList;
             }
             else { // 실패
-                alert("카드 로드 실패");
+                alert("카드를 불러올 수 없습니다.");
             }
         });
     }
@@ -465,13 +467,20 @@
 
         getJson('POST', createBoardUrl, body, function (status, response) {
             if (status == 201) { // 성공
-                //loadBoardList();
-                $("#board-list").append("<li class='board-li'><a href='board.jsp' class='board-a'><span>-</span><span>" + body.board_name + "</span><span id='board-idx' style='display:none;'>" + "" +
-                    "</span><span id='board-color' style='display: none'>" + boardColor + "</span></a></li>");
+                $("#board-list").append("<li class='board-li'><a class='board-a'><span>-</span><span>" + boardName +
+                    "</span><span id='board-idx' style='display:none;'>" + response.board_idx +
+                    "</span><span id='board-color' style='display: none;'>" + boardColor +
+                    "</span><span id='board-master' style='display: none;'>" + 1 + "</span></a></li>");
+            }
+            else if (status == 400) { // 중복된 보드
+                alert("이미 존재하는 보드입니다.");
             }
             else { // 실패
-                alert("board 로드 실패");
+                alert("보드를 생성할 수 없습니다.");
             }
+
+            f.boardName.value = "";
+            f.boardColor.value = 0;
         });
 
         document.getElementById('create-board-modal').style.display = "none";
@@ -479,31 +488,162 @@
 
     //클릭했을 때 idx와 name 저장 이벤트 재등록
     $(document).on("click",".board-a", function() {
+
         var b = $(this).children();
         var board_name = b[1].innerText;
         var board_idx = b[2].innerText;
         var board_background = b[3].innerText;
+        var board_master = b[4].innerText;
 
         sessionStorage.setItem("board_name", board_name);
         sessionStorage.setItem("board_idx", board_idx);
         sessionStorage.setItem("board_background", board_background);
-        sessionStorage.setItem("board_master", "1");
+        sessionStorage.setItem("board_master", board_master);
 
-        location.replace("board.jsp");
+        location.href = "board.jsp";
     });
 
     function logout(){
         var r = confirm("로그아웃 하시겠습니까?");
         if (r == true) {
             sessionStorage.clear();
-            location.replace("index.jsp");
+            location.href = "index.jsp";
         }
     }
-</script>
 
-<%-- display-calendar --%>
-<script>
+    <%-- display-calendar --%>
+    function displayCalendar(moveMonth, curYear, curMonth, curDay) {
 
+        //alert("ddi");
+
+        //loadPage();
+        var htmlContent = "";
+        var FebNumberOfDays = "";
+        var counter = 1;
+
+        var dateNow;
+        if(curYear != null && curMonth != null) {
+            dateNow = new Date(curYear, curMonth);
+        }
+        else {
+            dateNow = new Date();
+        }
+        var year = dateNow.getFullYear();
+        var month = dateNow.getMonth() + moveMonth;
+        var day = dateNow.getDate();
+
+        // 년도 넘어갈 때
+        if(month == 12) {
+            month = 0;
+            year += 1;
+        }
+        else if(month <= -1) {
+            month = 11;
+            year -= 1;
+        }
+
+        var nextMonth = month + 1; // getMonth()는 0~11
+
+        // 윤달 구하기
+        if (month == 1) {
+            if ((year % 100 != 0) && (year % 4 == 0) || (year % 400 == 0)) {
+                FebNumberOfDays = 29;
+            } else {
+                FebNumberOfDays = 28;
+
+            }
+        }
+
+        // names of months and week days.
+        var monthNames = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+        var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        var dayPerMonth = ["31", "" + FebNumberOfDays + "", "31", "30", "31", "30", "31", "31", "30", "31", "30", "31"]
+
+
+        // days in previous month and next one , and day of week.
+        var nextDate = new Date(nextMonth + ' 1 ,' + year);
+        var weekdays = nextDate.getDay();
+        var weekdays2 = weekdays
+        var numOfDays = dayPerMonth[month];
+
+        // this leave a white space for days of pervious month.
+        while (weekdays > 0) {
+            htmlContent += "<td class='monthPre'></td>";
+
+            // used in next loop.
+            weekdays--;
+        }
+
+        // loop to build the calander body.
+        while (counter <= numOfDays) {
+
+
+            // When to start new line.
+            if (weekdays2 > 6) {
+                weekdays2 = 0;
+                htmlContent += "</tr><tr class='dayNum'>";
+            }
+
+            // if counter is current day.
+            // highlight current day using the CSS defined in header.
+            if (counter == day) {
+                htmlContent += "<td class='dayNow'><span class='day'>" + counter + "</span>";
+                if (dateString.indexOf(day) != -1) {
+                    htmlContent += "<span id=\"haveDate\"><img height=8px weight=8px src=\"image/date_on.png\"</span></td>";
+                }
+                else{
+                    htmlContent += "</td>";
+                }
+            } else {
+                htmlContent += "<td class='monthNow'><span class='day'>" + counter + "</span>";
+                if (dateString.indexOf(day) != -1) {
+                    htmlContent += "<span id=\"haveDate\"><img height=8px weight=8px src=\"image/date_on.png\"></span></td>";
+                }
+                else{
+                    htmlContent += "</td>";
+                }
+            }
+
+            weekdays2++;
+            counter++;
+        }
+
+        // building the calendar html body.
+        var calendarBody = "<table class='calendar'> <tr class='monthNow'>" +
+            "<th colspan='7'><button type='button' class='preMon' onclick='moveCalendar(-1)'><</button><span id='year'>" + year +
+            "</span>" + "." + "<span id='month'>" + monthNames[month] + "</span>" + "</span><button type='button' class='nextMon' onclick='moveCalendar(1)'>></button></th></tr>";
+        calendarBody += "<tr class='dayNames'>  <td>Sun</td>  <td>Mon</td> <td>Tue</td>" +
+            "<td>Wed</td> <td>Thu</td> <td>Fri</td> <td>Sat</td> </tr>";
+        calendarBody += "<tr class='dayNum'>";
+        calendarBody += htmlContent;
+        calendarBody += "</tr></table>";
+        // set the content of div.
+        document.getElementById("calendar-wrapper").innerHTML = calendarBody;
+    }
+
+    function moveCalendar(moveMonth) {
+        //alert("Yong");
+        var year = parseInt(document.getElementById('year').innerText);
+        var month = parseInt(document.getElementById('month').innerText) - 1;
+        var day = parseInt(document.getElementsByClassName('dayNow').innerText) ;
+
+        displayCalendar(moveMonth, year, month, day);
+    }
+
+    var dateList = new Array();
+    var dateString ="";
+
+    //Calendar 정보 불러오기
+    function loadCalendarList(response){
+        var i;
+        var end_date;
+
+        for (i in response) {
+            end_date = response[i].card_end_date.toString().substr(8, 2);
+            dateList[i] = end_date;
+            dateString += end_date + " ";
+        }
+    }
 
 </script>
 
