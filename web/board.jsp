@@ -721,7 +721,7 @@
             <div class="card-modal-header">
                 <span class="modal-header-name">Create a Card</span>
                 <img src="image/multiply.png" class="modal-close-button card-close-button" onclick="document.getElementById('add-card-modal').style.display='none'">
-                <img src="image/star_off.png" class="modal-cardStar" id="cardStar" alt="off">
+                <img src="image/star_off.png" class="modal-cardStar" id="cardStar" alt="0">
             </div>
             <hr style="width: 702px; border: 0; border-top:1px solid rgba(112, 112, 112, 0.5);">
             <div class="container">
@@ -754,7 +754,7 @@
                 <span class="card-container-duedate">Due Date</span>
                 <div id='edit-duedate'><script type="text/javascript">Today('null','null','null');</script></div>
             </div>
-            <button class="edit-card-button" type="button" onclick='editCard()'>create</button>
+            <button class="edit-card-button" type="button">create</button>
         </form>
     </div>
     <div id="more-menu-modal">
@@ -985,7 +985,7 @@
         var card_idx = sessionStorage.getItem("selectCard_idx");
 
         if(ori_list_idx != null) {
-            //editCard(ori_list_idx, ori_list_idx, card_idx);
+            editCard(ori_list_idx, ori_list_idx, card_idx);
         }
         document.getElementById('edit-card-modal-contents').reset();
         document.getElementById('edit-card-modal').style.display='none'
@@ -1003,17 +1003,46 @@
     });
     /*중요도 표시*/
     $(document).on("click", ".cardStar", function() {
-        var curAlt = $(this).attr('alt');
+        var changeMarkUrl = myUrl + "calender";
+        var selectCard = this;
+        var curCardMark = $(this).attr('alt');
+        var cardName = $(this).prev().text();
+        var body = {
+            "card_name": cardName,
+            "card_mark": curCardMark
+        };
 
-        if(curAlt == 'off') {
+        getJson('PUT', changeMarkUrl, body, function (status, response) {
+            if(status == 201) { // 성공
+                if(curCardMark == '0') {
+                    selectCard.setAttribute('src', '/image/star_on.png');
+                    selectCard.setAttribute('alt', '1');
+                    //$(this).parent().css("border", "2px solid yellow")
+                }
+                else {
+                    selectCard.setAttribute('src', '/image/star_off.png');
+                    selectCard.setAttribute('alt', '0');
+                    //$(this).parent().css("border", "0")
+                }
+            }
+            else {
+                alert('중요도 수정 실패 ' + status);
+            }
+        });
+    });
+    /* 카드 만들때 중요도 표시 */
+    $(".modal-cardStar").on("click", function() {
+        var curCardMark = $(this).attr('alt');
+
+        if(curCardMark == '0') {
             $(this).attr('src', '/image/star_on.png');
-            $(this).attr('alt', 'on');
-            $(this).parent().css("border", "2px solid yellow")
+            $(this).attr('alt', '1');
+            //$(this).parent().css("border", "2px solid yellow")
         }
         else {
             $(this).attr('src', '/image/star_off.png');
-            $(this).attr('alt', 'off');
-            $(this).parent().css("border", "0")
+            $(this).attr('alt', '0');
+            //$(this).parent().css("border", "0")
         }
     });
 
@@ -1096,12 +1125,12 @@
                     if(card.card_mark == 0) {
                         str += "<li id='" + list.list_idx.toString() + "-" + card.card_idx + "' class='card' alt='off'><span class='card_idx' style='display: none;'>" + card.card_idx +
                             "</span><span class='card-name'>" + card.card_name +
-                            "</span><img src='/image/star_off.png' class='cardStar' alt='off'></li>";
+                            "</span><img src='/image/star_off.png' class='cardStar' alt='0'></li>";
                     }
                     else {
                         str += "<li id='" + list.list_idx.toString() + "-" + card.card_idx + "' class='card' alt='on'><span class='card_idx' style='display: none;'>" + card.card_idx +
                             "</span><span class='card-name'>" + card.card_name +
-                            "</span style=><img src='/image/star_on.png' class='cardStar' alt='on'></li>";
+                            "</span style=><img src='/image/star_on.png' class='cardStar' alt='1'></li>";
                     }
                 }
             });
@@ -1228,14 +1257,13 @@
         var f = document.forms['addCardForm'];
         var card_end_date = f['year'].value + "-" + f['month'].value + "-" + f['day'].value;
         var card_order = clicked_list.children.length + 1;
-
-        //var list_idx = 2;
+        var card_mark = $(".modal-cardStar").attr('alt');
         var body = {
             card_name: card_name,
             card_end_date: card_end_date,
             card_order: card_order,
             card_content: card_content,
-            card_mark: 1
+            card_mark: card_mark
         };
 
         getJson('POST', myUrl.concat('card/', board_data.board_idx, '/', list_idx.toString()), body, function (status, response) {
@@ -1250,9 +1278,19 @@
                     }
                 });
                 //카드 추가 UI 구현
-                $(clicked_list).append("<li id='"+ list_idx.toString() +"-"+ response.card_idx +"' class='card'><span class='card_idx' style='display: none;'>" + response.card_idx +
-                    "</span><span class='card-name'>" + card_name +
-                    "</span><img src='/image/star_off.png' class='cardStar'></li>");
+                if(card_mark == 0) {
+                    $(clicked_list).append("<li id='" + list_idx.toString() + "-" + response.card_idx + "' class='card'><span class='card_idx' style='display: none;'>" + response.card_idx +
+                        "</span><span class='card-name'>" + card_name +
+                        "</span><img src='/image/star_off.png' class='cardStar' alt='0'></li>");
+                }
+                else if(card_mark == 1) {
+                    $(clicked_list).append("<li id='" + list_idx.toString() + "-" + response.card_idx + "' class='card'><span class='card_idx' style='display: none;'>" + response.card_idx +
+                        "</span><span class='card-name'>" + card_name +
+                        "</span><img src='/image/star_on.png' class='cardStar' alt='1'></li>");
+                }
+                else {
+                    alert("잘못된 중요도 값입니다.");
+                }
             }
             else {
                 alert('카드를 추가할 수 없습니다.');
