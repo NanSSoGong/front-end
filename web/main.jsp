@@ -42,9 +42,8 @@
             margin-bottom: 50px;
         }
         .d-day-list {
-            margin-top: 200px;
             position: absolute;
-            top: 500px;
+            top: 530px;
             left: calc(50% - 300px);
             width:600px;
             height: 100%;
@@ -406,25 +405,26 @@
                     var todayMonthName = monthName[Number(end_date[1] - 1)];
                     var day = end_date[2].split('T');
                     var todayOfWeek = dayCount(day[0]);
-                    var card_d_day = response.data[i].d_day - 1;
+                    var card_d_day = response.data[i].d_day;
 
                     // 마감일이 오늘인 카드들
                     if(card_d_day == 0) {
-                        todayCard += "<span class='today-card-name'>" + response.data[i].card_name + "</span>";
+                        todayCard += "<span class='today-card-name'>" + response.data[i].card_name + "<br></span>";
                         count++;
                     }
-                    else {
-                        // 마감일이 하루 이상 남은 카드들
-                        cardList += "<li><div class='card-list'><div class='card-header'><span class='board-name'><b>" +
-                            response.data[i].board_name + "</b></span><span class='colon'>: </span><span class='list-name'>" +
-                            response.data[i].list_name + "</span>" + setDdayStyle(card_d_day) + "</div><div class='card-contents'><span class='card-name'>" +
-                            response.data[i].card_name + "</span><span class='card-duedate'>Due Date : " + todayMonthName + ", " + todayOfWeek + "</span></div></div></li>"
-                    }
+                    // 마감일이 하루 이상 남은 카드들
+                    cardList += "<li><div class='card-list'><div class='card-header'><span class='board-name'><b>" +
+                        response.data[i].board_name + "</b></span><span class='colon'>: </span><span class='list-name'>" +
+                        response.data[i].list_name + "</span>" + setDdayStyle(card_d_day) + "</div><div class='card-contents'><span class='card-name'>" +
+                        response.data[i].card_name + "</span><span class='card-duedate'>Due Date : " + todayMonthName + ", " + todayOfWeek + "</span></div></div></li>"
                 }
 
                 // Today 일정이 없을 경우
-                if(count == 0) {
+                if (count == 0) {
                     todayCard += "<span class='today-card-name'>Today is Free</span>";
+                }
+                else {
+                    $(".d-day-list").css("top", (507 + count * 23).toString() + "px");
                 }
 
                 todayCard += "</li><li style='margin:0;'><span class='today-date'>"+ dateToday +"</span></li></ul>";
