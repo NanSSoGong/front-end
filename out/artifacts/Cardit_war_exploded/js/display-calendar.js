@@ -1,5 +1,22 @@
 function displayCalendar(moveMonth, curYear, curMonth, curDay) {
 
+    var user_idx = sessionStorage.getItem("user_idx");
+
+    myUrl="http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calender";
+
+    //var calUrl = myUrl + "/emergency/" + user_idx + "/1";
+    var calUrl = myUrl + "/emergency/" + user_idx + "/-1";    // "/user_idx/board_idx"
+    var body = "";
+
+    getJson('GET', calUrl, body, function (status, response) {
+        if (status == 201) { // 성공
+            loadCalendarList(response.data);
+        }
+        else { // 실패
+            alert("D-Day 로드 실패");
+        }
+    });
+
     //alert("ddi");
 
     //loadPage();
