@@ -545,8 +545,8 @@
 
         myUrl="http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/calender";
 
-        var calUrl = myUrl + "/emergency/" + user_idx + "/1";
-        //var calUrl = myUrl + "/emergency/" + user_idx + "/" + board_idx;    // "/user_idx/board_idx"
+        //var calUrl = myUrl + "/emergency/" + user_idx + "/1";
+        var calUrl = myUrl + "/emergency/" + user_idx + "/" + board_idx;    // "/user_idx/board_idx"
         var body = "";
 
         getJson('GET', calUrl, body, function (status, response) {
