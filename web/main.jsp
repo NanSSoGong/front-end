@@ -209,8 +209,8 @@
 <header>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="logout.jsp" class="user-box text"><span id="user-name" class="user-name"></span></a>
-        <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
+        <a href="#" onclick="logout()" class="user-box text"><span id="user-name" class="user-name"></span></a>
+        <a href="#" onclick="logout()" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
 
@@ -438,8 +438,6 @@
         });
     }
 
-
-
     /*function loadCalendar(response) {
         var dayNum = document.getElementById("calendar-wrapper").querySelectorAll('tr');
         var i, date, month, year, endDay;
@@ -493,6 +491,14 @@
 
         location.replace("board.jsp");
     });
+
+    function logout(){
+        var r = confirm("로그아웃 하시겠습니까?");
+        if (r == true) {
+            sessionStorage.clear();
+            location.replace("index.jsp");
+        }
+    }
 </script>
 
 <%-- display-calendar --%>

@@ -680,8 +680,8 @@
     <a href="main.jsp" class="home-box image"><img src="image/home.png" class="home-button"></a>
     <a href="main.jsp" class="header-logo"><img src="image/header-logo.png" class="logo-image"></a>
     <div class="user">
-        <a href="logout.jsp" class="user-box text"><span id="user-name" class="user-name"></span></a>
-        <a href="#" class="user-box image"><img src="image/user.png" class="user-image"></a>
+        <a href="#" onclick="logout()" class="user-box text"><span id="user-name" class="user-name"></span></a>
+        <a href="#" onclick="logout()" class="user-box image"><img src="image/user.png" class="user-image"></a>
     </div>
 </header>
 <section class="sub-header">
@@ -1011,13 +1011,11 @@
             $(this).parent().css("border", "2px solid yellow")
         }
         else {
-            $(this).attr('src', 'http://localhost:8080/image/star_off.png');
+            $(this).attr('src', '/image/star_off.png');
             $(this).attr('alt', 'off');
             $(this).parent().css("border", "0")
         }
     });
-
-
 
     function List(list_idx, list_name, list_position_x, list_position_y) {
         return {
@@ -1045,18 +1043,12 @@
         return board_data.board_idx != -1;
     }
 
-</script>
-
-<script>
-    var token = sessionStorage.getItem("user_token");
-    var myUrl = 'http://ec2-13-125-157-233.ap-northeast-2.compute.amazonaws.com:3000/api/';
-
     function loadData() {
         board_data.board_idx = sessionStorage.getItem("board_idx");
         board_data.board_name = sessionStorage.getItem("board_name");
         board_data.board_background = sessionStorage.getItem("board_background");
         board_data.board_master = sessionStorage.getItem("board_master");
-        alert('board_idx : ' + board_data.board_idx + ', board_name : ' + board_data.board_name + ', board_background : ' + board_data.board_background + ', board_master : ' + board_data.board_master);
+        //alert('board_idx : ' + board_data.board_idx + ', board_name : ' + board_data.board_name + ', board_background : ' + board_data.board_background + ', board_master : ' + board_data.board_master);
 
         getListAndCard();
     };
@@ -1107,17 +1099,21 @@
                             "</span><img src='/image/star_off.png' class='cardStar' alt='off'></li>";
                     }
                     else {
-                        str += "<li id='" + list.list_idx.toString() + "-" + card.card_idx + "' class='card' alt='off'><span class='card_idx' style='display: none;'>" + card.card_idx +
+                        str += "<li id='" + list.list_idx.toString() + "-" + card.card_idx + "' class='card' alt='on'><span class='card_idx' style='display: none;'>" + card.card_idx +
                             "</span><span class='card-name'>" + card.card_name +
-                            "</span><img src='/image/star_on.png' class='cardStar' alt='on'></li>";
+                            "</span style=><img src='/image/star_on.png' class='cardStar' alt='on'></li>";
                     }
                 }
             });
             /*onclick='changeStar(\""+ card.card_name +"\", "+ card.card_idx +")'*/
             str += "</ul><img src='image/plus.png' class='open-add-card-modal'></div>";
         });
-
         document.getElementById('list').innerHTML = str;
+
+        var cardStar = $(".cardStar");
+        if(cardStar.attr('alt') == 'on') {
+            cardStar.parent().css("border", "2px solid yellow");
+        }
     }
 
     function addList(list_position_x, list_position_y, list_name) {
@@ -1404,8 +1400,8 @@
         });
     };
 
-    var userBackGroundArray = new Array(15)
-    ;
+    var userBackGroundArray = new Array(15);
+
     function searchUser(id) {
         if(!checkValidation()) { alert('유효하지 않은 접근입니다.'); return false; }
         var body = {
@@ -1475,6 +1471,14 @@
     function closeModal(obj) {
         obj.parentElement.parentElement.parentElement.style.display = 'none'; // modal창 최상위 div
         obj.parentElement.parentElement.reset(); // form reset
+    }
+
+    function logout(){
+        var r = confirm("로그아웃 하시겠습니까?");
+        if (r == true) {
+            sessionStorage.clear();
+            location.replace("index.jsp");
+        }
     }
 </script>
 
